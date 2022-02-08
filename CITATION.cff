@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use these materials, please cite them as follows."
+authors:
+- family-names: "Jünger"
+  given-names: "Stefan"
+  orcid: "https://orcid.org/0000-0001-8100-7957"
+- family-names: "Batzdorfer"
+  given-names: "Veronika"
+  orcid: " https://orcid.org/0000-0002-2678-2579 "
+- family-names: "Breuer"
+  given-names: "Johannes"
+  orcid: "https://orcid.org/0000-0001-5906-7873"
+title: "Workshop Introduction to R for Data Analysis"
+date-released: 2022-08-15
+url: "https://github.com/StefanJuenger/r-intro-gesis-2022"
