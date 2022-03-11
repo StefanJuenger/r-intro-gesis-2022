@@ -1,13 +1,13 @@
 ---
 title: "Demo Slides"
 subtitle: "Catchy Subtitle"
-author: "Johannes Breuer & Stefan Jünger"
+author: "Stefan Jünger, Veronika Batzdorfer, & Johannes Breuer"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
-presenter: Stefan
+presenter: Veronika
 ---
 layout: true
 
-```{r child = "./content/config/sessions_setup.Rmd"} 
+```{r child = "../config/sessions_setup.Rmd"} 
 ```
 
 <!-- START HERE WITH SLIDES -->
@@ -16,7 +16,7 @@ layout: true
 
 ## Content
 
-Mauz
+Content?
 
 ```{r some-code}
 x <- 1
@@ -27,7 +27,7 @@ x
 
 ---
 
-```{r child = "./content/config/sessions_end.Rmd"}
+```{r child = "../config/sessions_end.Rmd"}
 ```
 
 
