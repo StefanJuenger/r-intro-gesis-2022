@@ -135,7 +135,7 @@ By the end of the course participants should be:
 <tbody>
   <tr>
    <td style="text-align:left;color: gray !important;"> Wednesday </td>
-   <td style="text-align:left;color: gray !important;"> 09:30 - 10:00 </td>
+   <td style="text-align:left;color: gray !important;"> 09:30 - 10:30 </td>
    <td style="text-align:left;font-weight: bold;"> Exploratory Data Analysis </td>
   </tr>
   <tr>
