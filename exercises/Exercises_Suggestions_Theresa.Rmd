@@ -1,0 +1,2368 @@
+<<<<<<< HEAD
+---
+title: "Exercises_Suggestions_Theresa"
+author: "Theresa Wagner"
+date: '2022-07-11'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# 1_1_1 First Steps
+
+```{r child = "../exercises_setup.Rmd"}
+```
+
+
+As this is the first set of exercises in this course, it is quite easy and short. Its purpose is also to get used to this exercise format and, more importantly, to get a first feeling for working with `R` and *RStudio*.
+
+*Note*: You can find the solutions for this exercise as well as all other exercises in the `solutions` folder in the repo/directory that contains the course materials.  You can easily copy code from these solution files by clicking on the small blue clipboard icon in the upper right corner of the solution boxes showing the code.
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+The first thing we would like you to do in this exercise is to explore the *RStudio* interface a bit. Just "have a look around" and see, if you can find the elements and options we have discussed so far.
+```
+
+For the following simple coding tasks in this first set of exercises, you can just work interactively in the Console in `R`/*RStudio*.
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+After you have made yourself a bit familiar with the *RStudio* interface, start using the console interactively by entering and executing the following simple calculations: 21 times 2; 2 to the power of 6; 1 divided by 3
+```
+
+```{r second-exercise, solution = TRUE}
+21*2
+2^6
+1/3
+```
+
+Feel free to play around a bit and try a few things out.
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Now, let's create an object in `R`. Assign the number 42 to an object named `the_answer` and then print the object to the console.
+```
+
+```{block, opts.label = "clues"}
+You need to use the assignment operator `<-` for this.
+```
+
+```{r third.exercise, solution = TRUE}
+the_answer <- 42
+the_answer
+```
+
+Also have a look at the `Environment` tab in the *RStudio* interface. The object you created should now be visible there.
+
+```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
+Use a simple function to calculate the square root of 49.
+```
+
+```{r fourth-exercise, solution = TRUE}
+sqrt(49)
+```
+
+```{block, box.title = "5", box.body = list(fill = "white"), box.icon = "fa-star"}
+Check out the help file for the `grep()` function. How many required arguments does it have?
+```
+
+```{r fifth-exercise, solution = TRUE, eval = FALSE}
+?grep
+# It has two required arguments: pattern and x.
+```
+
+
+
+# 1_1_2 Packages Scripts
+
+For this set of exercises as well as all following ones, we suggest that you write `R` scripts (one per set of exercises or a combined one for the whole course) and store them in the `my_scripts` folder contained in the course materials. This folder already contains a script stub called `my_script.R` which you can use for getting started.
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+To explore what `R` packages are out there that may be of interest for you, have a brief (!) look at the [`CRAN Task View`](https://cran.r-project.org/) section called *SocialSciences* and do a quick search for "regression" on [METACRAN](https://www.r-pkg.org/).
+```
+
+```{block, opts.label = "clues"}
+ Although it may be tempting (there are so many interesting packages!), try not to spend more than 2 to 3 minutes on this (for now).
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+The first simple coding task for this exercise is to install a few packages from `CRAN` (we will use those later on in the course). Please install the following packages: `remotes`, `dplyr`, `janitor`, `correlation` (*Note*: We will need a few more packages throughout this course, but we do not have to install all of them now). 
+```
+
+```{r second-exercise, solution = TRUE, eval = FALSE}
+install.packages(c("remotes", "dplyr", "janitor", "correlation"))
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Now, let's load one of the packages you have just installed. Load the `remotes` package.
+```
+
+```{block, opts.label = "clues"}
+You do not need to enclose the package name in quotes when loading it.
+```
+
+```{r third-exercise, solution = TRUE, eval = FALSE}
+library(remotes)
+```
+
+```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
+Some packages are not on `CRAN`. Another important source of `R` packages is *GitHub* (especially for development versions). So, let's install a package from there. Install the [`emo` package](https://github.com/hadley/emo) from *GitHub*. **NB**: To be able to install packages from *GitHub* on *Windows* machines, you will need to install [`Rtools`](https://cran.r-project.org/bin/windows/Rtools/) first.
+```
+
+```{block, opts.label = "clues"}
+You can use a function from the `remotes` package for this. The required argument for the function for installing a package from *GitHub* needs to be in the form "user_name/repo_name" (i.e., the parts of the URL that come after github.com).
+```
+
+```{r fourth-exercise, solution = TRUE, eval = FALSE}
+library(remotes)
+install_github("hadley/emo")
+```
+
+```{block, box.title = "5", box.body = list(fill = "white"), box.icon = "fa-star"}
+Check which packages are now installed on your system.
+```
+
+```{block, opts.label = "clues"}
+You can use the *RStudio* interface or a function for this.
+```
+
+```{r fifth-exercise, solution = TRUE, eval = FALSE}
+installed.packages()
+```
+
+```{block, box.title = "6", box.body = list(fill = "white"), box.icon = "fa-star"}
+As a final exercise, add some comments to your script and save it (in the `my_scripts` folder).
+```
+
+```{block, opts.label = "clues"}
+Comments in `R` start with #. Ideally, these should explain what the code you have written does. You can simply save the `R` script file via the *RStudio* GUI.
+```
+
+```{r sixth-exercise, solution = TRUE, eval = FALSE}
+# Check installed packages
+installed.packages()
+```
+
+
+# 1_2_1 Data Types
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Create a numeric vector with at least 6 numbers.
+```
+
+```{block, opts.label = "clues"}
+To create a vector you need the `c()` function. 
+```
+
+```{r first.exercise, solution = TRUE}
+cool_numeric_vector <-
+  c(4, 8, 15, 16, 23, 42)
+cool_numeric_vector
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Now, create a character vector with six distinct strings.
+```
+
+```{block, opts.label = "clues"} 
+Strings or characters have to be enclosed by quotation marks (`""` or `''`).
+```
+
+```{r second.exercise, solution = TRUE}
+cool_character_vector <-
+  c("I", "like", "bananas", "and", "rhubarb", "pie")
+cool_character_vector
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Let's turn to more complex data structures. Create a matrix with two columns using the `matrix()` function based on the numeric vector you built in the first exercise.
+```
+
+```{block, opts.label = "clues"}
+You have to either define the `nrow` or `ncol` option to get the proper layout of the matrix.
+```
+
+```{r third.exercise, solution = TRUE}
+cool_matrix <- matrix(cool_numeric_vector, nrow = 3)
+cool_matrix
+```
+
+```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
+Create a list that includes all of the objects you have created in the previous tasks in this set of exercises    .
+```
+
+```{block, opts.label = "clues"}
+Just wrap all elements in the `list()` function
+```
+
+```{r fourth.exercise, solution = TRUE}
+cool_list <-
+  list(
+    cool_numeric_vector,
+    cool_character_vector,
+    cool_matrix
+  )
+cool_list
+```
+
+```{block, box.title = "5", box.body = list(fill = "white"), box.icon = "fa-star"}
+Extract the matrix from the list and convert it to a data frame using the `as.data.frame()` function .
+```
+
+```{block, opts.label = "clues"}
+List elements are accessed with `[[]]`. 
+```
+
+```{r fifth.exercise, solution = TRUE}
+cool_data_frame <- as.data.frame(cool_list[[3]])
+cool_data_frame
+```
+
+```{block, box.title = "6", box.body = list(fill = "white"), box.icon = "fa-star"}
+Add some column names (e.g., "first" and "second") for the two columns of the data frame.
+```
+
+```{block, opts.label = "clues"}
+You can use the same function for setting/changing names as for viewing them.
+```
+
+```{r sixth.exercise, solution = TRUE}
+names(cool_data_frame) <- c("one", "two")
+cool_data_frame
+```
+
+```{r sixth.exercise, solution = TRUE}
+names(cool_data_frame) <- c("first", "second")
+cool_data_frame
+```
+
+# 1_2_2 Flat Files
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Import the `titanic` data from the `data` folder.
+```
+
+```{block, opts.label = "clues"}
+The file format is `CSV`. You can use the `readr` library and a function that starts with `read_...` (of course, you could also use the `base R` equivalent if you want to).
+```
+
+
+```{r load_titanic, solution = TRUE}
+library(readr)
+titanic <-
+  read_csv("./data/titanic.csv")
+```
+
+You may have noticed that the function you just *used* imports factor variables as characters by default. For some analyses, this may not be what we want (for example, if we're going to use "sex" as a predictor in a regression).
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Convert the variable `sex` to a factor.
+```
+
+```{block, opts.label = "clues"}
+You can do that while importing the data or after loading them.
+```
+
+```{r convert_sex, solution = TRUE}
+# change column type while importing
+titanic <-
+  read_csv(
+    "./data/titanic.csv",
+    col_types = cols(
+      Sex = col_factor()
+    )
+  )
+```
+
+We have already worked with the *titanic* data quite a bit. Let's import some other data for a change.
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Import the `.xlsx` file containing *Gapminder* data on GDP from the `data` folder.
+```
+
+```{block, opts.label = "clues"}
+We need the `readxl` package for this importing task. The name of the file we need is `GDPpercapitaconstant2000US.xlsx`.
+```
+
+```{r load_gapminder_gdp, solution = TRUE}
+library(readxl)
+gapminder_GDP <-
+  read_excel("GDPpercapitaconstant2000US.xlsx")
+```
+
+As you may have noticed, the format of the output of the two importing functions is the same (tibbles in both cases). Sometimes, however, the contents of an Excel file are not that easy to import. We will illustrate this with the help of the `Unicorns on Unicycles` **data set**. This is what is known about this data according to its creator:
+
+> The documents were recently unearthed from a hidden chest in Delft and seem to be written by Rudolphus Hogervorstus, my great great great uncle, in 1681. These documents show that he was a scientist studying the then roaming herds of unicorns in the area around Delft. Unfortunately these animals are extinct now.
+> His work contains multiple tables, carefully written down, documenting the population of unicorns over time in multiple places and related to that the sales and numbers of unicycles in those countries.
+> According to Rudolphus the unicorn populations and unicycles are related "The presence of the cone on the unicorn hints at a very defined sense of equilibrium, it is therefore only natural to assume unicorns ride unicycles".
+> As part of the archival process these tables were copied, as Rudolphus himself would say: "with the black magic, so vile it could not be discussed for hell would come descent upon us" into satans own spawn: Microsoft Excel.
+Source: https://github.com/RMHogervorst/unicorns_on_unicycles
+
+```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
+Load the unicorn sales data `.xlsx` file. As we are not interested in the `total_turnover` variable only read in the cell range `A1:C43`
+```
+
+```{block, opts.label = "clues"}
+You can define ranges with the argument `range = range_definition` (see `?read_excel`).
+```
+
+```{r load_unicorn_sales, solution = TRUE}
+library(readxl)
+unicorn_sales <-
+  read_excel(
+    "sales.xlsx",
+    range = "A1:C43"
+      )
+```
+
+
+
+# 1_2_3 Statistical Software Files
+
+In this set of exercises, we will work with files from statistical software. The first tasks are about importing data, while the later ones are about labeling and exporting.
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Import the `.dta` version of the data from the *German General Social Survey - ALLBUS 2021*.
+```
+
+```{block, opts.label = "clues"}
+You need the `haven` package for this. The file should be stored in the `data` folder.
+```
+
+```{r load_gp, solution = TRUE}
+library(haven)
+Allbus <- read_dta("./data/ZA5280_v1-0-0.dta")
+```
+
+Unlike in flat files, such as CSV, the variables now have labels.
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Print the labels of the first ten variables in the data set.
+```
+
+```{block, opts.label = "clues"}
+You can use a function from the `sjlabelled` package for this. Remember that you can use [ ] to subset columns/variables (we only want to print the labels for the first ten variables).
+```
+
+```{r print_labels, solution = TRUE, message = FALSE}
+library(sjlabelled)
+get_label(Allbus[1:10])
+```
+
+Unfortunately, it's all in German. Imagine you are an education researcher working on a publication in English, and you are interested in the variable `pa01`. So you may want to consider translating the variable to English.
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Change the variable label of `pa01` from "LINKS-RECHTS-SELBSTEINSTUFUNG, BEFR." to "left-right self-assessment".
+```
+
+```{block, opts.label = "clues"}
+You can, again, use a function from `sjlabelled` for this.
+```
+
+```{r changevarlabel, solution = TRUE, message = FALSE}
+Allbus$pa01 <- 
+  set_label(
+    Allbus$pa01, 
+    label = "left-right self placement"
+  )
+get_label(Allbus$pa01)
+```
+
+Your collaborators ask you to share the data after changing labels and stuff. Unfortunately, they do not use `R` or `SPSS` and, hence, asks you to export your data as a *Stata* file.
+
+```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
+Export your data as a *Stata* file.
+```
+
+```{block, opts.label = "clues"}
+The `haven` package provides a function for writing such files that is called and works in a similar way as the corresponding function for importing data in this particular format.
+```
+
+```{r exportstata, solution = TRUE, eval = FALSE}
+write_stata(Allbus, "Allbus_STATA_format.dta")
+```
+###  Question: Does this task still work? Because the data format is already .dta ...
+
+
+# 2_1_1 Selecting & renaming variables
+
+As in the presentation, we will use data from the [German General Social Survey - ALLBUS 2021](https://search.gesis.org/research_data/ZA5280) for this exercise. You should (have) download(ed) the dataset in `.dta` format and saved it in a folder caller `data` within the folder containing the materials for this workshop. Also remember that it is helpful to consult the [codebook for the data set](https://search.gesis.org/research_data/ZA5280).
+
+### AN: insert a link leading to our own little translated codebook in the repo
+
+
+That being sad, let's get wrangling...
+
+...but before we can do that, we need to load the `tidyverse` package(s) and import the data.
+
+```{r read-data, message = F}
+library(tidyverse)
+Allbus <- read_dta("./data/Allbus_STATA_format.dta")
+```
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Before we apply any changes to our data, let's first pipe them into a function to catch a glimpse (hint hint). 
+```
+
+```{block, opts.label = "clues"}
+The clue for this task is already "hidden" in the text of the task ;-)
+```
+
+```{r first-exercise, solution = TRUE}
+Allbus %>% 
+  glimpse()
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Using `base R`, create a new object called `Allbus_trust` that contains all variables that assess how much people trust specific people or institutions in dealing with the Corona virus. To find the required variable names, you can check the [codebook]((https://dbk.gesis.org/dbksearch/download.asp?id=67378)) (search for "trust") or have a look at the clue for this task.
+```
+
+### AN: insert a link leading to our own little translated codebook in the repo
+
+```{block, opts.label = "clues"}
+The first variable we want to select for our subset is named `pt01`, and the last one is `pt20`. They appear consecutively in the data set. Remember that there are two options for selecting columns in `base R`: One is subsetting using [ ], the other is the `subset()` function.
+```
+
+```{r second-exercise, solution = TRUE}
+# Option 1
+gp_covid_trust_german_institutions <- Allbus[, c("pt01",
+                               "pt02",
+                               "pt03",
+                               "pt04",
+                               "pt06",
+                               "pt07",
+                               "pt08",
+                               "pt09",
+                               "pt10",
+                               "pt11",
+                               "pt12",
+                               "pt14",
+                               "pt15",
+                               "pt19",
+                               "pt20")]
+# Option 2
+gp_covid_trust_german_institutions  <- subset(Allbus, TRUE, select = c(pt01:pt20))
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Use a function from the `dplyr` package to create a new object named `Allbus_info` that only contains the (binary) variables that asked about the use of different devices for the individual Internet consumption. Again, you can consult the code book to find the right variable names (search for "XXX key word") or have a look at the clue for this task, instead.
+```
+
+### AN: Keywords ergänzen sobald codebook fertig ist
+
+```{block, opts.label = "clues"}
+The first variable we want to select for our subset is named `lm27`, and the last one is `lm34`. They appear consecutively in the data set.
+```
+
+```{r third-exercise, solution = TRUE}
+Allbus_info <- Allbus %>% 
+  select(lm27:lm34)
+```
+
+```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
+Again, using a function from the `tidyverse` package `dplyr`, select only the character variables from the `Allbus` data set and assign them to an object named `Allbus_char`.
+```
+
+```{block, opts.label = "clues"}
+You need to use the selection helper `where()` for this task.
+```
+
+```{r fourth-exercise, solution = TRUE}
+Allbus_char <-Allbus %>% 
+  select(where(is.character))
+```
+
+```{block, box.title = "5", box.body = list(fill = "white"), box.icon = "fa-star"}
+After creating subsets of variables, let's now rename those variables. 
+First, rename the variables `lm27` to `internet_use_pc`, `lm28` to `internet_use_laptop`, and `lm29` to `internet_use_tablet` using `base R`. 
+Then rename the variables `lm30` `lm31` `lm32` `lm33` , and `lm34` to `internet_use_smartphone`, `internet_use_TV`, `internet_use_playstation`, `internet_use_ebook`, and ``internet_use_other`, using a function from `dplyr`. 
+When using the `dplyr` function for renaming the variables, assign the result to the same object name as before (i.e., overwrite the `internet_use_pc` object).
+```
+
+```{block, opts.label = "clues"}
+The `base R` function we need here is `colnames()`, and the `dplyr` function is `rename()`. Remember that the correct syntax the `rename()` function is `new_name = old_name`.
+```
+
+```{r fifth-exercise, solution = TRUE}
+# base R
+colnames(Allbus)[colnames(Allbus) == "lm27"] <- "internet_use_pc"
+colnames(Allbus)[colnames(Allbus) == "lm28"] <- "internet_use_laptop"
+colnames(Allbus)[colnames(Allbus) == "lm29"] <- "internet_use_tablet"
+# tidyverse (dplyr)
+Allbus_info <- Allbus %>% 
+  rename(internet_use_smartphone = lm30,
+         internet_use_TV = lm31,
+         internet_use_playstation = lm32,
+         internet_use_ebook = lm33,
+         internet_use_other = lm34)
+```
+
+```{block, box.title = "6", box.body = list(fill = "white"), box.icon = "fa-star"}
+As the final task in this set of exercises, do the previous selection and renaming procedure using `dplyr` functions again for the `Allbus_info` object, but this time in one step.
+```
+
+```{block, opts.label = "clues"}
+You can also rename variables within the `select()` command.
+```
+
+```{r sixth-exercise, solution = TRUE}
+#Allbus_info <- Allbus %>% 
+#  select(internet_use_pc = lm27,
+#         internet_use_laptop = lm28,
+#         internet_use_tablet = lm29,
+#         internet_use_smartphone = lm30,
+#         internet_use_TV = lm31,
+#         internet_use_playstation = lm32,
+#         internet_use_ebook = lm33,
+#         internet_use_other = lm34)
+```
+
+### Fehler - weil teile des Allbus schon überschrieben sind aus der Aufgabe davor, kann Aufgabe 6 nicht durchlaufen ... LÖSUNG?
+
+# 2_1_2 Filter, Arrange
+
+In this set of exercises, we will practice filtering and rearranging the order of rows.
+
+As for the previous set of data wrangling exercises, before we can begin, we need to load the `tidyverse` package(s) and import the data. Also for these exercises, it is advisable to open the *AKTUELLER LINK* [codebook for the data set](https://dbk.gesis.org/dbksearch/download.asp?id=67378).
+
+```{r read-data, message = F}
+library(tidyverse)
+Allbus <- read_dta("./data/ZA5280_v1-0-0.dta")
+```
+
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+As a first exercise, using `base R`, let's create a new data set named `Allbus_single` that only contains data from respondents who reported being single.
+```
+
+```{block, opts.label = "clues"}
+The variable representing marital status is named `mstat` and the value indicating that the respondent is married is 5. Remember that there are 2 options in `base R` for filtering rows (the same ones as for selecting columns).
+```
+
+```{r first-exercise, solution = TRUE}
+# Option 1
+Allbus_single <- Allbus[Allbus$mstat == 5, ]
+# Option 2
+Allbus_single <- subset(Allbus, mstat == 5)
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Now, let's use the `dplyr` function for filtering rows: Create an object named `Allbus_male_sober_driver` that only contains respondents who report that they are male as well as never having driven a car whilst being drunk in the past.
+```
+
+```{block, opts.label = "clues"}
+The names of the variables we need here are `sex` and `cs02` (drunk driving) and the values we want to filter for are 1 (male), and 1 (never), respectively.
+```
+
+```{r second-exercise, solution = TRUE}
+Allbus_male_sober_driver <- Allbus %>% 
+  filter(sex == 1,
+         cs02 == 1)
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Using the same function from `dplyr`, create another subset of cases called `Allbus_social_media_news` that only includes respondents that stated that they use social media between (inclusively) *three to five* days per week as a means of news source.
+```
+
+```{block, opts.label = "clues"}
+The variable we need for this is called `lm35` and the values of that variable we are looking for are 3 to 5. You can use the helper function `between()` here (remember that the values you provide to this function are inclusive).
+```
+
+```{r third-exercise, solution = TRUE}
+Allbus_social_media_news <- Allbus %>% 
+  filter(between(lm35, 3, 5))
+```
+
+```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
+Let's briefly turn back to `base R` for this task: Sort the `Allbus` data set in descending order of the `ls01` (general life satisfaction) variable. You can overwrite the original `Allbus` object for this task. Have a look at the resulting data frame to check if your code worked.
+```
+
+```{block, opts.label = "clues"}
+You need the `base R` function `order()` here. You can check your result using `head()`. To limit the amount of output, you can subset columns using [ ] within the `head()` command (general life satisfaction is the *513th* variable in the data set, so you could, e.g., subset columns 510:*513*).
+```
+
+```{r fourth-exercise, solution = TRUE}
+Allbus <- Allbus[order(desc(Allbus$ls01)),]
+head(Allbus[, 510:513])
+```
+
+```{block, box.title = "5", box.body = list(fill = "white"), box.icon = "fa-star"}
+Let's rearrange the order of rows again, this time using a function from the `dplyr` package. To restore the original order of the `Allbus` data set, sort in ascending order of the `respid` variable. As for the previous task, check whether your code works, but this time using a (short) pipe chain and a `dplyr` function for catching a glimpse of your data.
+```
+
+```{block, opts.label = "clues"}
+The `dplyr` function you are looking for is in another castle... Just kidding (and apologies for the silly "Super Mario" reference here... that's what happens when you work with pipes more than a plumber does), it's `arrange()`. 
+```
+
+```{r fifth-exercise, solution = TRUE}
+Allbus <- Allbus %>% 
+  arrange(respid)
+Allbus %>% 
+  select(respid:ls01) %>% 
+  glimpse()
+```
+
+
+# 2_1_3 Mutate variables, recoding, and missings
+
+
+In this final set of exercises for the data wrangling basics, we will transform and recode variables, and work with missing data. In the following exercises, we will focus on data wrangling functions from the `tidyverse`.
+
+Same procedure as before: Load the `tidyverse` package(s) and import the data and have the *AKTUELLER LINK + path*  [codebook](https://dbk.gesis.org/dbksearch/download.asp?id=67378) ready.
+
+```{r read-data, message = F}
+library(tidyverse)
+Allbus <- read_csv("./data/ZA5280_v1-0-0.csv")
+```
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+To begin with, let's use the `dplyr`function for creating and transforming variables to create a new variable representing political orientation named `pol_orientation_new` that ranges from 1 to 11 instead of from 0 to 10 as is the case for the original variable `pa01`. *CHECKCODING*
+```
+
+```{block, opts.label = "clues"}
+We simply need to add 1 to the existing variable.
+```
+
+```{r first-exercise, solution = TRUE}
+Allbus <- Allbus %>% 
+  mutate(pol_orientation_new = pa01 + 1)
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+By combining the function used for the previous task with another one from the `dplyr` package, recode the values of the variable measuring trust in the federal government into a new variable named `distrust_gov` that captures distrust instead of trust.
+```
+
+```{block, opts.label = "clues"}
+The name of the variable we want to transform is `pt12`. Disregarding missing values for the moment, its values range from 1 to 7. Remember that the correct syntax for recoding values with the corresponding `dplyr` function is old value (enclosed in backticks) = new value.
+```
+
+```{r second-exercise, solution = TRUE}
+Allbus <- Allbus %>% 
+  mutate(distrust_gov = recode(pt12,
+                               `7` = 1,  # old_value = new_value
+                               `6` = 2,
+                               `5` = 3,
+                               `4` = 4,
+                               `3` = 5,
+                               `2` = 6,
+                               `1` = 7))
+```
+
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+The variable we have just recoded still contains several values representing different types of missing values. Using the appropriate `dplyr` function, recode the following values as `NA` for the new `distrust_gov` variable: -42, -11, and -9.
+```
+
+```{block, opts.label = "clues"}
+To to this, we need to combine `mutate()` with the `dplyr` function for recoding specific values as `NA`.
+```
+
+```{r third-exercise, solution = TRUE}
+Allbus <- Allbus %>% 
+  mutate(distrust_gov = na_if(distrust_gov, -42)) %>% 
+  mutate(distrust_gov = na_if(distrust_gov, -11)) %>% 
+  mutate(distrust_gov = na_if(distrust_gov, -9))
+  
+```
+
+```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
+After recoding a set of values as `NA` for one variable, let's now do the same for the whole `Allbus` data frame. However, we do not want to recode 98 as `NA` as it is a valid value for the `respid` variable.
+```
+
+```{block, opts.label = "clues"}
+This time, we do not need the `mutate()` function.
+```
+
+```{r fourth-exercise, solution = TRUE}
+Allbus <- Allbus %>%
+  na_if(-1) %>%
+  na_if(-6) %>%
+  na_if(-7) %>%
+  na_if(-8) %>%
+  na_if(-9) %>%
+  na_if(-10) %>%
+  na_if(-11) %>%
+  na_if(-12) %>%
+  na_if(-13) %>%
+  na_if(-14) %>%
+  na_if(-15) %>%
+  na_if(-32) %>%
+  na_if(-33) %>%
+  na_if(-34) %>%
+  na_if(-41) %>%
+  na_if(-42) %>%
+  na_if(-88)
+```
+
+
+```{block, box.title = "5", box.body = list(fill = "white"), box.icon = "fa-star"}
+As `na_if()` only takes on single values as its second argument (i.e., the value to replace with `NA`), let's use a function from the `sjlabelled` function to achieve the same thing with fewer lines of code.
+```
+
+```{block, opts.label = "clues"}
+The function we are looking for can also be included in a pipe chain and takes a vector of values to be recoded as `NA` as its second (required) argument. 
+```
+
+### AN: check file again for more NAs
+
+```{r fifth-exercise, solution = TRUE}
+library(sjlabelled)
+Allbus <- Allbus %>% 
+  set_na(na = c(-99, -77, -33))
+```
+
+```{block, box.title = "6", box.body = list(fill = "white"), box.icon = "fa-star"}
+How many of the respondents do not have a missing value for the variable `political_orientation`? To answer this question, please use a function from the `tidyr` package that allows you to exclude cases with missing values. Do not assign the result to a new object.
+```
+
+```{block, opts.label = "clues"}
+To count the number of cases, you can use the base `R` function `nrow()` at the end of your pipe.
+```
+
+```{r sixth-exercise, solution = TRUE}
+Allbus %>% 
+  drop_na(pt12) %>% 
+  nrow()
+```
+
+```{block, box.title = "7", box.body = list(fill = "white"), box.icon = "fa-star"}
+As a final exercise for this session, let's recode the `mstat` variable into an unordered factor called `mstat_fac` that has 5 levels named after the different value labels listed in the codebook.
+```
+
+```{block, opts.label = "clues"}
+The value labels from the codebook are 1 = Married and living together, 2 = Married and living separately, 3 = Widowed, 4 = Divorced, and 5 = Single. The `dplyr` function we need to use here (in combination with `mutate()`) is `recode_factor()`.
+```
+
+```{r seventh-exercise, solution = TRUE}
+Allbus <- Allbus %>% 
+  mutate(mstat_fac = recode_factor(mstat,
+                                     `1` = "Married and living together",
+                                     `2` = "Married and living separately",
+                                     `3` = "Widowed",
+                                     `4` = "Divorced",
+                                     `5` = "Single"))
+```
+
+
+# 2_2_1 Across the tidyverse
+
+As always, first some prep work before we can work on the exercises: Load the packages & the data we need...
+
+*AKTUELLER LINK*
+*NAS CHECKEN UND EINTRAGEN*
+
+```{r read-data, message = F}
+library(tidyverse)
+library(sjlabelled)
+Allbus <- 
+  read_csv("./data/ZA5280_v1-0-0.csv") %>%
+  set_na(na = c(-99, -77, -33, 98))
+```
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Use `across()` to recode the trust variables `pt01:pt20` into dichotomized versions. The value `1` should remain, all others should be `0`.
+```
+
+```{block, opts.label = "clues"}
+You have to wrap it into the `mutate()` function and then use `recode()`.
+```
+
+```{r first-exercise, solution = TRUE}
+Allbus <- 
+  Allbus %>% 
+  mutate(
+    across(
+      pt01:pt20,
+      ~recode(
+        .x,
+        `7` = 0,
+        `6` = 0,
+        `5` = 0,
+        `4` = 0,
+        `3` = 0,
+        `2` = 0,
+        `1` = 1
+      )
+    )
+  )
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Using short pipe and `dplyr` functions, let's check if the code worked.
+```
+
+```{block, opts.label = "clues"}
+You can combine end your pipe with `glimpse()` to print the output or use `View()` to a data tab in *RStudio*.
+```
+
+```{r second-exercise, solution = TRUE}
+Allbus %>% 
+  select(pt01:pt20) %>% 
+  glimpse()
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Use the `median()` function to calculate an aggregated variable of all trust variables per respondent.
+```
+
+```{block, opts.label = "clues"}
+For this task you need to first change the data into a row-wise format. For creating the aggregate variable you need the `c_across()` function. Oh, and don't forget to ungroup your data at the end (of your pipe).
+```
+
+```{r third-exercise, solution = TRUE}
+Allbus <- 
+  Allbus %>% 
+  rowwise() %>% #<<
+  mutate(
+    median_trust = 
+      median(
+        c_across(pt01:pt20),
+        na.rm = TRUE
+      )
+  ) %>% 
+  ungroup()
+```
+
+
+# 2_2_2 Define your cases
+
+*AKTUELLER LINK*
+*NAS CHECKEN UND EINTRAGEN*
+
+```{r read-data, message = F}
+library(tidyverse)
+library(sjlabelled)
+library(readr)
+Allbus <- 
+read_csv("./data/ZA5280_v1-0-0.csv")%>%
+  set_na(na = c(-9, -7, -6, -8, -11, -32, -33, -41, -42, -50, -88))
+```
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Create a new binary variable called `married` in the `Allbus` data frame that has the value 1 if the individual is married + living together and 0 if not. 
+```
+
+```{block, opts.label = "clues"}
+As there are no missing values in the variable, you can simply use `ifelse()` for this.
+```
+
+```{r first-exercise, solution = TRUE}
+Allbus <- Allbus %>% 
+  mutate(married = ifelse(mstat == 1, 1, 0))
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Let's create another new variable. This time, it should be a character variable named `age_cat` that has the following unique values representing the respective age categories: "up to 40 years", "41 to 60 years" and "older than 60 years".
+```
+
+```{block, opts.label = "clues"}
+You can use the `between()` helper function in combination with the `dplyr` function for conditional variable creation/transformation. The required existing variable is called `yborn`. As a side note: In reality, you would probably not want to have such a variable as an ordered factor, but for the sake of simplicity, we'll stick with a character variable here.
+```
+
+```{r second-exercise, solution = TRUE}
+Allbus <- Allbus %>% 
+  mutate(age_cat = case_when(
+    between(age, 1, 40) ~ "up to 40 years",
+    between(age, 41, 60) ~ "41 to 60 years",
+    age > 60 ~ "older than 60 years"
+    ))
+```
+
+
+# 2_2_3 If I had a function
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Write a function with the name `standardize` that normalizes the values of a given vector with the following formula:
+$$(x - \bar{x}) / S$$
+where $x$ is each input value, $\bar{x}$ is the sample mean value and $S$ the sample standard deviation.
+```
+
+```{block, opts.label = "clues"}
+The `base R` function for computing the standard deviation function is `sd()`. Don't forget to use the option `na.rm = TRUE` and be careful when setting the brackets around the formula.
+```
+
+```{r first-exercise, solution = TRUE}
+standardize <- function (x) {
+  (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)
+}
+```
+
+As a preparation for the next task, please run the following code create a vector with 30 randomly selected values.
+
+```{r vector}
+vector <- sample(1:100, 30)
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Feed the vector into your `standardize()` function to see if it works.
+```
+
+```{r second-exercise, solution = TRUE}
+standardize(vector)
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Write an if-else statement that checks whether the first element of the standardized vector is smaller than 0. If this condition is true, "TRUE" should be printed. If this condition is false, "FALSE" should be printed.
+```
+
+```{block, opts.label = "clues"}
+Make use of logical operators (`<`) to check if a condition is true or false. For printing, you should use the `print()` function.
+```
+
+```{r third-exercise, solution = TRUE}
+if (standardize(vector)[1] < 0) {
+  print("TRUE")
+} else {
+  print("FALSE")
+}
+```
+
+
+# 2_2_4 Purrr Joy of Writing Loops
+
+Use the code below to re-define the `standardize()` function and to create a vector with standardized numbers.
+
+```{r provides-stuff}
+standardize <- function (x) {
+  (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)
+}
+standardized_vector <-
+  standardize(sample(1:100, 30))
+```
+
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Using a `for()`-loop, loop through each element of the vector, add the number `pi`, and print the result.
+```
+
+```{block, opts.label = "clues"}
+There's a pre-defined value in R for `pi`. Just type `pi` and you'll receive 3.141593. You need to wrap what the function does within the `print()` function.
+```
+
+```{r first-exercise, solution = TRUE}
+for (number in standardized_vector) {
+  print(number + pi)
+}
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Repeat the previous exercise, but this time the results should be printed all at once in a vector. Use the `sapply()` function here.
+```
+
+```{block, opts.label = "clues"}
+You don't need the `print()` function anymore.
+```
+
+```{r second-exercise, solution = TRUE}
+sapply(standardized_vector, function (number) {
+  number + pi
+}) 
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Now, we want to have the same output as a list.
+```
+
+```{block, opts.label = "clues"}
+You can either use `lapply()` or `map()` from the `purrr` package. 
+```
+
+```{r third-exercise, solution = TRUE}
+library(purrr)
+lapply(standardized_vector, function (number) {
+  number + pi
+}) 
+standardized_vector %>% 
+  map(~.x + pi)
+```
+
+
+# 3_1_1 Summary Statistics
+
+For this exercise, we will use the same subset of the *German General Social Survey - ALLBUS 2021* data as in the lecture. For the rest of the course exercises we will continue to work with the subset data set instead of the full Allbus 2021 data. This makes your work accessable and easier to keep clarity. If you have stored that data set as an `.rds` file as shown in the slides, you can simply load it with the following command:
+
+### ABSPRACHE: muss mit Folien übereinstimmen!
+
+
+```{r load}
+Allbus_subset <- readRDS("./data/Allbus.rds")
+```
+
+```{r}
+# Preparation from lecture
+
+Allbus_subset <- Allbus %>% 
+  select(respid,
+         left_right = pa01,
+         agec,
+         respected_profession = ja04,
+         free_time_profession = ja05,
+         educ,
+         sex,
+         party = pv01,
+         working_mother_less_intimacy =fr07,
+         shared_tasks = fr08,
+         working_mother_child_suffering = fr03b,
+         housewife_model = fr04b,
+         eastwest,
+         newspaper_perweek = lm14,
+         socialmedia_newssource = lm35,
+         
+         
+         immigration_war_refugees =  mi05,
+         immigration_politically_persecuted =  mi06,
+         immigration_economic_reasons =  mi07,
+         immigration_EU_workers_EasternEurope =  mi08,
+         immigration_EU_workers = mi09,
+         immigration_nonEU_workers =  mi10,
+         immigration_spouses_children =  mi11,
+         
+         trust_health_system = pt01,
+         trust_federal_constitutional_court = pt02,
+         trust_bundestag = pt03,
+         trust_local_administration = pt04,
+         trust_catholic_church = pt06,
+         trust_protestant_church = pt07,
+         trust_judiciary = pt08,
+         trust_television = pt09,
+         trust_newspaper = pt10,
+         trust_universities = pt11,
+         trust_federal_government = pt12,
+         trust_police = pt14,
+         trust_parties = pt15) %>%
+   
+         mutate(immigration_war_refugees = case_when(
+           immigration_war_refugees > 1 ~ 0,
+           immigration_war_refugees < 2 ~ 1
+         )) %>%
+         mutate(immigration_politically_persecuted = case_when(
+           immigration_politically_persecuted > 1 ~ 0,
+           immigration_politically_persecuted < 2 ~ 1
+         )) %>%
+         mutate(immigration_economic_reasons = case_when(
+           immigration_economic_reasons > 1 ~ 0,
+           immigration_economic_reasons < 2 ~ 1
+         )) %>%
+         mutate(immigration_EU_workers_EasternEurope = case_when(
+           immigration_EU_workers_EasternEurope > 1 ~ 0,
+           immigration_EU_workers_EasternEurope < 2 ~ 1
+         )) %>%
+         mutate(immigration_EU_workers = case_when(
+           immigration_EU_workers > 1 ~ 0,
+           immigration_EU_workers < 2 ~ 1
+         )) %>%
+         mutate(immigration_nonEU_workers = case_when(
+           immigration_nonEU_workers > 1 ~ 0,
+           immigration_nonEU_workers < 2 ~ 1
+         )) %>%
+         mutate(immigration_spouses_children = case_when(
+           immigration_spouses_children > 1 ~ 0,
+           immigration_spouses_children < 2 ~ 1
+         ))
+ 
+
+Allbus_subset <- Allbus_subset %>%
+  rowwise() %>% 
+  mutate(sum_acceptance = sum(c_across(immigration_war_refugees:immigration_spouses_children)),
+         mean_trust = mean(c_across(trust_health_system:trust_parties), na.rm = T)) %>% 
+  ungroup()
+
+Allbus_subset <- Allbus_subset %>% 
+    mutate(sex = recode_factor(sex,
+                               `1` = "male",
+                               `2` = "female",
+                               `3` = "diverse"),
+           age_cat = recode_factor(agec,
+                                   `1`= "Less than 30 years old",
+                                   `2`= "Between 30 and 44 years old",
+                                   `3` = "Between 45 and 59 years old",
+                                   `4` = "Between 60 and 74 years old",
+                                   `5` = "Between 75 and 89 years old",
+                                   `6` = "More than 89 years old",
+                                   .ordered = TRUE),
+           educ = recode_factor(educ,
+                                   `1`= "Pupil",
+                                   `2`= "No Degree",
+                                   `3` = "Elementary school",
+                                   `4` = "Intermediate degree",
+                                   `5` = "Technical college",
+                                   `6` = "Abitur",
+                                   .ordered = TRUE),
+           choice_of_party = recode_factor(party,
+                                           `1`= "CDU/CSU",
+                                           `2`= "SPD",
+                                           `3` = "AfD",
+                                           `4` = "FDP",
+                                           `5` = "Linke",
+                                           `6` = "Gruene"))
+```
+
+If you have not saved the wrangled data as an `.rds` file yet, you need to go through the data wrangling pipeline shown in the EDA slides (again).
+
+Also, in case you have not done so yet, please install `summarytools` and `psych` as we will need them for the exercises (in addition to `base R` and the `tidyverse` packages). The following code chunk will check if you have these packages installed and install them, if that is not the case.
+
+```{r pkgs, eval = F}
+if (!require(summarytools)) install.packages("summarytools")
+if (!require(psych)) install.packages("psych")
+```
+
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Using a `base R` function, print some basic summary statistics for the variable `sum_acceptance`.
+```
+
+```{block, opts.label = "clues"}
+We can use the `dplyr` function for selecting variables and pipe the result into the required function.
+```
+
+```{r first-exercise, solution = TRUE}
+Allbus_subset %>% 
+  select(starts_with("sum")) %>% 
+  summary()
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Using a function from the `psych` package, print the summary statistics for all variables that assess how much people trust specific GERMAN people or institutions (excluding EU institutions). The summary statistics should include IQR but no measures of skew (and kurtosis).
+```
+
+```{block, opts.label = "clues"}
+All names of the variables we are interested in here start with "trust". You can find information about the arguments of the `describe()` function in its help file (`?describe`).
+```
+
+```{r second-exercise, solution = TRUE}
+library(psych)
+Allbus_subset %>% 
+  select(starts_with("trust")) %>% 
+  describe(skew = FALSE,
+           IQR = TRUE)
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Use a function from the `summarytools` package to get summary statistics for the following variables in your data set: `left_right` (left-right self-placement), `sum_acceptance`, `mean_trust`. Unlike in the lecture, however, we now want all stats (not just the "common" ones).
+```
+
+```{block, opts.label = "clues"}
+You can check the arguments for the function we need via `?descr`.
+```
+
+```{r third-exercise, solution = TRUE, message = FALSE, warning = FALSE}
+library(summarytools)
+Allbus_subset %>% 
+  select(left_right,
+         sum_acceptance,
+         mean_trust) %>%
+  descr()
+```
+
+
+```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
+Now, let's use functions from `dplyr` to create grouped summary statistics. Compute separate means for the variables `risk_self` and `risk_surroundings` for the different age groups in the data set. The resulting summary variables should be called `risk_self_mean` and `risk_surroundings_mean`. You should exclude respondents with missing values for the variables of interest.
+```
+
+```{block, opts.label = "clues"}
+You need to group and summarize the data. There are (at least) two different ways of doing this.
+```
+
+```{r fourth-exercise, solution = TRUE}
+# This is the option that requires more typing but is easier to code
+Allbus_subset %>% 
+  select(agec,
+        respected_profession, free_time_profession) %>% 
+  drop_na() %>% 
+  group_by(agec) %>% 
+  summarize(prestige_mean = mean(respected_profession),
+            free_time_mean = mean(free_time_profession))
+# This is the more elegant but somewhat more difficult to code option
+# Allbus_subset %>%
+#   select(agec,
+#          starts_with("risk")) %>%
+#   drop_na() %>%
+#   group_by(agec) %>%
+#   summarize(across(starts_with("risk"),
+#                    list(mean = mean),
+#                    .names = "{col}_{fn}")) %>%
+#   ungroup()
+```
+
+```{r}
+saveRDS(Allbus_subset, "Allbus_subset.rds")
+```
+
+
+# 3_1_2 Frequency Proportions
+
+We will continue to work with the same data as in the previous set of exercises. By now, you should (hopefully) have saved them as an `.rds` file and, hence, be able to easily load them (in case they are not already/still in your current `R` workspace/working environment).
+
+```{r load}
+Allbus_subset <- readRDS("./data/Allbus_subset.rds")
+```
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Using `base R`, print a simple table with the frequencies of the variable `educ`. Also include the counts for missing values.
+```
+
+```{block, opts.label = "clues"}
+The argument for including missing values in the resulting table is `useNA = "always"`.
+```
+
+```{r first-exercise, solution = TRUE}
+table(Allbus_subset$educ, useNA = "always")
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Next, use a combination of `base R` functions to get the proportions for the variable `sex` rounded to four decimal places.
+```
+
+```{block, opts.label = "clues"}
+You need to wrap `table()` into two other functions: One for creating the proportion table and another one for rounding the decimal places.
+```
+
+```{r second-exercise, solution = TRUE}
+round(prop.table(table(Allbus_subset$sex)), 4)
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Now, use functions from the `dplyr` package to get the frequencies and proportions for the `sex` variable (without worrying about the number of decimal places this time).
+```
+
+```{block, opts.label = "clues"}
+We first need to count the cases and then transform the resulting variable to get proportions.
+```
+
+```{r third-exercise, solution = TRUE}
+Allbus_subset %>% 
+  count(sex) %>%
+  mutate(proportion = n/sum(n)) %>% 
+  ungroup()
+```
+
+```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
+Use a function from the `summarytools` package to display the counts and percentages for the categories in the `agec` variable. The output should not include information about the totals.
+```
+
+```{block, opts.label = "clues"}
+Check the help file for the function to see how to exclude the totals from the output.
+```
+
+```{r fourth-exercise, solution = TRUE}
+freq(Allbus_subset$age_cat,
+     totals = FALSE)
+```
+
+### Question: new variables are not saved in the 'Allbus_subset' data set, is this desired?
+
+# 3_1_3 Crosstabs & correlations
+
+As before, we may need to load the data again, if they are not in our work space.
+
+```{r load}
+Allbus_subset <- readRDS("./data/Allbus_subset.rds")
+```
+
+In case you have not done so yet, please also install `janitor` and `correlation`.
+
+```{r pkgs, eval = F}
+if (!require(summaryrtools)) install.packages("janitor")
+if (!require(summaryrtools)) install.packages("correlation")
+```
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+As a first exercise, use `base R` to create a cross tabulation for the variables `agec` (age category, rows) and `pv01` (choice of party, columns) showing row percentages. Before you run the table, make sure to set all values to NA that do not correspond to a political party. 
+```
+
+```{block, opts.label = "clues"}
+We need to combine `round()`, `table()`, and `prop.table()` here, add an argument to `prop.table()` to get row totals, and transform the results to represent percentages. Set the values `-50`, `42`, `90`, an `91` to NA.
+```
+
+```{r first-exercise, solution = TRUE}
+install.packages("naniar")
+library(naniar)
+
+na_strings <- c(-50, 42, 90, 91)
+
+Allbus_subset <- Allbus_subset %>%
+  replace_with_na_at(.vars = "choice_of_party",
+                     condition = ~.x %in% (na_strings))
+
+round(prop.table(table(Allbus_subset$age_cat, Allbus_subset$choice_of_party), 1)*100, 2)
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Now, let's use the `janitor` package to get the same results. 
+```
+
+```{block, opts.label = "clues"}
+We want to create a `tably()` object and add some additional functions to get the row percentages. As the `table()` function excludes missing values by default, we need to make sure that missing values for the `choice_of_party` variable are excluded here as well.
+```
+
+```{r second-exercise, solution = TRUE}
+install.packages("janitor")
+library(janitor)
+Allbus_subset %>% 
+  filter(!is.na(choice_of_party)) %>% 
+  tabyl(age_cat, choice_of_party) %>% 
+  adorn_percentages(denominator = "row") %>% 
+  adorn_pct_formatting(digits = 2)
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+As a final exercise on crosstabs, compute a chi-square test for the `tabyl` we have created before. 
+```
+
+```{block, opts.label = "clues"}
+We do not need the percentage sign or the row percentages for this.
+```
+
+```{r third-exercise, solution = TRUE}
+Allbus_subset %>% 
+  filter(!is.na(age_cat)) %>%
+  tabyl(age_cat, choice_of_party) %>% 
+  chisq.test()
+```
+
+```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
+Let's turn to correlations: Use the `correlation` package to calculate and print correlations between the following variables: `respected_profession`, `free_time_profession`, `sum_acceptance`.
+```
+
+```{block, opts.label = "clues"}
+The name of the function you need is the same as that of the package we use here.
+```
+
+```{r fourth-exercise, solution = TRUE, message=FALSE}
+install.packages("correlation")
+library(correlation)
+Allbus_subset %>% 
+  select(respected_profession,
+         free_time_profession,
+         sum_acceptance) %>% 
+  correlation()
+```
+
+```{block, box.title = "5", box.body = list(fill = "white"), box.icon = "fa-star"}
+As a final exercise, compute the correlations using the same function and variables as in the previous exercise, but group them by `education_cat`.
+```
+
+```{block, opts.label = "clues"}
+You need to use group the data by `education_cat` before computing the correlations.
+```
+
+```{r fifth-exercise, solution = TRUE, message=FALSE}
+library(correlation)
+Allbus_subset %>% 
+  select(respected_profession,
+         free_time_profession,
+         sum_acceptance,
+         educ) %>% 
+  group_by(educ) %>% 
+  correlation()
+```
+
+
+# 3_2_1 A simple plot
+
+Plotting data is fun. We also do it for data exploration (see the section on *Exploratory Data Analysis*). In these exercises, however, we just want to familiarize ourselves with some of the graphic facilities in R.
+
+So let's start with a simple task: creating a simple scatter plot. For this purpose, we first load the *German General Social Survey - ALLBUS 2021 SUBSET*.
+```{r loadgpcovid, message=FALSE, eval=TRUE}
+library(dplyr)
+library(haven)
+```
+### AN: Changed .sav file to.csv file; still using subset data
+
+Now let's plot an actual variable from the data set.
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Create a scatter plot for the variables `political_orientation` and `fr03b` (children suffer under working mothers).
+```
+
+```{block, opts.label = "clues"}
+You simply need the `plot()` command.
+```
+
+```{r scatter, solution = TRUE}
+plot(Allbus_subset$left_right, Allbus_subset$working_mother_child_suffering)
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Add some jitter to the scatter plot.
+```
+
+```{block, opts.label = "clues"}
+You need the `jitter()` function. Have a look at `?jitter` for more details on using the function.
+```
+
+```{r jitter, solution = TRUE}
+plot(
+  jitter(Allbus_subset$left_right, 2), 
+  jitter(Allbus_subset$working_mother_child_suffering, 2)
+)
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Add some color of your choice to the plot.
+```
+
+```{block, opts.label = "clues"}
+Did you check out the `ColourPicker` add-in for more modern colors?
+```
+
+```{r colorscatter, solution = TRUE}
+plot(
+  jitter(Allbus_subset$left_right, 2), 
+  jitter(Allbus_subset$working_mother_child_suffering, 2),
+  col = c("#1C86EE", "#FFFFFF", "#FFFFFF")
+)
+```
+
+
+# 3_2_2 Handling multiple plots
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Plot 4 bar plots of 4 variables of your choice from the data set in two rows and two columns.
+```
+
+```{block, opts.label = "clues"}
+You have to use the `par()` function in combination with its `mfrow` option.
+```
+
+```{r barplots, solution = TRUE}
+tab_1 <- table(Allbus_subset$working_mother_less_intimacy)
+tab_2 <- table(Allbus_subset$shared_tasks)
+tab_3 <- table(Allbus_subset$working_mother_child_suffering)
+tab_4 <- table(Allbus_subset$housewife_model)
+par(mfrow = c(2, 2))
+barplot(tab_1)
+barplot(tab_2)
+barplot(tab_3)
+barplot(tab_4)
+```
+
+That's interesting. One may wonder what the median is in each of these distributions. You know what's perfect for visualizing this statistic? Boxplots!
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Use the same plotting approach, but change the barplot to a boxplot.
+```
+
+```{block, opts.label = "clues"}
+Creating the tables beforehand is not needed anymore.
+```
+
+```{r boxplots, solution = TRUE}
+par(mfrow = c(2, 2))
+boxplot(Allbus_subset$working_mother_less_intimacy)
+boxplot(Allbus_subset$shared_tasks)
+boxplot(Allbus_subset$working_mother_child_suffering)
+boxplot(Allbus_subset$housewife_model)
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Store the box plots from the previous exercises combined in one `png` image.
+```
+
+```{block, opts.label = "clues"}
+The name of the function is the same as the file format we want for out output (with the required argument of a file path).
+```
+
+```{r png, solution = TRUE}
+png("Boxplots.png")
+par(mfrow = c(2, 2))
+boxplot(Allbus_subset$working_mother_less_intimacy)
+boxplot(Allbus_subset$shared_tasks)
+boxplot(Allbus_subset$working_mother_child_suffering)
+boxplot(Allbus_subset$housewife_model)
+dev.off()
+```
+
+Before we later start with the other exercises, you should clean your graphics device with `dev.off()`
+
+```{r cleandevice , message=FALSE}
+# dev.off()
+```
+### Error ?
+
+# 3_2_3 Plotting repeats
+
+~~History~~ Plotting repeats. Let's dive into `ggplot2` and repeat what we've done in `base R` using the "grammar of graphics".
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Create a scatter plot for the variables `political_orientation` and `hzcy001a`.
+```
+
+```{block, opts.label = "clues"}
+Remember the order of layers: `data + aesthetics + geoms`
+```
+
+```{r scatter, solution = TRUE}
+library(ggplot2)
+ggplot(
+  Allbus_subset,
+  aes(left_right, working_mother_child_suffering)
+)
+  geom_point()
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Add some jitter to the scatter plot.
+```
+
+```{block, opts.label = "clues"}
+In contrast to the `base R` function jitter does not have to be added; it just replaces the original `geom` using `geom_jitter()`
+```
+
+```{r jitter, solution = TRUE}
+ggplot(
+  Allbus_subset,
+  aes(left_right, working_mother_child_suffering)
+) +
+  geom_jitter()
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Boxplots are boring, right? Try to plot the relationship between `fr03b` and `pa01` as a violin plot! Have a look here for reference: https://ggplot2.tidyverse.org/reference/
+What's the difference to a boxplot?
+```
+
+```{block, opts.label = "clues"}
+You can't find the proper `geom`? Try `geom_violin()`.
+```
+
+```{r violin, solution = TRUE}
+ggplot(
+  Allbus_subset,
+  aes(left_right, working_mother_child_suffering)
+) +
+  geom_violin()
+# In contrast to simple boxplots, violin plots show densities and can, e.g.,
+# help to assess whether a variable is normally distributed or not.
+```
+
+# 3_2_4 GGod plots
+
+As we have discussed in the session on *Exploratory Data Analysis*, data exploration is not only about creating numbers and summary statistics. Sometimes a good plot can reveal more insights than a whole data frame filled with numbers (especially to the human eye). In this exercise, we use what we've just learned about plots with `ggplot2`. We will also repeat some of the content from the sessions on data wrangling in the following exercises (as this is typically part of a pipeline for data visualization).
+
+This time we are going to use the [*Gapminder*](https://www.gapminder.org/) data on GDP per capita again. Hence, we need to first load the *Gapminder* GDP data from the `CSV` file and convert it to long format.
+
+```{r data_file}
+library(dplyr)
+library(tidyr)
+gapminder_ggplot_input <-
+  readr::read_csv("./data/gdppercapita_us_inflation_adjusted.csv") %>%
+  pivot_longer(-country, names_to = "year", values_to = "GDP") %>% 
+  filter(!is.na(GDP)) %>%
+  arrange(year, GDP) %>%
+  group_by(year) %>%
+  summarise(GDP_over_all_countries = mean(GDP)) %>% 
+  ungroup()
+```
+
+Our aim is to analyze how the GDP has developed over time. The nice thing about plots is that we can use the whole range of years and still identify differences between various periods. Our plot of choice for this is a line plot to visualize the data as a time series.
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Using `ggplot2`, plot the *Gapminder* GDP per capita data as a line plot to display a time series. One important note here: In the aesthetics definition for this plot you should define a grouping variable `group = 1`. Otherwise, `ggplot` assumes that you want to plot one line for each year.
+```
+
+```{block, opts.label = "clues"}
+The name of the geom we need is `geom_line`.
+```
+
+```{r line_plot_solution, solution = TRUE}
+ggplot(
+  data = gapminder_ggplot_input,
+  aes(x = year, y = GDP_over_all_countries, group = 1)
+) +
+  geom_line()
+```
+
+Admittedly, this may not be the best approach to identify differences between the periods directly. We don't know when our periods start and when they end. Luckily, this can be done in two relatively straightforward steps. Let's start with the first one: using different colors for different periods. For this purpose, we need an indicator variable as a grouping variable to use different colors for the line at each period.
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Create an indicator variable for the periods 1960-1969, 2002-2018 and the time in between.
+```
+
+```{block, opts.label = "clues"}
+A combination of `mutate()` and `case_when()` lets you create the new variables we need. To get some sensible legend labels later, you should specify the indicator variables as strings.
+```
+
+```{r indicator_variable_solution, solution = TRUE}
+gapminder_ggplot_input <-
+  gapminder_ggplot_input %>% 
+  mutate(
+    period = 
+      case_when(
+        year >= 1960 & year <= 1969 ~ "1960-1969",
+        year >= 1970 & year <= 2001 ~ "1970-2001",
+        year >= 2002 & year <= 2018 ~ "2002-2018"
+      )
+  )
+```
+
+After we're set up with our indicator variable, it's plotting time again. We can simply reuse our code from before and define a grouping color in the aesthetics definition.
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Plot the line plot once again, but this time with different colors for the different periods.
+```
+
+```{block, opts.label = "clues"}
+In the aesthetics definition `aes()`, you can choose the option `color = indicator_variable` to define the grouping.
+```
+
+```{r line_plot_periods_solution, solution = TRUE}
+ggplot(
+  data = gapminder_ggplot_input,
+  aes(
+    x = year, 
+    y = GDP_over_all_countries, 
+    color = period, 
+    group = 1
+  )
+) +
+  geom_line()
+```
+
+Now we can see some visual differences between the different periods. One last thing, however, is that there are way too many labels on the x-axis. Maybe a more sensible axis labeling approach would be to create axis breaks for ten-year-steps. **NB: The next one is an advanced exercise as we did not talk about manipulating axes before. If you're not feeling adventurous you can just skip this one.**
+
+```{block, box.title = "Bonus", box.body = list(fill = "white"), box.icon = "fa-star"}
+Create some prettier, i.e., more sensible breaks for the x-axis.
+```
+
+```{block, opts.label = "clues"}
+You can modify the x-axis with `scale_x_discrete()` and its breaks with the option `breaks = breaks_vector`. You can check the help file (`?scale_discrete`) for some more information. A helpful additional function to use here is `seq()` from `base R`. 
+```
+
+```{r line_plot_breaks_solution, solution = TRUE}
+ggplot(
+  data = gapminder_ggplot_input,
+  aes(
+    x = year, 
+    y = GDP_over_all_countries, 
+    color = period, 
+    group = 1
+  )
+) +
+  geom_line() +
+  scale_x_discrete(
+    breaks = seq(
+      from = 1960, 
+      to = 2011,
+      by = 10
+    )
+  )
+```
+
+# 4_1_1 t-test and ANOVA
+
+As in the slides, we will, again, use the data from the *German General Social Survey - ALLBUS 2021 SUBSET*. If they are not (still/yet) in your work space, you first need to load them.
+
+```{r load}
+Allbus_subset <- readRDS("./data/Allbus_subset.rds")
+```
+
+
+In case you have not done so yet, please also install the `effectsize` package.
+
+```{r pkgs, eval = F}
+if (!require(summaryrtools)) install.packages("effectsize")
+```
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Let's start with a very simple analysis: Compute a t-test to compare the means of the two `eastwest` groups in the data for the variable `sum_acceptance`.
+```
+
+```{block, opts.label = "clues"}
+For the t-test you can use a `base R` function named after this test.
+```
+
+```{r first exercise, solution = TRUE}
+t.test(sum_acceptance ~ eastwest, data = Allbus_subset)
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+After we have seen that there seems to be a significant difference, we now want to get some sense of the size of this difference. For that purpose, we are interested in the effect size Cohen's d.
+```
+
+```{block, opts.label = "clues"}
+To calculate Cohen's d you can use a function from the `effectsize` package.
+```
+
+```{r second-exercise, solution = TRUE}
+install.packages("effectsize")
+library(effectsize)
+cohens_d(sum_acceptance ~ eastwest, data = Allbus_subset)
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Next, use a `base R` function to run an ANOVA to test the relationship between the participants acceptance range of immigration and their respective age groups.
+```
+
+```{block, opts.label = "clues"}
+We can get some (more) detailed information about the results using the `summary()` function.
+```
+
+```{r third-exercise, solution = TRUE}
+anova <- aov(sum_acceptance ~ age_cat, 
+             data = Allbus_subset)
+summary(anova)
+```
+
+```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
+Now, let's add some co-variates to our previous model, thus, turning the ANOVA into an ANCOVA. The co-variates we want to include are age group, region, and education.
+```
+
+```{block, opts.label = "clues"}
+Remember that you can simply add co-variates in a formula in `R` with `+`.
+```
+
+```{r fourth-exercise, solution = TRUE}
+ancova <- aov(sum_acceptance ~ age_cat + eastwest + educ,
+              data = Allbus_subset)
+summary(ancova)
+```
+
+```{block, box.title = "5", box.body = list(fill = "white"), box.icon = "fa-star"}
+We also want to have some indicator of effect size for our ANCOVA. As Reviewer 2 prefers Omega² over Eta², let's give them (it was an anonymous reviewer, of course) what they want...
+```
+
+```{block, opts.label = "clues"}
+The `effectsize` package also offers a function for calculating Omega².
+```
+
+```{r fifth-exercise, solution = TRUE}
+omega_squared(ancova)
+```
+
+
+# 4_1_2 Regression Analysis
+
+As per usual, we first need to load our data (in case we have not already done so in the current `R` session).
+
+```{r load}
+# Allbus_subset <- readRDS("./data/Allbus_subset.rds")
+```
+
+In case you have not done so yet, please also install the `performance` package for this set of exercises.
+
+```{r pkgs, eval = F}
+if (!require(summaryrtools)) install.packages("performance")
+```
+
+In the following exercise, we will cover/repeat some of the basics of regression analysis in `R`.
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+To begin with, run a simple linear regression model with trust in the German federal parliament as the outcome variable and choice of party and political orientation as predictors.
+```
+
+```{block, opts.label = "clues"}
+To get some (more) informative output, you can use `summary()` again. 
+```
+
+```{r first-exercise, solution = TRUE}
+reg_linear <- lm(trust_federal_government ~ choice_of_party + left_right,
+                 data = Allbus_subset)
+summary(reg_linear)
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+As the next step in our analyses, we want to run a logistic regression model with the variable indicating whether people are in favor of immigration due to *economic reasons* and trust in newspaper, trust in the government, and choice of party as predictors.
+```
+
+```{block, opts.label = "clues"}
+This time, you need the `glm()` function in which you need to specify a link function. The name of the outcome variable is `info_fb`.
+```
+
+```{r second-exercise, solution = TRUE}
+reg_logistic <- glm(immigration_economic_reasons ~ trust_newspaper + trust_federal_government + choice_of_party,
+    family = binomial(link = "logit"),
+    data = Allbus_subset)
+summary(reg_logistic)
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Reviewer 2 is at it again... As Cauchit links are all the rage in their field, they want us to run the same model with the sole difference of using a cauchit link.... sigh!
+```
+
+```{block, opts.label = "clues"}
+Have a look at the help page `?family` to see how you can include a cauchit link.
+```
+
+```{r third-exercise, solution = TRUE}
+reg_cauchit <- glm(immigration_economic_reasons ~ trust_newspaper + trust_federal_government + choice_of_party,
+    family = binomial(link = "cauchit"),
+    data = Allbus_subset)
+summary(reg_cauchit)
+```
+
+```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
+Compare both regression models using an ANOVA. Use the argument `test = "LRT"` in the function we need for this to perform a likelihood ratio test. What's your interpretation?
+```
+
+```{block, opts.label = "clues"}
+A p-value considered as statistically significant would indicate a difference between the models.
+```
+
+```{r fourth-exercise, solution = TRUE}
+anova(reg_logistic,
+      reg_cauchit,
+      test = "LRT")
+# Interpretation of difference:
+# It seems there is no big difference. We can make the reviewer happy with the
+# cauchit models and still keep our main findings.
+```
+
+```{block, box.title = "5", box.body = list(fill = "white"), box.icon = "fa-star"}
+To be extra sure that there is no meaningful difference between the logit and the cauchit model, let's also compare some fit parameters. We want the following model fit metrics: AIC, BIC, R², and RMSE
+```
+
+```{block, opts.label = "clues"}
+The `performance` package provides a function for comparing the performance of different models in terms of their fit.
+```
+
+```{r fifth-exercise, solution = TRUE}
+compare_performance(reg_logistic,
+                    reg_cauchit,
+                    metrics = c("AIC", "BIC", "R2", "RMSE"))
+```
+
+
+# 4_1_3 Regression Reporting
+
+After running a few regression analyses in the previous exercises, we will now explore some options for reporting their results.
+
+If necessary, load the data first....
+
+
+```{r load}
+Allbus_subset <- readRDS("./data/Allbus_subset.rds")
+```
+
+In addition to the `parameters` package, which we have already used in the previous exercises on regression analysis, this time we also need the following packages: `stargazer`, `report`, and `broom`. 
+
+```{r pkgs, eval = F}
+if (!require(summaryrtools)) install.packages("stargazer")
+if (!require(summaryrtools)) install.packages("report")
+if (!require(summaryrtools)) install.packages("broom")
+```
+
+Before we can report anything, we, of course, first need to run a regression analysis (again)...
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Run a simple linear regression model with the sum of acceptance (acceptance rate for reasons of immigration) as the outcome variable and the amount of social media use as a news source `socialmedia_newssource`, the number of days the participant reads a daily newspaper per week `newspaper_perweek`, the east-west division `eastwest` and the interaction effect of `sex` and trust in the federal government `trust_federal_government`.
+```
+
+```{block, opts.label = "clues"}
+Remember that you can include interaction effects in a formula in `R` using `*`. If you want to, you can have a look at the results via `summary()`.
+```
+
+```{r first-exercise, solution = TRUE}
+reg_model <- lm(sum_acceptance ~ socialmedia_newssource + newspaper_perweek + eastwest + sex*trust_federal_government,
+                data = Allbus_subset)
+summary(reg_model)
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Using `base R`, print only the coefficients from the model.
+```
+
+```{block, opts.label = "clues"}
+You can use the same operator that you use in `base R` for accessing variables in a data frame to select the element we want from the `lm` object.
+```
+
+```{r second-exercise, solution = TRUE}
+reg_model$coefficients
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Using a function from a package that allows us to view model parameters, print some more interesting information on the results of our model (including confidence intervals and p-values) in a nice tabular format.
+```
+
+```{block, opts.label = "clues"}
+We can use a function from the `parameters` package for printing model parameters here.
+```
+
+```{r third-exercise, solution = TRUE}
+model_parameters(reg_model)
+```
+
+```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
+For further use in a publication, we also want to create a typical regression table using the `stargazer` package. We want the output to be in plain text format.
+```
+
+```{block, opts.label = "clues"}
+If you want to, you can also specify labels for the variables in your models as arguments in the `stargazer` function.
+```
+
+```{r fourth-exercise, solution = TRUE}
+library(stargazer)
+stargazer(reg_model,
+          type = "text",
+          dep.var.labels=c("Sum of acceptance"),
+          covariate.labels=c("Social media as a news source", "Newspaper per week", "East - West",
+                             "Interaction: sex - trust in the federal government"))
+```
+
+```{block, box.title = "5", box.body = list(fill = "white"), box.icon = "fa-star"}
+To produce custom tables and plots, we also want to store the key parameters of our model in a tidy tibble.
+```
+
+```{block, opts.label = "clues"}
+There's a function in the `broom` package for that.
+```
+
+```{r fifth-exercise, solution = TRUE}
+library(broom)
+tidy(reg_model)
+```
+
+```{block, box.title = "6", box.body = list(fill = "white"), box.icon = "fa-star"}
+Of course, we can't write a paper that just consists of tables and plots (though some would surely very much appreciate that). We also need to produce some actual text. We all know the "You should be writing" memes, so we're in luck that `R` can also help us out here as well. Let's use a function that produces some model language describing the results of our regression model. 
+```
+
+```{block, opts.label = "clues"}
+The package we can use to save some time that we would otherwise spend typing or copying and pasting is called `report`.
+```
+
+```{r sixth-exercise, solution = TRUE}
+library(report)
+report(reg_model)
+```
+
+
+# 4_2_1 Plotting Diagnostics
+
+In the following exercises, you will work on your own 'research question' using the GESIS Allbus data. If you have not already done so, you can load the data first using the following code:
+
+```{r load-gp-covid}
+library(haven)
+library(dplyr)
+library(sjlabelled)
+
+Allbus_reg <- 
+read_sav(
+  "./data/ZA5280_v1-0-0.sav"
+)  %>% 
+  set_na(na = c(-1:-99)) %>% 
+  rowwise() %>%
+  mutate(
+    mean_trust = 
+      mean(
+        c_across(pt01:pt15), 
+        na.rm = TRUE
+      )
+  ) %>% 
+  ungroup() %>% 
+  remove_all_labels() %>% 
+  mutate(
+    pol_leaning_cat = 
+      case_when(
+       between(pa01 , 0, 3) ~ "left",
+        between(pt01, 4, 7) ~ "center",
+        pt01 > 7 ~ "right"      ) %>% 
+      as.factor()
+  ) %>% 
+  filter(pol_leaning_cat != "NA")
+```
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Take a few minutes to choose a dependent variable (DV) and an independent variable (IV) from the [Allbus 2021 codebook](https://dbk.gesis.org/dbksearch/download.asp?id=67378). Don't overthink your choices!
+```
+
+```{block, opts.label = "clues"}
+If you're really struggling to find something you like, what about the following variables:
+1. mi05 (accepting refugees from war-torn countries) as DV and st01 (general trust in people) as IV
+2. pa01 (left-right self-placement) as DV and agec as IV
+3. fr12 (man taking care of the household and children) as DV and sex IV
+Be aware that you may have to do some recoding, and that your sample is likely reduced due to filter questions.
+```
+
+```{r first-exercise, solution = TRUE}
+# We will use option 2 from the list in the clues in the following.
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Run a linear regression model with your variables and `education_cat` as covariate. If it is part of your predictor variables (IV), choose another one. Then check visually if the residuals are normally distributed.
+```
+
+```{block, opts.label = "clues"}
+You need the `performance` and `see` packages for this task (and `dplyr` for the preparatory wrangling part).
+```
+
+```{r second-exercise, solution = TRUE}
+library(performance)
+library(see)
+
+Allbus_reg <- 
+  read_sav(
+    "./data/ZA5667_v1-1-0.sav"
+  ) %>% 
+  set_na(na = c(-1:-99)) %>% 
+  rowwise() %>%
+  mutate(
+    mean_trust = 
+      mean(
+        c_across(pt01:pt15),
+        na.rm = TRUE
+      )
+  ) %>% 
+  ungroup() %>% 
+  remove_all_labels() %>% 
+  mutate(
+    pol_leaning_cat = 
+      case_when(
+        between(pa01 , 0, 3) ~ "left",
+        between(pt01, 4, 7) ~ "center",
+        pt01 > 7 ~ "right"
+      ) %>% 
+      as.factor()
+  ) %>% 
+  filter(pol_leaning_cat != "NA")
+
+Allbus_reg <-
+  Allbus_reg %>% 
+  mutate(
+    satisfied_Germany = 
+      case_when(
+        between(pa01 , 1, 2) ~ 1,
+        between(pt01, 3, 4) ~ 0
+      )
+  )
+
+linear_model <-
+  lm(
+        satisfied_Germany ~ agec + educ,
+    data = Allbus_reg
+    )
+check_normality(linear_model) %>%
+  plot()
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Now, do the full range of model checks using a function from the `performance` package.
+```
+
+```{r third-exercise, solution = TRUE}
+check_model(linear_model)
+```
+
+
+# 4_2_2 Plotting a regression
+
+You can continue to work with the analyses you did in the previous set of exercises. For the examples we are going to use, we need to first load and wrangle the data. **NB** You do not need to run this code, if you want to continue with/from the analyses you did in the previous exercises (which is what we would recommend).
+
+```{r load-gp-covid}
+library(haven)
+library(dplyr)
+library(sjlabelled)
+Allbus_reg <- 
+  read_sav(
+    "./data/ZA5667_v1-1-0.sav"
+  ) %>% 
+  set_na(na = c(-1:-99)) %>% 
+  rowwise() %>%
+  mutate(
+    mean_trust = 
+      mean(
+        c_across(pt01:pt15),
+        na.rm = TRUE
+      )
+  ) %>% 
+  ungroup() %>% 
+  remove_all_labels() %>% 
+  mutate(
+    pol_leaning_cat = 
+      case_when(
+        between(pa01 , 0, 3) ~ "left",
+        between(pt01, 4, 7) ~ "center",
+        pt01 > 7 ~ "right"
+      ) %>% 
+      as.factor()
+  ) %>% 
+  filter(pol_leaning_cat != "NA")
+
+Allbus_reg <-
+  Allbus_reg %>% 
+  mutate(
+    satisfied_Germany = 
+      case_when(
+        between(pa01 , 1, 2) ~ 1,
+        between(pt01, 3, 4) ~ 0
+      )
+  )
+```
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Re-use your analysis from the previous set of exercises and run an interaction model between your IV and the other covariate. Plot the interaction as a coefficient plot.
+```
+
+```{block, opts.label = "clues"}
+For the coefficient plot, you can use the `easystats` packages we have used in the lecture. 
+```
+
+
+```{r first-exercise, solution = TRUE}
+library(parameters)
+library(performance)
+library(see)
+linear_model_interaction <-
+  lm(
+    satisfied_Germany ~ agec * educ,
+    data = Allbus_reg
+  )
+model_parameters(linear_model_interaction) %>% 
+  plot()
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Imagine that you want to use the plot in a publication. Color figures usually cost extra. So, to save some money, try to make the plot "turn grey".
+```
+
+```{block, opts.label = "clues"}
+Remember that the `easytats` plots are based on `ggplot2`. You could choose from one of `ggplot2`'s built-in themes from this list: https://ggplot2.tidyverse.org/reference/ggtheme.html. In another step, you could adjust the color of the scale, e.g., with `scale_colour_grey()`. Be creative. 
+```
+
+```{r second-exercise, solution = TRUE}
+model_parameters(linear_model_interaction) %>% 
+  plot() +
+  scale_colour_grey(start = 0,
+                    end = .5,
+                    guide = "none") +
+  theme_minimal()
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Plot the interaction effect as a prediction.
+```
+
+```{block, opts.label = "clues"}
+For this purpose, you need the `plot_model()` function from `sjPlot`.
+```
+install.packages("sjPlot")
+```{r third-exercise, solution = TRUE}
+library(sjPlot)
+plot_model(
+  linear_model_interaction,
+  type = "int"
+)
+```
+
+
+# 4_2_3 Combining Predictions
+
+```{r load-gp-covid, include = FALSE}
+library(haven)
+library(dplyr)
+library(sjlabelled)
+Allbus_reg <- 
+  read_sav(
+    "./data/ZA5667_v1-1-0.sav"
+  ) %>% 
+  set_na(na = c(-1:-99)) %>% 
+  rowwise() %>%
+  mutate(
+    mean_trust = 
+      mean(
+        c_across(pt01:pt15),
+        na.rm = TRUE
+      )
+  ) %>% 
+  ungroup() %>% 
+  remove_all_labels() %>% 
+  mutate(
+    pol_leaning_cat = 
+      case_when(
+        between(pa01 , 0, 3) ~ "left",
+        between(pt01, 4, 7) ~ "center",
+        pt01 > 7 ~ "right"
+      ) %>% 
+      as.factor()
+  ) %>% 
+  filter(pol_leaning_cat != "NA")
+
+Allbus_reg <-
+  Allbus_reg %>% 
+  mutate(
+    satisfied_Germany = 
+      case_when(
+        between(pa01 , 1, 2) ~ 1,
+        between(pt01, 3, 4) ~ 0
+      )
+  ) 
+```
+
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Let's re-estimate our model from the previous exercise, just with another dependent variable. Again, consult the [GESIS Panel codebook](https://dbk.gesis.org/dbksearch/download.asp?id=67378) and choose another variable that may make sense to be inserted into a regression.
+```
+
+```{block, opts.label = "clues"}
+If you're having a hard time finding suitable variables, what about one of the dependent variables from the first set of exercises for this session:
+1. mi05 (accepting refugees from war-torn countries)
+2. satisfied_Germany (satisfaction with general living situation in Germany)
+3. fr12 (man taking care of the household and children)
+Be aware that you may have to conduct some recoding.
+```
+
+```{r first-exercise, solution = TRUE}
+# We chose pa01 for the following tasks/solutions.
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Re-run your analysis just by switching the dependent variables.
+```
+
+```{r second-exercise, solution = TRUE}
+library(parameters)
+linear_model_2 <-
+  lm(
+    satisfied_Germany  ~ agec + educ,
+    data = Allbus_reg
+  )
+model_parameters(linear_model_2)
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Now extract the prediction data for your main independent variable for this model.
+```
+
+```{block, opts.label = "clues"}
+You can use the function `get_model_data()` from the `sjPlot` package. You should set the option `type = "pred"` and provide the name of your independent variable in the `terms` option.
+```
+
+```{r third-exercise, solution = TRUE}
+library(sjPlot)
+predictions_model_2 <-
+  get_model_data(
+    linear_model_2,
+    type = "pred",
+    terms = "agec"
+  )
+```
+
+```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
+Repeat the previous step for your original model and combine both data sets. The resulting data should be a `data.frame` or a `tibble`.
+```
+
+```{block, opts.label = "clues"}
+- For combining the data, you simply have append both data sets rowwise. You can either use the `bind_rows()` function from the `dplyr` package or `rbind()` from `base R`. 
+- Make sure that you add an indicator variable for the model for each of the data sets before during the combination.
+- You can convert any (well, a lot of...) data objects to a `tibble` using `as_tibble()` from the `tibble` package.
+```
+
+```{r fourth-exercise, solution = TRUE}
+library(dplyr)
+library(tibble)
+linear_model <-
+  lm(
+    pol_leaning_cat ~ agec + educ,
+    data = Allbus_reg
+  )
+predictions_model <-
+  get_model_data(
+    linear_model,
+    type = "pred",
+    terms = "agec"
+  )
+predictions <-
+  bind_rows(
+    predictions_model %>% 
+      mutate(model = "Model 1"),
+    predictions_model_2 %>% 
+      mutate(model = "Model 2")
+  ) %>% 
+  as_tibble()
+```
+
+```{block, box.title = "5", box.body = list(fill = "white"), box.icon = "fa-star"}
+Create a faceted `ggplot` with the regression predictions (without further customizing anything).
+```
+
+```{block, opts.label = "clues"}
+You can use `facet_wrap()` here.
+```
+
+```{r fifth-exercise, solution = TRUE}
+library(ggplot2)
+ggplot(
+  predictions,
+  aes(x, predicted)
+  ) + 
+  geom_line() +
+  geom_line(aes(x, conf.low), linetype = "dashed") +
+  geom_line(aes(x, conf.high), linetype = "dashed") +
+  facet_wrap(~model)
+  
+```
+
+
+# 5_1_1 R-Markdown
+
+The structure of this final exercise for the course is a bit different. We want you to create and work with `R Markdown` documents (creating `HTML` output) to go through some of the things we covered and did in the previous sessions. There are no coding tasks in this document.
+
+We have created an `R Markdown` document (which we have also already knitted to create an `HTML` output file) that demonstrates some of the things you can do/create with `R Markdown` and repeats a few of the topics and steps we went through in the sessions before this one.
+
+This document uses *Gapminder* data and you can find it in the `exercise` folder: It is called `explore_gapminder.Rmd`.
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+The first thing we want you to do is to open the `explore_gapminder.Rmd`file in *RStudio* and explore it a bit to see what it contains. You can also open `explore_gapminder.html` (in your browser) to see the `.Rmd` and the resulting output document side-by-side.
+```
+
+```{block, opts.label = "clues"}
+You can open the `.Rmd` file via the `File` tab or the menu (`File` -> `Open File`) in *RStudio*.
+```
+
+You might notice that there are quite a few things specified in the `YAML` header. Let's briefly go through them:
+
+toc: true -> The document will contain a table of contents (ToC)
+
+toc_depth: 3 -> The ToC will contain header levels 1 to 3
+
+number_sections: true -> The sections divided by headers will be numbered
+
+toc_float: true -> The ToC is floating, meaning that it moves when you scroll
+
+code_folding: hide -> By default, the code chunks are hidden, but you display them by clicking the `Code` buttons in the `HTML` document
+
+theme: flatly -> The [*Bootswatch*](https://bootswatch.com/) them [*flatly*](https://bootswatch.com/flatly/) is used to style the document
+
+highlight: tango -> The document uses the [*Pandoc* code highlighting style](https://www.garrickadenbuie.com/blog/pandoc-syntax-highlighting-examples/) *tango*
+
+code_download: true -> The document includes a button allowing you to download the full code
+
+df_print: paged -> When data frames are printed in the document they are printed in paged tables
+
+**NB**: To knit the document you need to have the packages it uses installed. These are the following ones:
+`rmarkdown`, `knitr`, `tidyverse`, `visdat`, `janitor`, `pander`, `patchwork`, `correlation`, `GGally`, `broom`, `sjPlot`, `scales`.
+
+An easy option for checking whether you have these packages installed, doing so if that is not the case in one go, and loading them is the `packages()` function from the `easypackages` package. To use it for this purpose, you can run the following code:
+
+```{r easyp, eval = F}
+if (!require(easypackages)) install.packages("easypackages")
+library(easypackages)
+packages("rmarkdown", "knitr", "tidyverse", "visdat", "janitor", "pander", "patchwork", "correlation", "GGally", "broom", "sjPlot", "scales", prompt = F)
+```
+
+Feel free to play around a bit with the `explore_gapminder.Rmd` and its output (you can also change parts of the `YAML` header to see how that influences the output).
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+The big task we have for you for this exercise is to create a similar `R Markdown` document for the *German General Social Survey - ALLBUS 2021* data. Using the `explore_gapminder.Rmd` as a starting point and guidance, we want you to do the following in this document:
+1. Load and wrangle the data the same way as before to create the `Allbus` subset, but with one difference: Also include the variable `hzcy026a`, rename it to `obey_curfew` and code the value 4 for it as `NA`
+2. In addition to that, define a function called `inverter` as follows and use it to create a new variable called `distrust_gov` based on `trust_government`:
+`inverter2 <- function (var) {max(var, na.rm = TRUE) - var + 1}`
+*Note*: You can do both of these first things in a code chunk that is not displayed in the output document.
+3. Get an overview of the missing data using the `vis_miss()` function from the `visdat` package.
+4. Look at the relative frequencies for the variables `sex`, `age_cat`, `education_cat`, and `choice_of_party` using a function from the `janitor` package.
+5. Create bar plots with `ggplot2` to visualize the relative frequencies (percentages) for the variables `education_cat` and `choice_of_party`.
+6. Using the `pander` package, include a table with the output of the `base R` function `summary()` for the variables on trust in different people and institutions.
+7. Create `ggplot2` bar plots to visualize the distribution of the variables `risk_self` and `left_right`.
+8. Create a `ggplot2` boxplot to show differences in trust in the government between supporters of different parties; also showing (jittered) individual data points.
+9. Calculate correlations between `left_right`, `sum_acceptance`, `sum_sources`, and the trust variables using the `correlation` package and display them in a table using the `kable()` from the `knitr` package. 
+10. Create a plot with the `GGally` package to visualize these correlations.
+10. Calculate a logistic regression model with `obey_curfew` as the dependent variable and `mean_trust` and `risk_self` as predictors (also include an intercept).
+11. Turn the output of this model into a table with the `broom` package and display it with `knitr::kable()`.
+12. Create one regression plot with the coefficients and another one with the predictions using the `sjPlot` package.
+This is a lot, but you can find template code for most of this in the `explore_gapminder.Rmd` (and the rest in the slides for the previous sessions). To get you started we have created an almost empty template `.Rmd` called `explore_gesis_panel_corona_stub.Rmd` in the `exercises` folder.
+```
+
+```{block, opts.label = "clues"}
+
+If you're stuck, you can find the solutions in the `explore_gesis_panel_corona.Rmd` in the `solutions` folder.
+>>>>>>> 571ad56d24849d56b2839fcded5bdce6e49ac7d3
+```
