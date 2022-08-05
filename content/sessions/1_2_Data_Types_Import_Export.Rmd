@@ -14,18 +14,18 @@ layout: true
  
 ---
 
-## Getting data into `R`
+## Getting data into `R`  
 Thus far, we've already learned what `R` and `RStudio` are. This course is about starting to use `R` and feeling prepared to use it for statistical analyses. There's one essential prerequisite:
 
 .center[**We need data!**]
 
 ```{r, out.width = "50%", echo = FALSE}
-woRkshoptools::include_picture("./import_data.png") 
+woRkshoptools::include_picture("./import_data.png")
 ```
 
 ---
 
-## Content of this session 
+## Content of this session
 
 - What are `R`'s internal data types?
 - How to work with different data types?
