@@ -21,13 +21,13 @@ course_content_1 <-
 course_content_2 <-
   tibble::tribble(
     ~Day, ~Time, ~Topic,
-    "Tuesday", "09:30 - 10:30", "Data Wrangling - Basics",
+    "Tuesday", "09:30 - 10:30", "Data Wrangling - Part 1",
     "Tuesday", "10:30 - 10:45", "Break",
-    "Tuesday", "10:45 - 12:00", "Data Wrangling - Basics",
+    "Tuesday", "10:45 - 12:00", "Data Wrangling - Part 1",
     "Tuesday", "12:00 - 13:00", "Lunch Break",
-    "Tuesday", "13:00 - 14:00", "Data Wrangling - Advanced",
+    "Tuesday", "13:00 - 14:00", "Data Wrangling - Part 2",
     "Tuesday", "14:00 - 14:15", "Break",
-    "Tuesday", "14:15 - 15:30", "Data Wrangling - Advanced"
+    "Tuesday", "14:15 - 15:30", "Data Wrangling - Part 2"
   ) %>%
   knitr::kable() %>%
   kableExtra::kable_styling() %>%
