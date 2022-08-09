@@ -1,0 +1,666 @@
+---
+title: "Introduction to R for Data Analysis"
+subtitle: "Data Wrangling - Part 2"
+author: "Johannes Breuer, Stefan Jünger, & Veronika Batzdorfer"
+date: "2022-08-16"
+presenter: Johannes
+---
+layout: true 
+
+```{r child = "config/sessions_setup.Rmd"}
+```
+---
+
+## Data wrangling continued `r ji("cowboy_hat_face")`
+
+While in the last session we focused on changing the structure of our data by **selecting**, **renaming**, and **relocating** columns and **filtering** and **arranging** rows, in this part we will focus on altering the content of data sets by *adding* and *changing* variables and variable values. More specifically, we will deal with...
+
+- creating and computing new variables (in various ways)
+
+- recoding the values of a variable
+
+- dealing with missing values
+
+---
+
+## Creating & transforming variables
+
+The simplest case of adding a new variable is creating a constant. You might, e.g., want to do that to indicate the number of the survey wave in a longitudinal data set. This is how you can do this in `base R`:
+
+```{r add-constant-base, eval = F}
+allbus2021$year <- 2021
+```
+
+*Note*: By default, new variables are added after the last column in the data set. 
+
+---
+
+## Creating & transforming variables
+
+Another simple variable transformation is adding or substracting a constant from its values, which, in `base R`, you can do as follows:
+
+```{r simple-transform-base, eval = F}
+allbus2021$sex_new <- allbus2021$sex - 1
+```
+
+---
+
+## Creating & transforming variables
+
+We can also add new variables by changing the data type of an existing variable.
+
+```{r base-add-type, eval=FALSE}
+allbus2021$id_char <- as.character(allbus2021$respid)
+```
+
+*Note*: In case you want to overwrite a variable, you can do so by giving the new variable the same name as the old one.   
+
+---
+
+## Creating & transforming variables
+
+The `dplyr` package provides a very versatile function for creating and transforming variables: `mutate()`, which you can also use to create a new variable that is a constant, ...
+
+```{r mutate-constant, eval=FALSE}
+allbus2021 <- allbus2021 %>% 
+  mutate(year = 2021)
+```
+
+---
+
+## Creating & transforming variables
+
+... applies a simple transformation to an existing variable, ...
+
+```{r mutate-transform, eval=FALSE}
+allbus2021 <- allbus2021 %>% 
+  mutate(sex_new = sex - 1)
+```
+
+---
+
+## Creating & transforming variables
+
+... or changes the data type of an existing variable.
+
+```{r mutate-type, eval=FALSE}
+allbus2021 <- allbus2021 %>% 
+  mutate(id_char = as.character(id))
+```
+
+---
+
+## `dplyr::mutate()`
+
+```{r, mutate-cartoon, out.width = "60%", echo = F}
+include_picture("dplyr_mutate.png")
+```
+<small><small>Artwork by [Allison Horst](https://github.com/allisonhorst/stats-illustrations)</small></small>
+
+---
+
+## Creating & transforming variables
+
+Notably, however, `mutate()` can be used for much more complex variable transformations. We will go through a few examples of those in this session, and discuss even more of them in the following session on advanced data wrangling operations.
+
+One situation in which we might want to transform variables or create new ones, e.g., is when we want to recode their values. 
+
+*Note*: We could, of course, also do this in `base R`, but the code for that can get quite convoluted. 
+
+---
+
+## Recoding values
+
+Say, for example, we want to recode the item from the *GESIS Panel Special Survey on the Coronavirus SARS-CoV-2 Outbreak in Germany* that measures trust in scientists with regard to dealing with the Coronavirus so that it represents distrust instead. In that case, we could combine the two `dplyr` functions `mutate()` and `recode()`.
+
+.small[
+```{r recode}
+allbus2021 <- allbus2021 %>% 
+  mutate(hzcy052aR = recode(hzcy052a,
+                           `5` = 1, # `old value` = new value
+                           `4` = 2,
+                           `2` = 4,
+                           `1` = 5))
+
+table(allbus2021$hzcy052a, allbus2021$hzcy052aR)
+```
+]
+
+---
+
+## Missing values
+
+A particular reason why we may want to recode specific values of one or multiple variable is if we have missing data in our data set.
+
+---
+
+## Missing values
+
+Most of the real data sets we work with have missing data. As the data can be missing for various reasons, we often use codes (and labels) to distinguish between different types of missing data. As the data can be missing for various reasons, we often use codes (and labels) to distinguish between different types of missing data.
+
+If you look at the the [codebook](https://dbk.gesis.org/dbksearch/download.asp?id=67378) of the *GESIS Panel Special Survey on the Coronavirus SARS-CoV-2 Outbreak in Germany* or the [*GESIS Panel* Cheatsheet](https://www.gesis.org/fileadmin/upload/GESIS_Panel/Cheatsheet/gesis_panel_cheatsheet.pdf), you will see that there are quite a few types of and codes for missing data. Some types of missing values are the same across variables, while some variables also have additional types of missing data (and, hence, additional codes for missings).
+
+---
+
+## Missing values
+
+In `R`, missing values are represented by `NA`. `NA` is a reserved term in `R`, meaning that you cannot use it as a name for anything else (this is also the case for `TRUE` and `FALSE`).
+
+When we prepare our data for analysis there are generally two things we might want/have to do with regard to missing values:
+
+- define specific values as missings (i.e., set them to `NA`)
+
+- recode `NA` values into something else (typically to distinguish between different types of missing values)
+
+---
+
+## Recode values as `NA`
+
+With `base R` you can set values to `NA` for specific variables as follows:
+
+.small[
+```{r set-NA-var-base}
+sum(is.na(allbus2021$hzcy006a))
+
+allbus2021$hzcy006a[allbus2021$hzcy006a == -99] <- NA
+allbus2021$hzcy006a[allbus2021$hzcy006a == -77] <- NA
+allbus2021$hzcy006a[allbus2021$hzcy006a == -33] <- NA
+
+sum(is.na(allbus2021$hzcy006a))
+```
+]
+
+---
+
+## Recode values as `NA`
+
+The `tidyverse` option for setting specific values of individual variables to `NA` is the `dplyr` function `na_if()` combined with the `mutate()`.
+
+```{r na-if-var}
+allbus2021 <- allbus2021 %>% 
+  mutate(hzcy006a = na_if(hzcy006a, -99)) %>% 
+  mutate(hzcy006a = na_if(hzcy006a, -77)) %>% 
+  mutate(hzcy006a = na_if(hzcy006a, -33))
+```
+
+---
+
+## Recode values as `NA`
+
+The `na_if()` function can also be used to recode specific values as `NA` across a whole data set.
+
+```{r na-if-df}
+allbus2021 <- allbus2021 %>% 
+  na_if(-99) %>% 
+  na_if(-77) %>% 
+  na_if(-33)
+```
+
+*Note*: `na_if()` only takes single values as its second argument (i.e., the value to replace with `NA`).
+
+---
+
+## Recode values as `NA`
+
+While `na_if()` can be applied to a specified selection of variables if combined with another `dplyr` function that we will cover in the following session on advanced data wrangling, the `base R` and `tidyverse` options for recoding values as `NA` are somewhat difficult to use when they should be used for a selection or range of values. There are, however, functions from two other packages that come in handy here:
+
+- `set_na()` from the [`sjlabelled` package](https://strengejacke.github.io/sjlabelled/index.html)
+- `replace_with_na()` and its scoped variants, such as `replace_with_na_all()`, from the [`naniar` package](http://naniar.njtierney.com/index.html) `r ji("lion")`
+
+---
+
+## The missings of `naniar` `r ji("lion")`
+
+The `naniar` package provides many useful functions for handling missing data in `R` (and works very well in combination with the `tidyverse`). If we have a list of values we want to code as `NA` for all variables in our data set, we can do that with a function from `naniar` the following way:
+
+```{r naniar-replace-with-NA-all, eval=FALSE}
+library(naniar)
+
+missings <- c(-99, -77, -33, -22)
+
+allbus2021 <- allbus2021 %>%
+  replace_with_na_all(condition = ~.x %in% missings)
+```
+
+---
+
+## The missings of `naniar` `r ji("lion")`
+
+We could, e.g., also use the same function to code every value < 0 as `NA`.
+
+```{r naniar-all-zero, eval=FALSE}
+allbus2021 <- allbus2021 %>%
+  replace_with_na_all(condition = ~.x < 0)
+```
+
+Using the functions `replace_with_na_at()` and `replace_with_na_if()`, we can also recode values as `NA` for a selection or specific type of variables (e.g., all numeric variables).
+
+---
+
+## `set_na()` from `sjlabelled`
+
+Another easy-to-use option for recoding values to `NA` (for individual variables of full data frames) is the function `set_na()` from the `sjlabelled` package. We can, e.g., use it the same way we have used the `naniar` function `replace_with_na_all()` in the previous example.
+
+```{r set-na}
+library(sjlabelled)
+
+allbus2021 <- allbus2021 %>% 
+  set_na(na = c(-99, -77, -33, -22))
+```
+
+---
+
+## Excluding cases with missing values
+
+If you want to exclude observations with missing values for individual variables, you can use `!is.na(variable_name)` with your filtering method of choice. However, there are also methods for only keeping complete cases (i.e., cases without missing data). The `base R` function for that is `na.omit()`
+
+```{r na-omit}
+allbus2021_complete <- na.omit(allbus2021) 
+
+```
+
+---
+
+## Excluding cases with missing values
+
+The `tidyverse` equivalent of `na.omit()` is `drop_na()` from the `tidyr` package. You can use this function to remove cases that have missings on any variable in a data set or only on specific variables.
+
+```{r drop-na}
+allbus2021 %>% 
+  drop_na() %>% 
+  nrow()
+
+allbus2021 %>% 
+  drop_na(choice_of_party) %>% 
+  nrow()
+```
+
+---
+
+## Recode `NA` into something else
+
+An easy option for replacing `NA` with another value for a single variable is the `replace_na()` function from the `tidyr` package in combination with `mutate()`.
+
+```{r replace-na, eval = F}
+allbus2021 <- allbus2021 %>% 
+  mutate(hzcy006a = replace_na(hzcy006a, -99))
+
+```
+
+**NB**: This particular example does not make much sense. You can, however, specify different values for different types of missing values. To do this, you probably need to make the recoding dependent on other variables, which is what we will discuss in the next session on advanced data wrangling operations.
+
+---
+
+## Other variable types
+
+In the examples in this session, we only worked with numeric variables. There are, however, other variable types that occur frequently in data sets in the social sciences:
+- factors
+- strings
+- time and dates
+
+Working with strings in `R` is a topic that would require its own workshop (and the same is essentially true for time and dates). Hence, we will only briefly discuss the basics of factors in this session (also because we will meet them again in the following session).
+
+---
+
+## Factors
+
+Factor are a special type of variable in `R` that represent categorical data. Before `R` version `4.0.0.` the default for `base R` was that all characters variables are imported as factors.
+
+Internally, factors are stored as integers, but they have (character) labels (so-called *levels*) associated with them. Hence, if you are not working with the special class of labelled data (e.g., via the packages [`haven`](https://haven.tidyverse.org/), [`labelled`](https://larmarange.github.io/labelled/index.html), or [`sjlabelled`](https://strengejacke.github.io/sjlabelled/index.html)), factors come closest to having variables with value labels as you might know from *SPSS*.
+
+---
+
+## Factors
+
+Factors in `R` can be **unordered** - in which case they are similar to **nominal** level variables in *SPSS* - or **ordered** - in which case they are similar to **ordinal** level variables in *SPSS*.
+
+Using factors can be necessary for certain statistical analysis and plots (e.g., if you want to compare groups). Working with factors in `R` is a big topic, and we will only briefly touch upon it in this workshop. For a more in-depth discussion of factors in `R` you can, e.g., have a look at the [chapter on factors](https://r4ds.had.co.nz/factors.html) in *R for Data Science*.
+
+---
+
+## Factors 4 `r ji("cat")`s 
+
+There are many functions for working with factors in `base R`, such as `factor()` or `as.factor()`. However, a generally more versatile and easier-to-use option is the [`forcats` package](https://forcats.tidyverse.org/) from the `tidyverse`. 
+
+```{r forcats-hex, out.width = "25%", echo = F}
+woRkshoptools::include_picture("./forcats.png")
+```
+
+*Note*: There is a good [introduction to working with factors using `forcats` by Vebash Naidoo](https://sciencificity-blog.netlify.app/posts/2021-01-30-control-your-factors-with-forcats/) and *RStudio* also offers a [`forcats` cheatsheet](https://raw.githubusercontent.com/rstudio/cheatsheets/master/factors.pdf).
+
+---
+
+## From numeric to factor
+
+Using the `recode_factor()` function (together with `mutate()`) from `dplyr`, you can create a factor from a numeric (or a character) variable. In the example below, we want an ordered factor.
+
+```{r recode-factor}
+allbus2021 %>% 
+  mutate(edu_cat = recode_factor(education_cat, 
+                                       `1` = "Low",
+                                       `2` = "Medium",
+                                       `3`= "High",
+                                       .ordered = TRUE)) %>% 
+  select(education_cat, edu_cat) %>% 
+  sample_n(5) # randomly sample 5 cases from the df
+```
+
+---
+
+## Working with strings in `R` 
+
+As stated before, we won't be able to cover the specifics of working with strings in `R` in this course. However, it may be good to know that the `tidyverse` package [`stringr`](https://stringr.tidyverse.org/index.html) offers a collection of convenient functions for working with strings.
+
+```{r stringr-hex, out.width = "25%", echo = F}
+woRkshoptools::include_picture("./stringr.png")
+```
+
+The `stringr` package provides a good [introduction vignette](https://cran.r-project.org/web/packages/stringr/vignettes/stringr.html), the book *R for Data Science* has a whole section on [strings with `stringr`](https://r4ds.had.co.nz/strings.html), and there also is an [*RStudio* Cheat Sheet for `stringr`](https://github.com/rstudio/cheatsheets/raw/master/strings.pdf).
+
+---
+
+## Sidenote: Regular expressions
+
+If you want (or have) to work with [regular expressions](https://en.wikipedia.org/wiki/Regular_expression), you should also check out the [`rebus` package](https://github.com/richierocks/rebus) which allows you to create regular expressions in R in a human-readable way. Another helpful tool is the *RStudio* addin [`RegExplain`](https://www.garrickadenbuie.com/project/regexplain/).  
+
+---
+
+## Times and dates
+
+If you are want/need to work with times and dates in `R`, you may want to look into the [`lubridate` package](https://lubridate.tidyverse.org/) which is part of the `tidyverse`, and for which *RStudio* also provides a [cheatsheet](https://raw.githubusercontent.com/rstudio/cheatsheets/master/lubridate.pdf).
+
+```{r lubridate-hex, out.width = "25%", echo = F}
+woRkshoptools::include_picture("./lubridate.png")
+```
+
+*Note*: If you work with time series data, it is also worth checking out the [`tsibble` package](https://tsibble.tidyverts.org/) for your wrangling tasks.
+
+---
+
+class: center, middle
+
+# [Exercise](https://jobreu.github.io/r-intro-gesis-2021/exercises/Exercise_2_1_3_Mutate_Recode_Missings.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+
+## [Solutions](https://jobreu.github.io/r-intro-gesis-2021/solutions/Exercise_2_1_3_Mutate_Recode_Missings.html)
+
+---
+
+## Recode data `across()` defined variables 
+
+The `dplyr` package provides a handy tool for applying transformations (such as recoding) across a set of variables: `across()`.
+
+```{r recode-across}
+gp_covid <- 
+  gp_covid %>% 
+  mutate(
+    across(
+      hzcy044a:hzcy052a,
+      ~recode(
+        .x,
+        `5` = 1, # `old value` = new value
+        `4` = 2,
+        `2` = 4,
+        `1` = 5
+      )
+    )
+  )
+```
+
+---
+
+## Using the function `across()` with logical conditions
+
+Sometimes we want to transform variables that meet certain conditions. For example, for some analyses, we might want to z-standardize all numeric variables in a data set. Let's create a temporary subset and transform the `id` variable into a character for this example.
+
+```{r create-tmp-data set}
+gp_covid_tmp <-
+  gp_covid %>% 
+  select(id, hzcy044a:hzcy052a) %>% 
+  mutate(id = as.character(id))
+
+gp_covid_tmp %>% 
+  sample_n(5)  # randomly sample 5 cases from the df
+```
+
+---
+
+## Example: z-standardize all numeric variables
+
+The `base R` function for z-standardizing a variable is `scale()`.
+
+```{r scale-vars}
+gp_covid_tmp <-
+  gp_covid_tmp %>% 
+  mutate(
+    across(
+      is.numeric,
+      ~scale(.x)
+    )
+  )
+
+gp_covid_tmp %>% 
+  sample_n(5)
+```
+
+---
+
+## `dplyr::across()`
+
+```{r, across-cartoon, out.width = "95%", echo = F}
+woRkshoptools::include_picture("across_blank.png")
+```
+<small><small>Artwork by [Allison Horst](https://github.com/allisonhorst/stats-illustrations)</small></small>
+
+---
+
+## Aggregate variables `c_across()` rows
+
+Something we might want to do for our analyses is to create aggregate variables, such as sum or mean scores for a set of items. As `dplyr` operations are applied to columns, whereas such aggregations relate to rows (i.e., respondents), we need to make use of the function `rowwise()`. Say, we want to compute a sum score for all measures that respondents have reported to engage in to prevent an infection with or the spread of the Corona virus.
+
+```{r rowwise-sum}
+gp_covid <- 
+  gp_covid %>% 
+  rowwise() %>%
+  mutate(
+    sum_trust = 
+      sum(
+        c_across(hzcy044a:hzcy052a),
+        na.rm = TRUE
+      )
+  ) %>% 
+  ungroup()
+```
+
+---
+
+## Aggregate variables
+
+Three things to note here: 
+
+1. `c_across()` is a special version of `across()`for rowwise operations. 
+
+2. We use the `ungroup()` function at the end to ensure that `dplyr` verbs will operate the default way when we further work with the `gpc` object. We will discuss grouping in the session on *Exploratory Data Analysis*, but you can also check out the [documentation for `group_by()`](https://dplyr.tidyverse.org/reference/group_by.html) to learn more about this.
+
+3. If you only need sums or means, a somewhat faster alternative is using the base `R` functions `rowSums()` and `rowMeans()` in combination with `mutate()` (and possibly also `across()` plus selection helpers). For an explanation why this can be faster, you can read the [online documentation for `rowwise()`](https://dplyr.tidyverse.org/articles/rowwise.html).
+
+---
+
+## Aggregate variables
+
+```{r rowwise-sum-output}
+gp_covid %>% 
+  select(hzcy044a:hzcy052a, sum_trust) %>% 
+  glimpse()
+```
+
+---
+
+## Example: Aggregate variables based on means
+
+Rowwise transformations work the same way for means. Here, we create a mean score for the items that ask how much people trust specific people or institutions in dealing with the Corona virus. 
+
+```{r rowwise-mean}
+gp_covid <- 
+  gp_covid %>%  
+  rowwise() %>% 
+  mutate(
+    mean_trust = 
+      mean(
+        c_across(hzcy044a:hzcy052a), 
+        na.rm = TRUE
+      )
+  ) %>% 
+  ungroup()
+```
+
+---
+
+class: middle
+
+```{r rowwise-mean-output}
+gp_covid %>% 
+  select(hzcy044a:hzcy052a, mean_trust) %>% 
+  glimpse()
+```
+
+---
+
+class: center, middle
+
+# [Exercise](https://jobreu.github.io/r-intro-gesis-2021/exercises/Exercise_2_2_1_Across_the_Tidyverse.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+
+## [Solutions](https://jobreu.github.io/r-intro-gesis-2021/solutions/Exercise_2_2_1_Across_the_Tidyverse.html)
+
+---
+
+## Becoming a data wrangling pro
+
+Sometimes, things are a bit more complicated when it comes to creating new variables. Simple recoding can be insufficient when we need to make the values of a new variable conditional on values of (multiple) other variables. Such cases require conditional transformations.
+
+---
+
+## Simple conditional transformation
+
+The simplest version of a conditional variable transformation is using an `ifelse()` statement.
+
+```{r mutate-ifelse}
+gp_covid <- 
+  gp_covid %>% 
+  mutate(
+    high_education = 
+      ifelse(education_cat == 3, "high", "not so high")
+  )
+
+gp_covid %>% 
+  select(education_cat, high_education) %>% 
+  sample_n(5)
+```
+
+.small[
+*Note*: A more versatile option for creating dummy variables is the [`fastDummies` package](https://jacobkap.github.io/fastDummies/).
+]
+
+---
+
+## Advanced conditional transformation
+
+For more flexible (or complex) conditional transformations, the `case_when()` function from `dyplyr` is a powerful tool.
+
+```{r case-when}
+gp_covid <- 
+  gp_covid %>% 
+  mutate(
+    pol_leaning_cat = 
+      case_when(
+        between(political_orientation, 0, 3) ~ "left",
+        between(political_orientation, 4, 7) ~ "center",
+        political_orientation > 7 ~ "right"
+      )
+  )
+
+gp_covid %>% 
+  select(political_orientation, pol_leaning_cat) %>% 
+  sample_n(5)
+```
+
+---
+
+## Conditional transformation based on multiple values
+
+```{r case-when-2}
+gp_covid <- 
+  gp_covid %>% 
+  mutate(
+    pol_leaning_edu = 
+      case_when(
+        between(political_orientation, 0, 3) & high_education == "high" ~ "left high",
+        between(political_orientation, 4, 7) & high_education == "high" ~ "center high",
+        political_orientation > 7 & high_education == "high" ~ "right high",
+        TRUE ~ "not so high"
+      )
+  )
+
+gp_covid %>% 
+  select(political_orientation, high_education, pol_leaning_edu) %>% 
+  sample_n(5)
+```
+
+---
+
+## `dplyr::case_when()`
+
+A few things to note about `case_when()`:
+- you can have multiple conditions per value
+- conditions are evaluated consecutively
+- when none of the specified conditions are met for an observation, by default, the new variable will have a missing value `NA` for that case
+- if you want some other value in the new variables when the specified conditions are not met, you need to add `TRUE ~ value` as the last argument of the `case_when()` call
+- to explore the full range of options for `case_when()` check out its [online documentation](https://dplyr.tidyverse.org/reference/case_when.html) or run `?case_when()` in `R`/*RStudio*
+
+---
+
+## `dplyr::case_when()` & `NA`s
+
+```{r case-when-2-na}
+gp_covid <- 
+  gp_covid %>% 
+  mutate(
+    pol_leaning_edu_2 = 
+      case_when(
+        between(political_orientation, 0, 3) & high_education == "high" ~ "left high",
+        between(political_orientation, 4, 7) & high_education == "high" ~ "center high",
+        political_orientation > 7 & high_education == "high" ~ "right high",
+        age_cat == 1 ~ NA_character_,
+        TRUE ~ "not so high"
+      )
+  )
+
+table(gp_covid$pol_leaning_edu, useNA = "always")
+table(gp_covid$pol_leaning_edu_2, useNA = "always")
+```
+
+---
+
+## `dplyr::case_when()`
+
+```{r, case-when-cartoon, out.width = "95%", echo = F}
+include_picture("dplyr_case_when.png")
+```
+<small><small>Artwork by [Allison Horst](https://github.com/allisonhorst/stats-illustrations)</small></small>
+
+---
+
+class: center, middle
+
+# [Exercise](https://jobreu.github.io/r-intro-gesis-2021/exercises/Exercise_2_2_2_Define_your_Cases.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+
+## [Solutions](https://jobreu.github.io/r-intro-gesis-2021/solutions/Exercise_2_2_2_Define_your_Cases.html)
+
+---
+
+---
+
+## Extracurricular activities
+
+Check out the [appendix slides for today](https://jobreu.github.io/r-intro-gesis-2021/slides/2_3_Appendix_Relational_Data.html) which cover the topic of relational data (i.e., combining multiple data sets).
+
+Have a look at the [*Tidy Tuesday* repository on *GitHub*](https://github.com/rfordatascience/tidytuesday), listen to a few of the very short episodes of the [*Tidy Tuesday* Podcast](https://www.tidytuesday.com/), check out the [#tidytuesday Twitter hashtag](https://twitter.com/hashtag/tidytuesday?lang=en), or watch one (or more) of the [*Tidy Tuesday* screencasts on *YouTube* by David Robinson](https://www.youtube.com/watch?v=E2amEz_upzU&list=PL19ev-r1GBwkuyiwnxoHTRC8TTqP8OEi8).

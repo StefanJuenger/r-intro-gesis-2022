@@ -88,7 +88,7 @@ By the end of the course participants should be:
   <tr>
    <td style="text-align:left;color: gray !important;"> Tuesday </td>
    <td style="text-align:left;color: gray !important;"> 09:30 - 10:30 </td>
-   <td style="text-align:left;font-weight: bold;"> Data Wrangling - Basics </td>
+   <td style="text-align:left;font-weight: bold;"> Data Wrangling - Part 1 </td>
   </tr>
   <tr>
    <td style="text-align:left;color: gray !important;color: gray !important;"> Tuesday </td>
@@ -98,7 +98,7 @@ By the end of the course participants should be:
   <tr>
    <td style="text-align:left;color: gray !important;"> Tuesday </td>
    <td style="text-align:left;color: gray !important;"> 10:45 - 12:00 </td>
-   <td style="text-align:left;font-weight: bold;"> Data Wrangling - Basics </td>
+   <td style="text-align:left;font-weight: bold;"> Data Wrangling - Part 1 </td>
   </tr>
   <tr>
    <td style="text-align:left;color: gray !important;color: gray !important;"> Tuesday </td>
@@ -108,7 +108,7 @@ By the end of the course participants should be:
   <tr>
    <td style="text-align:left;color: gray !important;"> Tuesday </td>
    <td style="text-align:left;color: gray !important;"> 13:00 - 14:00 </td>
-   <td style="text-align:left;font-weight: bold;"> Data Wrangling - Advanced </td>
+   <td style="text-align:left;font-weight: bold;"> Data Wrangling - Part 2 </td>
   </tr>
   <tr>
    <td style="text-align:left;color: gray !important;color: gray !important;"> Tuesday </td>
@@ -118,7 +118,7 @@ By the end of the course participants should be:
   <tr>
    <td style="text-align:left;color: gray !important;"> Tuesday </td>
    <td style="text-align:left;color: gray !important;"> 14:15 - 15:30 </td>
-   <td style="text-align:left;font-weight: bold;"> Data Wrangling - Advanced </td>
+   <td style="text-align:left;font-weight: bold;"> Data Wrangling - Part 2 </td>
   </tr>
 </tbody>
 </table>
@@ -291,9 +291,9 @@ By the end of the course participants should be:
 
 ## Day 2
 ### Slides
-[2_1 Data Wrangling Basics](https://stefanjuenger.github.io/r-intro-gesis-2022/slides/2_1_Data_Wrangling_Basics.html)     
+[2_1 Data Wrangling Part 1](https://stefanjuenger.github.io/r-intro-gesis-2022/slides/2_1_Data_Wrangling_Part1.html)     
 
-[2_2 Data Wrangling Advanced](https://stefanjuenger.github.io/r-intro-gesis-2022/slides/2_2_Data_Wrangling_Advanced.html)     
+[2_2 Data Wrangling Part 2](https://stefanjuenger.github.io/r-intro-gesis-2022/slides/2_2_Data_Wrangling_Part2.html)     
 
 [Appendix - Relational Data](https://stefanjuenger.github.io/r-intro-gesis-2022/slides/2_3_Appendix_Relational_Data.html)     
 
