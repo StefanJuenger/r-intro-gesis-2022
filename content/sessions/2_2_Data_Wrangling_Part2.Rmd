@@ -9,6 +9,7 @@ layout: true
 
 ```{r child = "config/sessions_setup.Rmd"}
 ```
+
 ---
 
 ## Data wrangling continued `r ji("cowboy_hat_face")`
@@ -23,12 +24,42 @@ While in the last session we focused on changing the structure of our data by **
 
 ---
 
+## Setup
+
+If you have not yet done so in your current `R` session, first load the required libraries for this part.
+
+```{r}
+library(tidyverse)
+library(haven)
+library(sjlabelled)
+```
+
+---
+
+## Setup
+
+As in the previous session (as well as most of the following ones), we will use the fresh *ALLBUS* data from 2021. In case you have not already done so, before you can (continue to) wrangle the data, you need to import them. As working with labelled data can be a bit tedious when wrangling them, for the sake of simplicity (and because they are in German), we will remove all labels from the data set using the `remove_all_labels()` function from the `sjlabelled` package. However, we want to keep codes for missing values (more on that later), so we need to set the `user_na` argument of the `read_sav()` function to `TRUE`.
+
+```{r load-data}
+allbus2021 <- read_sav("./data/allbus_2021ZA5280_v1-0-0.sav",
+                       user_na = TRUE) %>% 
+  zap_labels()
+```
+
+.small[
+*Note*: The code assumes that the `.sav` file containing the 2021 *ALLBUS* data is saved in subfolder `\data\allbus_2021` within the course materials folder (which should then also be your working directory for the code to run).
+]
+
+---
+
 ## Creating & transforming variables
 
-The simplest case of adding a new variable is creating a constant. You might, e.g., want to do that to indicate the number of the survey wave in a longitudinal data set. This is how you can do this in `base R`:
+The simplest case of adding a new variable is creating a constant. You might, e.g., want to do that to add information about the year in which data were collected. This is how you can do this in `base R`:
 
-```{r add-constant-base, eval = F}
+```{r add-constant-base}
 allbus2021$year <- 2021
+
+head(allbus2021$year)
 ```
 
 *Note*: By default, new variables are added after the last column in the data set. 
@@ -37,20 +68,25 @@ allbus2021$year <- 2021
 
 ## Creating & transforming variables
 
-Another simple variable transformation is adding or substracting a constant from its values, which, in `base R`, you can do as follows:
+Another simple variable transformation is adding or subtracting a constant from its values, which, in `base R`, you can do as follows:
 
-```{r simple-transform-base, eval = F}
+```{r simple-transform-base}
 allbus2021$sex_new <- allbus2021$sex - 1
+
+table(allbus2021$sex, allbus2021$sex_new)
 ```
 
 ---
 
 ## Creating & transforming variables
 
-We can also add new variables by changing the data type of an existing variable.
+We can also add new variables by changing the data type of an existing variable. The `base R` way of doing this is the following:
 
-```{r base-add-type, eval=FALSE}
+```{r base-add-type}
 allbus2021$id_char <- as.character(allbus2021$respid)
+
+typeof(allbus2021$respid)
+typeof(allbus2021$id_char)
 ```
 
 *Note*: In case you want to overwrite a variable, you can do so by giving the new variable the same name as the old one.   
@@ -64,6 +100,10 @@ The `dplyr` package provides a very versatile function for creating and transfor
 ```{r mutate-constant, eval=FALSE}
 allbus2021 <- allbus2021 %>% 
   mutate(year = 2021)
+
+allbus2021 %>% 
+  select(year) %>% 
+  head()
 ```
 
 ---
@@ -75,6 +115,10 @@ allbus2021 <- allbus2021 %>%
 ```{r mutate-transform, eval=FALSE}
 allbus2021 <- allbus2021 %>% 
   mutate(sex_new = sex - 1)
+
+allbus2021 %>% 
+  select(starts_with("sex")) %>% 
+  head
 ```
 
 ---
@@ -85,7 +129,11 @@ allbus2021 <- allbus2021 %>%
 
 ```{r mutate-type, eval=FALSE}
 allbus2021 <- allbus2021 %>% 
-  mutate(id_char = as.character(id))
+  mutate(id_char = as.character(respid))
+
+allbus2021 %>% 
+  select(respid, id_char) %>% 
+  glimpse()
 ```
 
 ---
@@ -93,7 +141,7 @@ allbus2021 <- allbus2021 %>%
 ## `dplyr::mutate()`
 
 ```{r, mutate-cartoon, out.width = "60%", echo = F}
-include_picture("dplyr_mutate.png")
+knitr::include_graphics("https://github.com/allisonhorst/stats-illustrations/blob/main/rstats-artwork/dplyr_mutate.png?raw=true")
 ```
 <small><small>Artwork by [Allison Horst](https://github.com/allisonhorst/stats-illustrations)</small></small>
 
@@ -101,7 +149,7 @@ include_picture("dplyr_mutate.png")
 
 ## Creating & transforming variables
 
-Notably, however, `mutate()` can be used for much more complex variable transformations. We will go through a few examples of those in this session, and discuss even more of them in the following session on advanced data wrangling operations.
+Notably, however, `mutate()` can be used for much more complex variable transformations. We will go through several of those in the following.
 
 One situation in which we might want to transform variables or create new ones, e.g., is when we want to recode their values. 
 
@@ -111,20 +159,46 @@ One situation in which we might want to transform variables or create new ones, 
 
 ## Recoding values
 
-Say, for example, we want to recode the item from the *GESIS Panel Special Survey on the Coronavirus SARS-CoV-2 Outbreak in Germany* that measures trust in scientists with regard to dealing with the Coronavirus so that it represents distrust instead. In that case, we could combine the two `dplyr` functions `mutate()` and `recode()`.
+Say, for example, we want to recode the item on political interest from the *ALLBUS* 2021, so that higher values represent stronger interest. For that purpose, we can combine the two `dplyr` functions `mutate()` and `recode()`.
 
 .small[
 ```{r recode}
 allbus2021 <- allbus2021 %>% 
-  mutate(hzcy052aR = recode(hzcy052a,
+  mutate(pa02aR = recode(pa02a,
                            `5` = 1, # `old value` = new value
                            `4` = 2,
                            `2` = 4,
                            `1` = 5))
 
-table(allbus2021$hzcy052a, allbus2021$hzcy052aR)
+table(allbus2021$pa02a, allbus2021$pa02aR)
 ```
 ]
+
+---
+
+## Excursus: Harmonization
+
+If we (want to) work with data sets from multiple sources (or also just multiple waves within the same survey program), it may be that the same constructs are measured differently. What we can do in this case is harmonizing the different measures. A helpful tool for this is the *GESIS* service [*QuestionLink*](https://www.gesis.org/en/services/processing-and-analyzing-data/data-harmonization/question-link).
+
+*QuestionLink* also offers `R` code (a `base R` as well as a `dplyr` version) for harmonizing various constructs (including political interest) across different survey programs (including the *ALLBUS*) .
+
+---
+
+## Harmonization example
+
+Let's say we want to recode the 5-point political interest measure from the *ALLBUS*, so that it matches the 4-point measure from the [*European Values Study* (EVS)](https://europeanvaluesstudy.eu/). We can download [an `HTML` document containing the code we need](https://osf.io/f2uta/download) via the *QuestionLink* website, and then use the code to recode the variable.
+
+```{r question-link-example}
+allbus2021 <- allbus2021 %>% 
+  mutate(polint_evs = recode(pa02a,
+                             `1` = 0.68,
+                             `2` = 1.31,
+                             `3` = 2.13,
+                             `4` = 3.22,
+                             `5` = 4.15))
+```
+
+*Note*: The `HTML` document also contains some information on the 
 
 ---
 
@@ -132,19 +206,49 @@ table(allbus2021$hzcy052a, allbus2021$hzcy052aR)
 
 A particular reason why we may want to recode specific values of one or multiple variable is if we have missing data in our data set.
 
----
-
-## Missing values
-
-Most of the real data sets we work with have missing data. As the data can be missing for various reasons, we often use codes (and labels) to distinguish between different types of missing data. As the data can be missing for various reasons, we often use codes (and labels) to distinguish between different types of missing data.
-
-If you look at the the [codebook](https://dbk.gesis.org/dbksearch/download.asp?id=67378) of the *GESIS Panel Special Survey on the Coronavirus SARS-CoV-2 Outbreak in Germany* or the [*GESIS Panel* Cheatsheet](https://www.gesis.org/fileadmin/upload/GESIS_Panel/Cheatsheet/gesis_panel_cheatsheet.pdf), you will see that there are quite a few types of and codes for missing data. Some types of missing values are the same across variables, while some variables also have additional types of missing data (and, hence, additional codes for missings).
+Most of the real data sets we work with have missing data. As the data can be missing for various reasons, we often use codes (and labels) to distinguish between different types of missing data.
 
 ---
 
-## Missing values
+## Missing value codes
+
+If you look at the the codebooks for ALLBUS data sets (the 2021 does not yet have one), you will see that there are quite a few codes for missing data. While the missing codes are consistent, typically only a few of them are used for each variable. 
+
+We have also already seen examples of this on the previous slides when we computed new variables based on existing ones.
+
+---
+
+## Short excursus: Exploring missing value codes in the *ALLBUS* 2021 data
+
+If we want to explore missing value codes within the data set, we need to import and keep the labels.
+
+```{r import-label}
+allbus2021_labelled <- read_sav("./data/allbus_2021ZA5280_v1-0-0.sav")
+```
+
+*Note*: Currently, only a German version of the data set is available (English translations are produced later on), the labels for missing values (as well as other values) will be in German.
+
+---
+
+## Short excursus: Exploring missing value codes in the *ALLBUS* 2021 data
+
+To print all value labels, including those used for missing values, we can make use of the function `print_labels()` from the `haven` package.
+
+```{r print-labels}
+print_labels(allbus2021_labelled$pa02a)
+```
+
+---
+
+## Missing values in `R`
 
 In `R`, missing values are represented by `NA`. `NA` is a reserved term in `R`, meaning that you cannot use it as a name for anything else (this is also the case for `TRUE` and `FALSE`).
+
+**NB**: If we use the `haven` function `read_sav()` for importing *SPSS* data files, by default, user-defined missings are converted to `NA`. If we want to keep the original values, we need to change the argument `user_na` within that function to `TRUE` (the default is that it is set to `FALSE`).
+
+---
+
+## Wrangling missing values
 
 When we prepare our data for analysis there are generally two things we might want/have to do with regard to missing values:
 
@@ -160,13 +264,12 @@ With `base R` you can set values to `NA` for specific variables as follows:
 
 .small[
 ```{r set-NA-var-base}
-sum(is.na(allbus2021$hzcy006a))
+sum(is.na(allbus2021$pa02a))
 
-allbus2021$hzcy006a[allbus2021$hzcy006a == -99] <- NA
-allbus2021$hzcy006a[allbus2021$hzcy006a == -77] <- NA
-allbus2021$hzcy006a[allbus2021$hzcy006a == -33] <- NA
+allbus2021$pa02a[allbus2021$pa02a == -42] <- NA
+allbus2021$pa02a[allbus2021$pa02a == -9] <- NA
 
-sum(is.na(allbus2021$hzcy006a))
+sum(is.na(allbus2021$pa02a))
 ```
 ]
 
@@ -178,9 +281,8 @@ The `tidyverse` option for setting specific values of individual variables to `N
 
 ```{r na-if-var}
 allbus2021 <- allbus2021 %>% 
-  mutate(hzcy006a = na_if(hzcy006a, -99)) %>% 
-  mutate(hzcy006a = na_if(hzcy006a, -77)) %>% 
-  mutate(hzcy006a = na_if(hzcy006a, -33))
+  mutate(pa02a = na_if(pa02a, -42)) %>% 
+  mutate(pa02a = na_if(pa02a, -9))
 ```
 
 ---
@@ -191,9 +293,8 @@ The `na_if()` function can also be used to recode specific values as `NA` across
 
 ```{r na-if-df}
 allbus2021 <- allbus2021 %>% 
-  na_if(-99) %>% 
-  na_if(-77) %>% 
-  na_if(-33)
+  na_if(-42) %>% 
+  na_if(-9)
 ```
 
 *Note*: `na_if()` only takes single values as its second argument (i.e., the value to replace with `NA`).
@@ -202,31 +303,31 @@ allbus2021 <- allbus2021 %>%
 
 ## Recode values as `NA`
 
-While `na_if()` can be applied to a specified selection of variables if combined with another `dplyr` function that we will cover in the following session on advanced data wrangling, the `base R` and `tidyverse` options for recoding values as `NA` are somewhat difficult to use when they should be used for a selection or range of values. There are, however, functions from two other packages that come in handy here:
+While `na_if()` can be applied to a specified selection of variables if combined with another `dplyr` function that we will cover in a bit, the `base R` and `tidyverse` options for recoding values as `NA` are somewhat difficult to use when they should be used for a selection or range of values. There are, however, functions from two other packages that come in handy here:
 
 - `set_na()` from the [`sjlabelled` package](https://strengejacke.github.io/sjlabelled/index.html)
 - `replace_with_na()` and its scoped variants, such as `replace_with_na_all()`, from the [`naniar` package](http://naniar.njtierney.com/index.html) `r ji("lion")`
 
 ---
 
-## The missings of `naniar` `r ji("lion")`
+## `set_na()` from `sjlabelled`
 
-The `naniar` package provides many useful functions for handling missing data in `R` (and works very well in combination with the `tidyverse`). If we have a list of values we want to code as `NA` for all variables in our data set, we can do that with a function from `naniar` the following way:
+An easy-to-use option for recoding values to `NA` (for individual variables of full data frames) is the function `set_na()` from the `sjlabelled` package.
 
-```{r naniar-replace-with-NA-all, eval=FALSE}
-library(naniar)
+```{r set-na}
+library(sjlabelled)
 
-missings <- c(-99, -77, -33, -22)
-
-allbus2021 <- allbus2021 %>%
-  replace_with_na_all(condition = ~.x %in% missings)
+allbus2021 <- allbus2021 %>% 
+  set_na(na = c(-6, -7, -8, -9, -10))
 ```
+
+*Note*: The `set_na` function can also be used to replace different values with `NA` for different variables.
 
 ---
 
 ## The missings of `naniar` `r ji("lion")`
 
-We could, e.g., also use the same function to code every value < 0 as `NA`.
+The `naniar` package provides many useful functions for handling missing data in `R` (and works very well in combination with the `tidyverse`). For example, we can use the function `replace_with_na_all` to code every value in our data set that is < 0 as `NA`.
 
 ```{r naniar-all-zero, eval=FALSE}
 allbus2021 <- allbus2021 %>%
@@ -234,19 +335,6 @@ allbus2021 <- allbus2021 %>%
 ```
 
 Using the functions `replace_with_na_at()` and `replace_with_na_if()`, we can also recode values as `NA` for a selection or specific type of variables (e.g., all numeric variables).
-
----
-
-## `set_na()` from `sjlabelled`
-
-Another easy-to-use option for recoding values to `NA` (for individual variables of full data frames) is the function `set_na()` from the `sjlabelled` package. We can, e.g., use it the same way we have used the `naniar` function `replace_with_na_all()` in the previous example.
-
-```{r set-na}
-library(sjlabelled)
-
-allbus2021 <- allbus2021 %>% 
-  set_na(na = c(-99, -77, -33, -22))
-```
 
 ---
 
@@ -258,6 +346,8 @@ If you want to exclude observations with missing values for individual variables
 allbus2021_complete <- na.omit(allbus2021) 
 
 ```
+
+*NB*: Of course, the number of excluded/included cases depends on how you have defined your missings values before.
 
 ---
 
@@ -271,9 +361,11 @@ allbus2021 %>%
   nrow()
 
 allbus2021 %>% 
-  drop_na(choice_of_party) %>% 
+  drop_na(pv01) %>% 
   nrow()
 ```
+
+*NB*: Of course, the number of excluded/included cases depends on how you have defined your missings values before.
 
 ---
 
@@ -283,11 +375,15 @@ An easy option for replacing `NA` with another value for a single variable is th
 
 ```{r replace-na, eval = F}
 allbus2021 <- allbus2021 %>% 
-  mutate(hzcy006a = replace_na(hzcy006a, -99))
+  mutate(pa02a = replace_na(pa02a, -99))
 
 ```
 
-**NB**: This particular example does not make much sense. You can, however, specify different values for different types of missing values. To do this, you probably need to make the recoding dependent on other variables, which is what we will discuss in the next session on advanced data wrangling operations.
+**NB**: This particular example does not make much sense. You can, however, specify different values for different types of missing values. To do this, you probably need to make the recoding dependent on (values in) other variables.
+
+---
+
+## Conditional variable transformation
 
 ---
 

@@ -181,6 +181,16 @@ woRkshoptools::include_picture("./stefan.png")
 
 ---
 
+## Step-by-step
+
+```{r workflow-tweet, echo=FALSE, out.width="50%"}
+tweet_screenshot("https://twitter.com/meghansharris/status/1552710056122191878",
+            theme = "dark")
+```
+<small><small>https://twitter.com/meghansharris/status/1552710056122191878</small></small>
+
+---
+
 ## Keep calm and carry on learning `R`
 
 ```{r first-then, out.width = "55%", echo = F}
@@ -222,7 +232,6 @@ Please try to keep it short (3 to 4 sentences or ~30 secs).
 
 ## Online format
 
-.small[
 - If possible, we invite you to turn on your camera
 
 - If you have an immediate question during the lecture parts, please send it via text chat
@@ -230,7 +239,6 @@ Please try to keep it short (3 to 4 sentences or ~30 secs).
 
 - If you have a question that is not urgent and might be interesting for everybody, you can also use audio (& video) to ask it at the end of a lecture part or during the exercises
   - please use the use the "raise hand" function in *Zoom* for this
-]
 
 ---
 
@@ -240,6 +248,12 @@ Please try to keep it short (3 to 4 sentences or ~30 secs).
   - please contact us via the text chat if you have any technical issues/questions that we can try to solve together with you
 
 - We would also kindly ask you to mute your microphones when you are not asking (or answering) a question
+
+---
+
+## Support for the course
+
+This year, we also have the privilege of having a fabulous teaching assistant for our course: Our intern Theresa Wagner. Theresa is a bachelor student in political science and has ample experience with using and also teaching `R`. She has helped us in the preparation of the course and will be around during the course for (additional) tech support and coding questions.
 
 ---
 
@@ -298,10 +312,15 @@ course_content_5
 - The `R` *Core Group* that has been responsible for the development of `R` since then and `CRAN` were founded in 1997
 - version `1.0.0` of `R` was released in 2000
 - *RStudio* was initially released in 2011
-- currently, the most recent version of `R` is `4.2.1` (released 2022-06-23)
+- currently, the most recent version of `R` is `4.2.1` (released 2022-06-23)<sup>1</sup>
 
-If you want to know a bit more about the origins and history of `R` as well as the philosophy behind it, the book [*R Programming for Data Science*](https://bookdown.org/rdpeng/rprogdatascience/) by Roger D. Peng provides a [good summary](https://bookdown.org/rdpeng/rprogdatascience/history-and-overview-of-r.html). Alternatively, you can also watch this [*YouTube* video in which David Smith talks about *Twenty Years of R*](https://youtu.be/iq_biXEIx-U).
+If you want to know a bit more about the origins and history of `R` as well as the philosophy behind it, the book [*R Programming for Data Science*](https://bookdown.org/rdpeng/rprogdatascience/) by Roger D. Peng provides a [good summary](https://bookdown.org/rdpeng/rprogdatascience/history-and-overview-of-r.html). You can also watch this [*YouTube* video in which David Smith talks about *Twenty Years of R*](https://youtu.be/iq_biXEIx-U).
 
+.small[
+.footnote[
+[1] Fun fact: The different versions of `R` also have (nick)names. The current version `4.2.1`, e.g., is called 'Funny-Looking Kid'.
+]
+]
 ---
 class: middle
 
@@ -430,7 +449,7 @@ Using an IDE provides several advantages, such as:
 
 ## *RStudio*
 
-*RStudio* is the most widely used IDE for `R`.<sup>1</sup> In addition to the general advantages of an IDE, it has some specific ones:
+*RStudio* is the most widely used IDE<sup>1</sup> for `R`.<sup>2</sup> In addition to the general advantages of an IDE, it has some specific ones:
 - easy integration with version control via `Git` (for a good tutorial on this, see [*Happy Git and GitHub for the useR*](https://happygitwithr.com/))
 - interfaces to [`Python` via the `reticulate` package](https://rstudio.github.io/reticulate/) and [`SQL`, e.g., via the `dbplyr` package](https://irene.rbind.io/post/using-sql-in-rstudio/)
 - possibility to install and use [addins](https://rstudio.github.io/rstudioaddins/) that extend the functionalities of the *RStudio* GUI (for an overview of *RStudio* addins, you can check out this [curated list by Dean Attali](https://github.com/daattali/addinslist))
@@ -439,8 +458,15 @@ Using an IDE provides several advantages, such as:
 .small[
 .footnote[
 [1] There are, of course, other IDEs that can be used with/for `R`. Another popular option is [*Visual Studio*](https://visualstudio.microsoft.com/) from *Microsoft* (for which an [`R` extension](https://marketplace.visualstudio.com/items?itemName=Ikuyadeu.r) is available).
+[2] Despite its name, however, the *RStudio* IDE is multilingual and can, e.g., also be used for/with `Python`.
 ]
 ]
+
+---
+
+## Sidenote: A glimpse into the future of *RStudio*
+
+[*RStudio* is becoming *Posit*](https://www.rstudio.com/blog/rstudio-is-becoming-posit/). However, the name change only affects the company, not the IDE (a bit like with *Alphabet* and *Google* or *Meta* and *Facebook*). One reason behind this move is that the company wants to expand its efforts of extending the functionalities of their products for other data science languages, such as Python and Julia.
 
 ---
 

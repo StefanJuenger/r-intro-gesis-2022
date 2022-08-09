@@ -494,23 +494,6 @@ If you load a package and some of its functions have the same names as those fro
 library(dplyr)
 ```
 
-```
-## 
-## Attache Paket: &#39;dplyr&#39;
-```
-
-```
-## Die folgenden Objekte sind maskiert von &#39;package:stats&#39;:
-## 
-##     filter, lag
-```
-
-```
-## Die folgenden Objekte sind maskiert von &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union
-```
-
 ---
 
 ## Avoiding/resolving namespace conflicts
@@ -530,6 +513,12 @@ You can also unload a package, but this generally is/should not be the preferred
 ```r
 detach(&quot;package:dplyr&quot;, unload = TRUE)
 ```
+
+---
+
+## Avoiding/resolving namespace conflicts
+
+A helpful tool for detecting as well as resolving namespace conflicts is the [`conflicted` package](https://www.tidyverse.org/blog/2018/06/conflicted/).
 
 ---
 

@@ -56,6 +56,12 @@ detach("package:dplyr", unload = TRUE)
 
 ---
 
+## Avoiding/resolving namespace conflicts
+
+A helpful tool for detecting as well as resolving namespace conflicts is the [`conflicted` package](https://www.tidyverse.org/blog/2018/06/conflicted/).
+
+---
+
 ## Updating packages
 
 You can update all packages you have installed with the following command:
