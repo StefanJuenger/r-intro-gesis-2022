@@ -174,7 +174,10 @@ woRkshoptools::include_picture("./stefan.png")
 ## Our jou`R`neys
 
 **Veronika**
-- TBD
+- grew up with *SPSS* cookbooks
+- began to learn *R* for text mining, but the data, workflows and documentation were not *tidy* at all
+- fallen for the R universe of code sharing and development like [TidyTuesday](https://github.com/rfordatascience/tidytuesday)
+- in love with *Python* as well (particularly for NLP tasks)
 
 ---
 
@@ -453,7 +456,7 @@ You can download the installer for your OS from the [*RStudio* website](https://
 woRkshoptools::include_picture("./rstudio_1st_explained.png")
 ```
 
-.small[
+.smaller[
 *Note*: You will only see the `Git` tab if you have [`Git`](https://git-scm.com/) installed and set up. In new(er) versions of *RStudio*, the pane including the *Files* tab also includes a *Presentation* tab (which is meant to be used for [`Quarto`](https://quarto.org/) files.)
 ]
 
