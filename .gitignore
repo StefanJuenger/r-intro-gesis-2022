@@ -1,4 +1,8 @@
+# R files
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
+
+# Data
+data/allbus_2021/*
