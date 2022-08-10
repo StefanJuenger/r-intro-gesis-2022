@@ -49,9 +49,7 @@ Yesterday, we covered exploratory data analysis (EDA). In contrast to that, the 
 ## Fake Research Question
 
 .pull-left[
-Say we're interested in xenophobic and anti-immigration attitudes. We'd like to investigate how social trust and contact to foreigners might reduce them.
-
-...
+Say we're interested in xenophobic attitudes. We'd like to investigate how social trust and contact to foreigners might reduce them, and how party choices may contribute to higher levels of xenophobia. 
 ]
 
 .pull-right[
@@ -88,7 +86,6 @@ allbus_2021_cda <-
   allbus_2021_cda %>% 
   mutate(
     xenophobia = rowSums(across(ma01b:ma04)) - 4, # sum score
-    anti_immigrant = rowSums(across(mi05:mi11)) - 7, # sum score
     trust = ifelse(st01 == 1, 1, 0), # dichotomization
     contact = rowSums(across(mc01:mc04)) * -1 + 8, # sum score + inversion
     party = as.factor(pv01) # factor conversion
@@ -461,6 +458,12 @@ contrasts(allbus_2021_cda$party)
 ]
 
 See what I did?
+
+
+```{r dummy-coding-3, echo = FALSE}
+contrasts(allbus_2021_cda$party) <- 
+  contr.treatment(8, base = 1)
+```
 
 ---
 
