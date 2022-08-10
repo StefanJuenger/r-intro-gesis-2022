@@ -676,7 +676,7 @@ Say we&#39;re interested in xenophobic attitudes. We&#39;d like to investigate h
 
 .pull-right[
 &lt;/br&gt;
-&lt;img src=&quot;data:image/png;base64,#../img/4iq3kg.jpg&quot; style=&quot;display: block; margin: auto;&quot; /&gt;
+&lt;img src=&quot;data:image/png;base64,#../img/4iq3kg.jpg&quot; width=&quot;813&quot; style=&quot;display: block; margin: auto;&quot; /&gt;
 .center[.tinyisher[https://imgflip.com/memegenerator/Trump-Bill-Signing]
 ]
 ]
@@ -1937,8 +1937,40 @@ simple_linear_model_logistic %&gt;%
 ---
 
 class: center, middle
-.small[
+.tinyish[
 
+```
+## We fitted a logistic model (estimated using ML) to predict trust with age, sex, eastwest, contact and party
+##  (formula: trust ~ age + sex + eastwest + contact + party). The model&#39;s explanatory power is weak (Tjur&#39;s R2 = 0.04). The model&#39;s intercept,
+## corresponding to age = 0, sex = 0, eastwest = 0, contact = 0 and party = 1
+## , is at -1.06 (95% CI [-1.72, -0.41], p = 0.002). Within this model:
+## 
+##   - The effect of age is statistically non-significant and positive (beta = 6.01e-03, 95% CI [5.35e-06, 0.01], p = 0.050; Std. beta = 0.10, 95% CI
+## [9.33e-05, 0.21])
+##   - The effect of sex is statistically significant and negative (beta = -0.38, 95% CI [-0.57, -0.18], p &lt; .001; Std. beta = -0.19, 95% CI [-0.29,
+## -0.09])
+##   - The effect of eastwest is statistically non-significant and positive (beta = 0.06, 95% CI [-0.16, 0.29], p = 0.574; Std. beta = 0.03, 95% CI
+## [-0.08, 0.14])
+##   - The effect of contact is statistically non-significant and positive (beta = 0.08, 95% CI [-2.30e-03, 0.17], p = 0.057; Std. beta = 0.11, 95% CI
+## [-2.99e-03, 0.22])
+##   - The effect of party [2] is statistically non-significant and positive (beta = 5.67e-03, 95% CI [-0.31, 0.31], p = 0.971; Std. beta = 5.67e-03, 95%
+## CI [-0.31, 0.31])
+##   - The effect of party [3] is statistically non-significant and positive (beta = 0.12, 95% CI [-0.22, 0.44], p = 0.493; Std. beta = 0.12, 95% CI
+## [-0.22, 0.44])
+##   - The effect of party [4] is statistically significant and positive (beta = 0.57, 95% CI [0.30, 0.85], p &lt; .001; Std. beta = 0.57, 95% CI [0.30,
+## 0.85])
+##   - The effect of party [5] is statistically non-significant and positive (beta = 0.35, 95% CI [-0.05, 0.73], p = 0.082; Std. beta = 0.35, 95% CI
+## [-0.05, 0.73])
+##   - The effect of party [6] is statistically significant and negative (beta = -0.95, 95% CI [-1.50, -0.44], p &lt; .001; Std. beta = -0.95, 95% CI [-1.50,
+## -0.44])
+##   - The effect of party [7] is statistically non-significant and negative (beta = -0.10, 95% CI [-0.64, 0.41], p = 0.709; Std. beta = -0.10, 95% CI
+## [-0.64, 0.41])
+##   - The effect of party [8] is statistically significant and negative (beta = -1.54, 95% CI [-2.37, -0.85], p &lt; .001; Std. beta = -1.54, 95% CI [-2.37,
+## -0.85])
+## 
+## Standardized parameters were obtained by fitting the model on a standardized version of the dataset. 95% Confidence Intervals (CIs) and p-values were
+## computed using a Wald z-distribution approximation.
+```
 ]
 
 ---

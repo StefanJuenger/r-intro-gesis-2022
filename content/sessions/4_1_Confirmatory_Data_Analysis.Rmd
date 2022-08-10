@@ -846,8 +846,8 @@ simple_linear_model_logistic %>%
 ---
 
 class: center, middle
-.small[
-```{r ref.label = "report-regression", echo = FALSE, eval = FALSE}
+.tinyish[
+```{r ref.label = "report-regression", echo = FALSE}
 ```
 ]
 
