@@ -1,13 +1,13 @@
 ---
 title: "Introduction to R for Data Analysis"
-subtitle: "Data Wrangling Basics"
+subtitle: "Data Wrangling Part - 1"
 author: "Johannes Breuer, Stefan Jünger, & Veronika Batzdorfer"
 date: "2022-08-16"
 presenter: Veronika
 ---
 layout: true 
 
-```{r child = "../config/sessions_setup.Rmd"}
+```{r child = "content/config/sessions_setup.Rmd"}
 ```
 
 ---
@@ -184,17 +184,6 @@ woRkshoptools::include_picture("./wide-long.png")
 
 ---
 
-### What's a pipe?
-
-```{r magrittr, echo=FALSE, out.width="50%"}
-woRkshoptools::include_picture("./pipe_office_decoration.jpg")
-```
-
-.small[
-Source: Johannes' GESIS office wall
-]
-
----
 
 ## Pipes (%>% == and then)
 
@@ -279,13 +268,13 @@ Side note: If you want to (semi-)automatically generate a codebook for your own 
 
 ## Load the data
 
-The first step is loading the data into `R`. The *Public Use File (PUF) of the GESIS German General Social Survey (ALLBUS) 2021* is available in different formats. We will work with the `.csv` file.
+The first step is loading the data into `R`.
 
 ```{r load-albus2021-data}
-allbus2021<- read_csv2("./data/ZA5667_v1-1-0.csv")
-```
+library(haven) #to load foreign data formats such as from SPSS into R
 
-*Note*: `read_csv2()` is used to load files that use "; for the field separator and , for the decimal point" (from the function help file), which is the format that the `.csv` version of this data set is in.
+allbus_2021 <- read_sav("./data/allbus_2021ZA5280_v1-0-0.sav")
+```
 
 ---
 
@@ -318,7 +307,7 @@ The `tidyverse` examples in the following will make use of functions from the [`
 The `dplyr` package provides a function for getting a first good look at your data, that is especially helpful when working with data sets that contain many columns/variables. The function `glimpse()` prints a data frame/tibble in a way that represents columns as rows and rows as columns and also provides some additional information about the data frame and its columns.
 
 ```{r glimpse, eval=FALSE}
-allbus2021 %>% 
+allbus_2021 %>% 
   glimpse()
 ```
 
@@ -337,12 +326,12 @@ class: middle
 
 ## Selecting variables
 
-We might want to reduce our data frame (or create a new one) to only include a *subset of specific variables*. Say, for example, we want to select only the variables that measure the satisfaction with democracy, life satisfaction and information seeking on social media from our full data set. There are two options for doing this with `base R`:
+We might want to reduce our data frame (or create a new one) to only include a *subset of specific variables*. Say, for example, we want to select only the variables that measure antisemitism, satisfaction with democracy, political views and information seeking on social media from our full data set. There are two options for doing this with `base R`:
 
 Option 1
 .small[
 ```{r select-vars-base}
-allbus_democracy_satisf <- allbus2021[, c("ps03", "ls01", "lm35")]
+allbus_antisemitsm <- allbus_2021[, c("ps03", "pa01", "lm35", "mj01", "mj02", "mj03")]
 # When subsetting with [], the first value refers to rows, the second to columns
 # [, c("var1", "var2", ...)] means we want to select all rows but only some specific columns.
 ```
@@ -351,7 +340,7 @@ allbus_democracy_satisf <- allbus2021[, c("ps03", "ls01", "lm35")]
 Option 2
 .small[
 ```{r subset}
-allbus_democracy_satisf  <- subset(allbus2021, TRUE, select = c(ps03, ls01, lm35))
+allbus_antisemitsm <- subset(allbus_2021, TRUE, select = c(ps03, pa01, lm35, mj01, mj02, mj03))
 # Again, here the 2nd argument refers to the rows.
 # Setting it to TRUE means that we want to include all rows in the subset.
 ```
@@ -364,7 +353,7 @@ allbus_democracy_satisf  <- subset(allbus2021, TRUE, select = c(ps03, ls01, lm35
 You can also select variables based on their numeric index.
 
 ```{r subset-base-index}
-allbus_demo <- allbus2021[, 6:13]
+allbus_demo <- allbus_2021[, 271:276]
 
 names(allbus_demo)
 ```
@@ -376,12 +365,15 @@ names(allbus_demo)
 In the `tidyverse`, we can create a subset of variables with the `dplyr` verb `select()`.
 
 ```{r select}
-allbus_democracy_satisf <- allbus2021 %>% 
+allbus_antisemitsm <- allbus_2021 %>% 
   select(ps03,
-         ls01,
-         lm35)
+         pa01,
+         lm35,
+         mj01,
+         mj02,
+         mj03)
 
-head(allbus_democracy_satisf)
+head(allbus_antisemitsm)
 ```
 
 ---
@@ -391,10 +383,10 @@ head(allbus_democracy_satisf)
 There also is a shorthand notation for selecting a set of consecutive columns with `select()`.
 
 ```{r select-range}
-allbus_democracy_satisf <- allbus2021 %>% 
-  select(ps03:lm35)
+allbus_range <- allbus_2021 %>% 
+  select(mj01:mj06)
 
-head(allbus_democracy_satisf)
+head(allbus_range)
 ```
 
 *Note*: You can also use this shorthand notation for the `select` argument of the `base R` function `subset()`.
@@ -406,10 +398,10 @@ head(allbus_democracy_satisf)
 Same as for `base R`, you can also use the numeric index of variables in combination with `select()` from `dplyr`.
 
 ```{r select-index}
-allbus_democracy_satisf <- allbus2021 %>% 
+allbus_select<- allbus_2021 %>% 
   select(6:13)
 
-names(allbus_democracy_satisf)
+names(allbus_select)
 ```
 
 ---
@@ -421,20 +413,20 @@ If you just want to exclude one or a few columns/variables, it is easier to unse
 Option 1
 .small[
 ```{r unselect-base}
-allbus2021_cut <- allbus2021[!(names(allbus2021) %in% c("age", "sex"))]
+allbus_2021_cut <- allbus_2021[!(names(allbus_2021) %in% c("za_nr", "version", "doi"))]
 # The ! operator means "not" (i.e., it negates a condition)
 # The %in% operator means "is included in" (in this case the following character vector)
 
-dim(allbus2021_cut)
+dim(allbus_2021_cut)
 ```
 ]
 
 Option 2
 .small[
 ```{r subset-unselect}
-allbus2021_cut  <- subset(allbus2021, TRUE, select = -c(age, sex))
+allbus_2021_cut  <- subset(allbus_2021, TRUE, select = -c(za_nr, version, doi))
 
-dim(allbus2021_cut)
+dim(allbus_2021_cut)
 ```
 ]
 
@@ -445,10 +437,10 @@ dim(allbus2021_cut)
 You can also use `select()` from `dplyr` to exclude one or more columns/variables.
 
 ```{r unselect}
-allbus2021_cut<- allbus2021%>% 
-  select(-c(age, sex))
+allbus_2021_cut<- allbus_2021%>% 
+  select(-c(za_nr, version, doi))
 
-dim(allbus2021_cut)
+dim(allbus_2021_cut)
 ```
 
 ---
@@ -458,24 +450,25 @@ dim(allbus2021_cut)
 `dplyr` offers several helper functions for selecting variables. For a full list of those, you can check the [documentation for the `select()` function](https://dplyr.tidyverse.org/reference/select.html).
 
 ```{r select-helper}
-allbus2021_pt <- allbus2021 %>% 
-  select(starts_with("pt"))
+allbus_2021_mj <- allbus_2021 %>% 
+  select(starts_with("mj"))
 
-allbus2021_1 <-allbus2021 %>% 
-  select(ends_with("_1"))
+allbus_2021_born <-allbus_2021 %>% 
+  select(ends_with("born"))
 
-glimpse(allbus2021_1)
+glimpse(allbus_2021_born)
 ```
 
 ---
 
 ## Advanced ways of selecting variables
 
-Another particularly useful selection helper is `where()`. You can, e.g., use `where()` to select only a specific type of variables.
+Another particularly useful selection helper is `where()` to select only a specific type of variables.
 
 ```{r where-num}
-allbus2021_num <- allbus2021%>% 
-  select(where(is.numeric))
+allbus_2021_num <- allbus_2021 %>% 
+  select(where(is.numeric)) %>% 
+  print()
 ```
 
 ---
@@ -485,14 +478,14 @@ allbus2021_num <- allbus2021%>%
 One thing that we need to know - and might want to change - are the names of the variables in the dataset.
 
 ```{r names-gpc}
-names(allbus2021)
+names(allbus_2021)
 ```
 
 ---
 
 ## What's in a name?
 
-As you can see, only a few of the variable names in the *GESIS German General Social Survey (ALLBUS) 2021* data set are self-explanatory. The other variable names are composed of codes representing the study wave, study name, variable number and whether they are original or derived variables (have a look at the [*GESIS ALLBUS* cheatsheet]() if you want to know more), but they are not intuitive to understand. Hence, for analyzing them, especially if you want to create tables and/or plots, it can make sense to rename them. This is also a common step if you work with your own data. Depending on what method or tool(s) you used to collect the data, the variable names in your raw data may also not be what you want or need them to be.
+As you can see, only a few of the variable names in the *GESIS German General Social Survey (ALLBUS) 2021* data set are self-explanatory. The other variable names are composed of codes representing the study wave, study name, variable number and whether they are original or derived variables (have a look at the [*GESIS ALLBUS 2021* codebook](https://github.com/StefanJuenger/r-intro-gesis-2022) if you want to know more), but they are not intuitive to understand. Hence, for analyzing them, especially if you want to create tables and/or plots, it can make sense to rename them. This is also a common step if you work with your own data. Depending on what method or tool(s) you used to collect the data, the variable names in your raw data may also not be what you want or need them to be.
 
 ---
 
@@ -516,13 +509,13 @@ woRkshoptools::include_picture("./coding_cases.png")
 You can rename individual columns/variables in `base R` as follows:
 
 ```{r rename-base, eval=FALSE}
-colnames(allbus2021)[colnames(allbus2021) == "ps03"] <- "satisf_democracy"
+colnames(allbus_2021)[colnames(allbus_2021) == "lm35"] <- "sm_info_seeking"
 ```
 
 As for subsetting, you can also rename variables based on their numeric index.
 
 ```{r base-rename-index, eval=FALSE}
-colnames(allbus2021)[4] <- "respondent_id"
+colnames(allbus_2021)[4] <- "respondent_id"
 ```
 
 ---
@@ -532,14 +525,13 @@ colnames(allbus2021)[4] <- "respondent_id"
 An easier to use and more versatile option for renaming columns/variables is the `dplyr` function `rename()`.
 
 ```{r rename}
-allbus_democracy_satisf  <- allbus_democracy_satisf %>% 
+allbus_antisemitsm <- allbus_antisemitsm %>% 
   rename(satisf_democracy= ps03, # new_name = old_name
-         satisf_life = ls01,
-         Internet_info = lm35)
-
-
-
-
+         polit_views = pa01,
+         sm_info_seeking = lm35,
+         antisemit_1 = mj01,
+         antisemit_2 = mj02,
+         antisemit_3 = mj03)
 
 
 names(allbus_democracy_satisf)
@@ -552,7 +544,7 @@ names(allbus_democracy_satisf)
 For some more advanced renaming options, you can use the `dplyr` function `rename_with()`.
 
 ```{r rename-with}
-allbus_democracy_satisf %>% 
+allbus_antisemitsm %>% 
   rename_with(toupper) %>% 
   names()
 ```
@@ -563,12 +555,12 @@ allbus_democracy_satisf %>%
 
 ## Renaming variables
 
-We can, e.g., use `rename_with()` in combination with `gsub()` (which we've already encountered in the session on *Getting Started*) to remove (or change) prefixes in variable names.
+We can use `rename_with()` in combination with `gsub()` (which we've already encountered in the session on *Getting Started*) to remove (or change) prefixes in variable names.
 
 ```{r rename-with-prefix}
-allbus2021 %>% 
-  select(hzcy001a:hzcy005a) %>% 
-  rename_with(~ gsub("hzcy", "risk", .x,
+allbus_2021 %>% 
+  select(mj01:mj06) %>% 
+  rename_with(~ gsub("mj", "antisemit", .x,
                      fixed = TRUE)) %>% 
   names()
 ```
@@ -581,12 +573,15 @@ A nice thing about the `dplyr` verb `select` is that you can use it to select an
 
 .small[
 ```{r select-rename}
-gp_covid_risk <- gp_covid %>% 
-  select(satisf_democracy = ps03, 
-         satisf_life = ls01,
-         Internet_info = lm35)
+allbus_antisemitsm <- allbus_2021 %>% 
+  select(satisf_democracy= ps03,
+         polit_views = pa01,
+         sm_info_seeking = lm35,
+         antisemit_1 = mj01,
+         antisemit_2 = mj02,
+         antisemit_3 = mj03)
 
-head(gp_covid_risk)
+head(allbus_antisemitsm)
 ```
 ]
 
@@ -597,10 +592,10 @@ head(gp_covid_risk)
 Although the positions of columns in a data frame do not matter for analyses or plotting (unless you want to select columns using their numerical index), you might want to change them. For this purpose, `dplyr` provides the `relocate()` function.
 
 ```{r relocate}
-gp_covid_risk <- gp_covid_risk %>% 
-  relocate(risk_infect_others, .after = risk_surroundings)
+allbus_antisemitsm  <- allbus_antisemitsm %>% 
+  relocate(satisf_democracy, .after = polit_views)
 
-glimpse(gp_covid_risk)
+glimpse(allbus_antisemitsm)
 ```
 
 *Note*: You can also move a column before a specific other column by providing a variable name to the `.before` argument (instead of `.after`).
