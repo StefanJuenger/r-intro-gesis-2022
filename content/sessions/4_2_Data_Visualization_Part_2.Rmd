@@ -1,0 +1,832 @@
+---
+title: "Introduction to R for Data Analysis"
+subtitle: "Data Visualization - Part 2"
+author: "Johannes Breuer, Stefan Jünger, Veronika Batzdorfer"
+date: "2021-08-18"
+presenter: Stefan
+editor_options: 
+  chunk_output_type: console
+---
+
+layout: true 
+
+```{r child = "./content/config/sessions_setup.Rmd"}
+```
+
+---
+
+## Content of this session
+
+.pull-left[
+**What we will do**
+- Visual checks of model assumptions
+- Plotting coefficients
+- Plotting predictions
+- Plotting multiple models
+]
+
+.pull-right[
+**What we won't do**
+- Again, no crazy models
+- No Bayesian statistics
+]
+
+---
+
+## Packages in this session
+
+.pull-left[
+We will, again, use some packages from the `easystats` collection
+- `parameters`
+- `performance`
+- **`see`**
+]
+
+.pull-right[
+```{r easystats-pic, echo = FALSE}
+woRkshoptools::include_picture("logo_wall.png")
+```
+]
+
+.pull-left[
+While the `see` package is straightforward to use, it has some limitations. From time to time we will, hence, also switch to the `sjPlot` package.
+]
+
+.pull-right[
+```{r sjPlot-pic, echo = FALSE, out.width = "40%"}
+woRkshoptools::include_picture("sjplot_logo.png")
+```
+]
+
+---
+
+## Data for this session
+
+As in the previous sessions, we will use the data from the from the *ALLBUS/GGSS 2021*.
+
+```{r load-allbus}
+library(haven)
+
+allbus_2021_cda <- 
+  read_spss("./data/allbus_2021/ZA5280_v1-0-0.sav")
+```
+
+---
+
+## Fictional research question
+
+We are still interested in xenophobic attitudes, like to investigate how social trust and contact to foreigners might reduce them, and how party choices may contribute to higher levels of xenophobia. 
+
+**Of course, this 'research' is again purely based on ad-hoc hypotheses.**
+
+```{r central-variables}
+library(dplyr)
+
+allbus_2021_cda <-
+  allbus_2021_cda %>% 
+  mutate(
+    xenophobia = rowSums(across(ma01b:ma04)) - 4, # sum score
+    trust = ifelse(st01 == 1, 1, 0), # dichotomization
+    contact = rowSums(across(mc01:mc04)) * -1 + 8, # sum score + inversion
+    afd = ifelse(pv01 == 42, 1, 0)
+  )
+```
+
+---
+
+## Estimating a linear model (OLS)
+
+We start with estimating a linear regression model including our variables of interest and two control variables.
+
+```{r linear-model}
+linear_model <- 
+  lm(
+    xenophobia ~ age + sex + eastwest + trust + contact + afd, 
+    data = allbus_2021_cda
+  )
+
+library(parameters)
+
+model_parameters(linear_model)
+```
+
+---
+
+## Quick inspection using `base R`
+
+In this session, we use `base R` plots again, but only to quickly illustrate that you could use them for some basic model checks, too.
+
+.pull-left[
+```{r lm_summary_plot, eval = FALSE}
+par(mfrow = c(2, 2))
+plot(linear_model)
+```
+]
+
+.pull-right[
+```{r ref.label = "lm_summary_plot", echo = FALSE}
+```
+]
+
+---
+
+## Using `easystats`
+
+`easystats` provides some nice features for inspecting model fit. Here's a simple check for normality of the residuals. It is a combination of using a function from the `performance` package and then using `see` to plot it.
+
+.pull-left[
+```{r easystats-performance, eval = FALSE}
+library(performance)
+library(see)
+
+check_normality(linear_model) %>% 
+  plot()
+```
+]
+
+.pull-right[
+```{r ref.label = "easystats-performance", echo = FALSE, out.width = "75%"}
+```
+]
+
+---
+
+## QQ-Plot (`easystats`)
+
+You can also draw some classic QQ-plots for this purpose.
+
+.pull-left[
+```{r easystats-qq, eval = FALSE}
+check_normality(linear_model) %>% 
+  plot(type = "qq")
+```
+]
+
+.pull-right[
+```{r ref.label = "easystats-qq", echo = FALSE, out.width = "85%"}
+```
+]
+
+---
+
+## Heteroscedasticity (`easystats`)
+
+Something that is always a bit of an issue in regression analysis is heteroscedasticity. Again, it's straightforward to check for this using `performance` and `see`.
+
+.pull-left[
+```{r easystats-hetero, eval = FALSE}
+check_heteroscedasticity(
+  linear_model
+) %>% 
+  plot()
+```
+]
+
+.pull-right[
+```{r ref.label = "easystats-hetero", echo = FALSE, out.width = "85%"}
+```
+]
+
+---
+
+## Check outliers (`easystats`)
+
+The same applies for outlier analysis.
+
+.pull-left[
+```{r check-outliers, eval = FALSE}
+check_outliers(linear_model) %>% 
+  plot()
+```
+]
+
+.pull-right[
+```{r ref.label = "check-outliers", echo = FALSE, out.width = "90%"}
+```
+]
+
+---
+
+## There is more
+
+In the collection of `easystats` packages, there are [way more procedures](https://easystats.github.io/see/articles/performance.html) you can apply to check your models. To replicate the summary plot from `base R` with some nicer formatting, we can use the following function from the `performance` package:
+
+.pull-left[
+```{r check-estimates, eval = FALSE}
+check_model(linear_model)
+```
+]
+
+.pull-right[
+```{r ref.label = "check-estimates", echo = FALSE, out.width = "80%"}
+```
+]
+
+---
+
+class: center, middle
+
+# [Exercise](https://jobreu.github.io/r-intro-gesis-2021/exercises/Exercise_4_2_1_Plotting_Diagnostics.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+
+## [Solutions](https://jobreu.github.io/r-intro-gesis-2021/solutions/Exercise_4_2_1_Plotting_Diagnostics.html)
+
+---
+
+## Getting to the substantive part
+
+After checking the model assumptions, and pretending everything's fine (it's not...), we will deal with the substantive part of our fictional research question. The traditional way of doing that it printing some regression tables and checking the individual coefficients. That's fine but plotting is also nice. For that purpose, we will now turn to...
+- Coefficient Plots / Forest Plots
+- Prediction Plots 
+
+---
+
+## Coefficient plot (`parameters`)
+
+`parameter` provides an easy method for creating a coefficient plot in one to two lines of code.
+
+.pull-left[
+```{r easystats-coef-plot, eval = FALSE}
+library(parameters)
+
+model_parameters(linear_model) %>% 
+  plot()
+```
+]
+
+.pull-right[
+```{r ref.label = "easystats-coef-plot", echo = FALSE, out.width = "95%"}
+```
+]
+
+---
+
+## Changing labels: it's `ggplot2`-based
+
+All of the plots produced by `parameters` and `see` are based on `ggplot2`. This means that, after calling the plotting functions from these packages, we can draw additional or manipulate existing plot layers using the usual `+`-structure.
+
+.pull-left[
+```{r labels-change, eval = FALSE}
+library(ggplot2)
+
+model_parameters(linear_model) %>% 
+  plot() +
+  scale_y_discrete(
+    labels = # in reversed order!
+      c(
+        "AfD Vote", "Contact", "Social Trust", "Region (Ref. Western Germany)",
+        "Sex", "Age"
+      )
+  )
+```
+]
+
+.pull-right[
+```{r ref.label = "labels-change", echo = FALSE, out.width = "90%"}
+```
+]
+
+---
+
+## Paint it black! `r ji("black_heart")`
+
+Thus, we can easily manipulate the appearance of the plots, e.g., by turning to a less colorful theme. 
+
+.pull-left[
+```{r labels-change-2, eval = FALSE}
+library(ggplot2)
+
+model_parameters(linear_model) %>% 
+  plot() +
+  scale_y_discrete(
+    labels = # in reversed order!
+      c(
+        "AfD Vote", "Contact", "Social Trust", "Region (Ref. Western Germany)",
+        "Sex", "Age"
+      )
+  ) +
+  scale_colour_grey(start = 0, end = 0) + 
+  guides(color = "none")
+```
+]
+
+.pull-right[
+```{r ref.label = "labels-change-2", echo = FALSE, out.width = "95%"}
+```
+]
+
+---
+
+## The advantage of prediction plots
+
+Regression coefficients are sometimes a bit hard to read
+- they are based on the scale of the independent variable when unstandardized
+- it is ambiguous what they actually mean substantially
+- for example, is a coefficient of .2 or .05 (practically) meaningful or not?
+
+Predictions are a solution
+- they basically draw the regression line into the scatter plot of the Y and X variables
+- we can read at which level of X which value of Y is expected
+
+---
+
+## Predictions (`sjPlot`)
+
+For the purpose of plotting predictions, we will use the `plot_model()` function from the `sjPlot` package. In principle, it would also be possible with the `easystats` packages, but I find `sjPlot` easier to work with in this case...
+
+.pull-left[
+```{r predictions, eval = FALSE}
+library(sjPlot)
+
+linear_model %>% 
+  plot_model(
+    type = "pred", 
+    terms = "age"
+  )
+
+```
+]
+
+.pull-right[
+```{r ref.label = "predictions", echo = FALSE, out.width = "90%"}
+```
+]
+
+---
+
+## Customizing `sjplot`s
+
+As for the `easytats` packages, the plots produced by `sjplot` are `ggplot2`-based.
+
+.pull-left[
+```{r predictions-nicer, eval = FALSE}
+linear_model %>% 
+  plot_model(
+    type = "pred", 
+    terms = "age"
+  ) +
+  xlab("Age") +
+  ylab("Xenophobia") +
+  ggtitle("Linear Model") +
+  theme_bw()
+```
+]
+
+.pull-right[
+```{r ref.label = "predictions-nicer", echo = FALSE, out.width = "95%"}
+```
+]
+
+---
+
+## Interaction effects
+
+Let's now turn to a possible interaction between age and contact. Does contact to foreigners moderate the relationship between age and xenophobia?
+
+```{r interaction-model}
+linear_model_interaction <-
+  lm(
+    xenophobia ~ age + sex + eastwest + trust + contact + afd + age:contact,
+    data = allbus_2021_cda
+  )
+
+model_parameters(linear_model_interaction)
+```
+
+---
+
+## Plotting interaction effects
+
+Regression parameters for interactions are particular difficult to interpret. Again, `sjPlot` can help in this regard.
+
+.pull-left[
+```{r interaction-plot, eval = FALSE}
+linear_model_interaction %>% 
+  plot_model(
+    type = "int"
+  ) +
+  xlab("Age") +
+  ylab("Xenophobia") +
+  ggtitle("Interaction Model") +
+  theme_bw()
+```
+]
+
+.pull-right[
+```{r ref.label = "interaction-plot", echo = FALSE, out.width = "95%"}
+```
+]
+
+---
+
+## Sidenote: colors again
+
+Here's an example of the different color types in `ggplot2` (`color` and `fill`) and how you can manipulate them.
+
+.pull-left[
+```{r interaction-plot-colors, eval = FALSE}
+linear_model_interaction %>% 
+  plot_model(
+    type = "int"
+  ) +
+  xlab("Age") +
+  ylab("Xenophobia") +
+  ggtitle("Interaction Model") +
+  theme_bw() +
+  scale_color_manual(
+    values = c("red", "blue"),
+    labels = c("Litte", "A lot"),
+    name = "Contact"
+  ) +
+  scale_fill_manual(
+    values = rep("grey", 3)
+  )
+```
+]
+
+.pull-right[
+```{r ref.label = "interaction-plot-colors", echo = FALSE, out.width = "95%"}
+```
+]
+
+---
+
+class: center, middle
+
+# [Exercise](https://jobreu.github.io/r-intro-gesis-2021/exercises/Exercise_4_2_2_Plotting_a_Regression.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+
+## [Solutions](https://jobreu.github.io/r-intro-gesis-2021/solutions/Exercise_4_2_2_Plotting_a_Regression.html)
+
+---
+
+## Estimating multiple models
+
+Something you may often do in your research is estimating multiple models because of
+- changing covariates or dependent variables
+- different model specifications
+
+We can compare models side by side using regression tables, but by now we should know: plotting is better.
+
+---
+
+## Two more example regressions
+
+We then can run a logistic regression based on the binary variable from the median split.
+
+```{r log-reg}
+linear_model_plain <-
+  lm(xenophobia ~ trust + contact + afd, data = allbus_2021_cda)
+
+linear_model_controls <-
+  lm(xenophobia ~ age + sex + eastwest + trust + contact + afd, data = allbus_2021_cda)
+
+model_parameters(linear_model_plain)
+
+model_parameters(linear_model_controls)
+```
+
+---
+
+## Comparing model fits (`performance`)
+
+The `performance` package gives you a nice spider plot when you compare the performance of models visually.
+
+.pull-left[
+```{r comparing-model-fit, eval = FALSE}
+library(performance)
+
+compare_performance(
+  linear_model_plain,
+  linear_model_controls
+) %>% 
+  plot()
+```
+]
+
+.pull-right[
+```{r ref.label = "comparing-model-fit", eval = FALSE, echo = FALSE, out.width = "90%"}
+```
+]
+
+---
+
+## Comparing model parameters (`sjPlot`)
+
+To compare coefficients from different regression models, we can also use `sjplot`. This time, instead of using `plot_model()`, we use `plot_models()`.
+
+.pull-left[
+```{r comparing-parameters, eval = FALSE}
+plot_models(
+  linear_model_plain,
+  linear_model_controls,
+  std.est = "std"
+)
+```
+]
+
+.pull-right[
+```{r ref.label = "comparing-parameters", echo = FALSE, out.width = "85%"}
+```
+]
+
+---
+
+## Adjusting it within the function
+
+The nice thing about `sjPlot` is that it provides a lot of options for customizing the plot. For example, to change the legend and axis labels we can use the `m.label` and `axis.labels` arguments.
+
+.pull-left[
+```{r comparing-parameters-adjusted, eval = FALSE}
+plot_models(
+  linear_model_plain,
+  linear_model_controls,
+  std.est = "std",
+  legend.title = "Models",
+  m.labels = 
+    c(
+      "Without controls", 
+      "With controls"
+    ),
+  axis.labels = 
+    c(
+      "Region (Ref. Western Germany)", "Sex", "Age", "AfD Vote", "Contact",
+      "Social Trust"
+    )
+) 
+```
+]
+
+.pull-right[
+```{r ref.label = "comparing-parameters-adjusted", echo = FALSE, out.width = "95%"}
+```
+]
+
+---
+
+## More customization
+
+As `sjplot` is also based on `ggplot2` we easily add further layers to our plot, such as a theme.
+
+.pull-left[
+```{r comparing-parameters-adjusted-bw, eval = FALSE}
+library(ggplot2)
+
+plot_models(
+  linear_model_plain,
+  linear_model_controls,
+  std.est = "std",
+  legend.title = "Models",
+  m.labels = 
+    c(
+      "Without controls", 
+      "With controls"
+    ),
+  axis.labels = 
+    c(
+      "Region (Ref. Western Germany)", "Sex", "Age", "AfD Vote", "Contact",
+      "Social Trust"
+    )
+) +
+  theme_bw()
+```
+]
+
+.pull-right[
+```{r ref.label = "comparing-parameters-adjusted-bw", echo = FALSE, out.width = "85%"}
+```
+]
+
+---
+
+## Plotting predictions from multiple models
+
+Neither the `easystats` packages nor `sjPlot` provide an easy way for plotting predictions from multiple models. For this purpose, we have to dig a bit deeper into the wrangling of the underlying data. Fortunately, what `sjPlot` supports is extracting the data from predicting a model. With these data at hand, we can simply create a data frame comprising predictions from multiple models.
+
+---
+
+## Extracting the predictions
+
+The procedure to extract predictions from a model is similar to using the plotting command. But instead of using `plot_model()`, we use `get_model_data()`.
+
+```{r extract-linear-predictions}
+linear_predictions <-
+  get_model_data(
+    linear_model_plain,
+    term = "contact",
+    type = "pred"
+  )
+
+linear_predictions
+```
+
+---
+
+## More predictions
+
+We can extract the predictions from the previous two models the same way.
+
+.pull-left[
+```{r extract-logistic-predictions}
+predictions_plain <-
+  get_model_data(
+    linear_model_plain,
+    term = "contact",
+    type = "pred"
+  )
+```
+]
+
+.pull-right[
+```{r extract-lp-predictions}
+predictions_controls <-
+  get_model_data(
+    linear_model_controls,
+    term = "contact",
+    type = "pred"
+  )
+```
+]
+
+---
+
+## Combining the predictions
+
+.pull-left[
+We combine the data using simple data wrangling operations. 
+- `bind_rows()` is a function from `dplyr` for appending rows from one data set to another
+  - there's also `rbind()` in `base R`
+- we use `mutate()` to create an indicator to know which row belongs to what model
+]
+
+.pull-right[
+```{r table}
+library(dplyr)
+library(tibble)
+
+all_predictions <-
+  bind_rows(
+    predictions_plain %>% 
+      mutate(
+        model = "Without Controls"
+      ),
+    predictions_controls %>% 
+      mutate(
+        model = "With Controls"
+      )
+  ) %>% 
+  as_tibble()
+```
+]
+
+---
+
+## Plotting them with `facet_wrap()`
+
+To create multiple prediction plots with a subplot for each model we use barebones `ggplot2`. Fortunately, this is not more complex than using `easystats` packages or `sjPlot`.
+
+.pull-left[
+```{r all-in-one, eval = FALSE}
+predictions_simple <-
+  ggplot(
+    all_predictions, 
+    aes(x = x, y = predicted)
+  ) +
+  geom_line() +
+  geom_line(aes(y = conf.high), linetype = "dashed") +
+  geom_line(aes(y = conf.low), linetype = "dashed") +
+  facet_wrap(~model) +
+  theme_bw()
+
+predictions_simple
+```
+]
+
+.pull-right[
+```{r ref.label = "all-in-one", echo = FALSE, out.width = "90%"}
+```
+]
+
+---
+
+## Average marginal effects (AME)
+
+In the previous session, we also (briefly) discussed average marginal effects.
+- parameter estimates based on the 'real' empirical values of all other covariates
+- handy when relationships are non-linear
+- way easier to interpret than usual regression coefficients
+- also nice when using predictions
+
+---
+
+## Extracting AME
+
+We can also use the `marginaleffects` package and extract prediction information for our models. While the resulting columns names are different, the `predictions()` function from that package also gives us information about X-values, estimates, and confidence bands.
+
+```{r margins}
+library(marginaleffects)
+
+plain_AME <-
+  predictions(linear_model_plain, newdata = datagrid(contact = 1:4)) 
+
+controls_AME <-
+  predictions(linear_model_controls, newdata = datagrid(contact = 1:4))
+```
+
+---
+
+## Combining AME data
+
+After extracting the information, we can simply combine the two data sets again to get predictions for all included models.
+
+```{r combine-data-again}
+all_AME <-
+  bind_rows(
+    plain_AME %>% 
+      mutate(model = "Without Controls"),
+    controls_AME %>% 
+      mutate(model = "With Controls")
+  ) %>% 
+  as_tibble()
+```
+
+---
+
+## Plotting predictions based on AME
+
+Plotting them can then be done the same way as before.
+
+.pull-left[
+```{r only-two-AME, eval = FALSE}
+predictions_AME <- 
+  ggplot(
+    all_AME, 
+    aes(x = contact, y = predicted)
+  ) +
+  geom_line() +
+  geom_line(aes(y = conf.high), linetype = "dashed") +
+  geom_line(aes(y = conf.low), linetype = "dashed") +
+  facet_wrap(~model) +
+  theme_bw()
+
+predictions_AME
+```
+]
+
+.pull-right[
+```{r ref.label = "only-two-AME", echo = FALSE, out.width = "90%"}
+```
+]
+
+---
+
+## Combining them with previous predictions
+
+Using the `patchwork` package again, we can even plot the 'simple' predictions together with the AME ones in one plot. *Note*: In principle, this would have been possible with combining the data as well.
+
+.pull-left[
+```{r patchwork-combining, eval = FALSE}
+library(patchwork)
+
+(predictions_simple +
+    ggtitle("Simple Predictions") +
+    ylab("Predicted Xenophobia Value") +
+    xlab("Contact") +
+  ylim(4, 11)) / 
+  (predictions_AME +
+     ggtitle("AME Predictions") +
+     ylab("Predicted Xenophobia Value") +
+     xlab("Contact") +
+     ylim(4, 11))
+```
+]
+
+.pull-right[
+```{r ref.label = "patchwork-combining", echo = FALSE, out.width = "80%"}
+```
+]
+
+---
+
+## What is more?
+
+Sometimes getting to a plot that is ready for publication can be a long way to go. Fortunately, the `easystats` packages and `sjPlot` help a lot to convert it to a medium walking distance.
+
+There are also other packages that can facilitate the goal of creating publication-ready plots, such as the [`dotwhisker`](https://cran.r-project.org/web/packages/dotwhisker/) package for coefficient plots.
+
+Things can get messy if we have to work with statistical models that are not incorporated into the presented packages. For example, AME models or when you want to make use of results produced with other statistical software like *Stata* (for an example, you can have a look at [my code](https://stefanjuenger.github.io/land_use_disadvantages/Land_Use_Disadvantages_Main_Analysis.html) for a [recent paper](https://doi.org/10.1177/00420980211023206)).
+
+---
+
+class: center, middle
+
+# [Exercise](https://jobreu.github.io/r-intro-gesis-2021/exercises/Exercise_4_2_3_Combining_Predictions.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+
+## [Solutions](https://jobreu.github.io/r-intro-gesis-2021/solutions/Exercise_4_2_3_Combining_Predictions.html)
+
+---
+
+## Extracurricular activities
+
+Explore the data from the *ALLBUS/GGSS 2021* a bit further and think about some confirmatory analyses you would find interesting for these data. Also think about how you would (want to) visualize your results. If you have the time and motivation, feel free to actually do some of the analyses and visualizations you find interesting, building on the code from today's lectures and exercises.
+
+
+
