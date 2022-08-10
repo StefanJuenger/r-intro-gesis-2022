@@ -14,7 +14,7 @@ layout: true
  
 ---
 
-## Getting data into `R`  
+## Getting data into `R`
 Thus far, we've already learned what `R` and `RStudio` are. This course is about starting to use `R` and feeling prepared to use it for statistical analyses. There's one essential prerequisite:
 
 .center[**We need data!**]
@@ -117,7 +117,7 @@ Factors take numeric data or character strings as input as they simply convert t
 
 Logical values are basically either `TRUE` or `FALSE` values. These values are produced by making logical requests on your data.
 
-```{r logical}
+```{r logical} 
 2 > 1
 2 < 1
 ```
@@ -334,7 +334,7 @@ Generally, the logic of `[index_number]` is used in `R` to access only a subset 
 
 Say, we want to extract the second element of our `character_vector` object, we could do that like this:
 
-```{r}
+```{r character-vector}
 character_vector[2]
 ```
 
@@ -344,7 +344,7 @@ character_vector[2]
 
 Matrices can have more dimensions, often you want information from a specific row and column.
 
-```{r eval = FALSE}
+```{r matrix, eval = FALSE}
 a_wonderful_matrix[number_of_row, number_of_column]
 ```
 
@@ -364,7 +364,7 @@ fancy_matrix[2:4, 1:3] # rows 2,3,4 of columns 1,2,3
 
 It's really like in math, and you can perform standard mathematical operations, such as matrix multiplications.
 
-```{r}
+```{r matrix-multiplication}
 fancy_matrix[2:4, 1:3] %*% fancy_matrix[1:3, 2:4]
 ```
 
@@ -374,7 +374,7 @@ fancy_matrix[2:4, 1:3] %*% fancy_matrix[1:3, 2:4]
 
 A nice feature of `data.frames` or `tibbles` is that their columns are names, just as variable names in ordinary data. It would be cumbersome to use index numbers to extract a specific column/variable, right? Do not fear:
 
-```{r}
+```{r column-name}
 fancy_data$who
 ```
 
@@ -389,7 +389,7 @@ Sometimes we also have to rely on character strings as input information, e.g., 
 .pull-left[ 
 Not only this way:
 
-```{r}
+```{r square-bracket}
 fancy_data[1]
 ```
 ]
@@ -397,7 +397,7 @@ fancy_data[1]
 .pull-right[
 But also this way:
 
-```{r}
+```{r by-name}
 fancy_data["who"]
 ```
 ]
@@ -502,13 +502,13 @@ class: center, middle
 ## German General Social Survey 2021 (GGSS/ALLBUS)
 
 .left-column[
-```{r echo = FALSE} 
+```{r allbus-pic, echo = FALSE} 
 woRkshoptools::include_picture("allbus.png")
 ```
 ]
 
 .right-column[
-For most of the examples and exercises in this course we will use data from the [German General Social Survey 2021 (GGSS/ALLBUS)](https://www.gesis.org/en/institute/research-data-centers/rdc-allbus). You can [download the data set in different formats as well as the codebook and the questionnaire (in German) from the *GESIS* website](https://search.gesis.org/research_data/ZA5280) (note: you need to have/create a user account).
+For most of the examples and exercises in this course we will use data from the [German General Social Survey 2021 (GGSS/ALLBUS)](https://www.gesis.org/en/institute/research-data-centers/rdc-allbus). You can [download the data set in different formats as well as the codebook and the questionnaire (in German) from the *GESIS* website](https://search.gesis.org/research_data/ZA5280) (note: you need to have/create a user account). Theresa also prepared a subset documentation of variables that might be interesting for you in the `./data` folder.
 
 The *GGSS* website provides [detailed documentation](https://www.gesis.org/en/allbus/contents-search).
 ]
@@ -616,7 +616,6 @@ Other file formats, particularly the proprietary ones, require the use of additi
 - they are complex
 - a lot of metadata (think of all the labels in an *SPSS* file)
 - they are binary (1110101)
-
 
 ---
 
