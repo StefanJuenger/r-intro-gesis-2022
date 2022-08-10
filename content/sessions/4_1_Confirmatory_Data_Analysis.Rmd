@@ -1,15 +1,15 @@
 ---
 title: "Introduction to R for Data Analysis"
 subtitle: "Confirmatory Data Analysis"
-author: "Johannes Breuer & Stefan Jünger"
-date: "2021-08-05"
-presenter: Johannes
+author: "Johannes Breuer, Stefan Jünger, Veronika Batzdorfer"
+date: "2021-08-18"
+presenter: Stefan
 editor_options: 
   chunk_output_type: console
 ---
 layout: true 
 
-```{r child = "../config/sessions_setup.Rmd"}
+```{r child = "./content/config/sessions_setup.Rmd"}
 ```
 
 ---
@@ -26,8 +26,8 @@ Yesterday, we covered exploratory data analysis (EDA). In contrast to that, the 
 - Bivariate hypothesis testing
 
 - Using (more or less) simple regression models
-  - OLS, GLM, and the like
-  
+- OLS, GLM, and the like
+
 - How to re-use the results of these models
 
 - How to feed these results into tables
@@ -38,9 +38,9 @@ Yesterday, we covered exploratory data analysis (EDA). In contrast to that, the 
 - Theory (and history) of hypothesis testing
 
 - Crazy complex models with elaborated estimators
-  - e.g., no multilevel models
-  - also no clustered standard errors
-  
+- e.g., no multilevel models
+- also no clustered standard errors
+
 - Bayesian statistics
 ]
 
@@ -70,23 +70,28 @@ woRkshoptools::include_picture("4iq3kg.jpg")
 In this session, we will, again, use the data from the *GGSS 2021*. As before, we need to load the data.
 
 ```{r load-ggss-data}
-ggss_2021 <- haven::read_spss("./data/ZA5280_v1-0-0.sav")
+library(haven)
+
+allbus_2021_cda <- read_spss("./data/allbus_2021/ZA5280_v1-0-0.sav")
 ```
 
-*Note*: In case you have not saved the data set as an `.rds` file in the `data` folder yesterday (or cannot find/load it), you need to go through the wrangling steps presented at the beginning of the EDA slides (again).
+*Note*: Again, we start from scratch, which means we are loading the data as published by GESIS. All data wrangling steps from the previous days are not part of the data.
 
 ---
 
 ## Building/Manipulating variables
 
 ```{r central-variables}
-ggss_2021 <-
-  ggss_2021 %>% 
+library(dplyr)
+
+allbus_2021_cda <-
+  allbus_2021_cda %>% 
   mutate(
-    xenophobia = rowSums(across(ma01b:ma04)) - 4, 
-    anti_immigrant = rowSums(across(mi05:mi11)) - 7,
-    trust = ifelse(st01 == 1, 1, 0),
-    contact = rowSums(across(mc01:mc04)) * -1 + 8
+    xenophobia = rowSums(across(ma01b:ma04)) - 4, # sum score
+    anti_immigrant = rowSums(across(mi05:mi11)) - 7, # sum score
+    trust = ifelse(st01 == 1, 1, 0), # dichotomization
+    contact = rowSums(across(mc01:mc04)) * -1 + 8, # sum score + inversion
+    party = as.factor(pv01) # factor conversion
   )
 ```
 
@@ -94,7 +99,7 @@ ggss_2021 <-
 
 ## `R` is rich in statistical procedures
 
-Generally, if you seek to use a specific statistical method in `R`, chances are quite high that you can easily do that. As we'we said before: There's ~~an app~~ a package for that. After all, `R` is a statistical progamming language that was originally developed by statisticians.
+Generally, if you seek to use a specific statistical method in `R`, chances are quite high that you can easily do that. As we've said before: There's ~~an app~~ a package for that. After all, `R` is a statistical programming language that was originally developed by statisticians.
 
 ---
 
@@ -232,7 +237,7 @@ The previous descriptions mainly refer to formulas used in regression models in 
 A very common methods for analyzing group differences are t-tests. You can use the `t.test()` function from `base R` function to easily perform such a test. 
 
 ```{r t-test}
-t.test(xenophobia ~ eastwest, data = ggss_2021)
+t.test(xenophobia ~ eastwest, data = allbus_2021_cda)
 ```
 
 .small[
@@ -246,7 +251,7 @@ t.test(xenophobia ~ eastwest, data = ggss_2021)
 What if our data are not normally distributed in the first place, thus, violating one of the basic assumptions of performing t-tests? To check this, we can use a [Shapiro-Wilk](https://en.wikipedia.org/wiki/Shapiro%E2%80%93Wilk_test) test of normality.
 
 ```{r swt}
-shapiro.test(ggss_2021$xenophobia)
+shapiro.test(allbus_2021_cda$xenophobia)
 ```
 
 ---
@@ -256,7 +261,7 @@ shapiro.test(ggss_2021$xenophobia)
 If the data are not normally distributed, the [Wilcoxon/Mann-Whitney](https://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U_test) test can be a suitable alternative.
 
 ```{r wilcox}
-wilcox.test(xenophobia ~ eastwest, data = ggss_2021)
+wilcox.test(xenophobia ~ eastwest, data = allbus_2021_cda)
 ```
 
 ---
@@ -266,7 +271,7 @@ wilcox.test(xenophobia ~ eastwest, data = ggss_2021)
 There are situations in which we want to test differences across multiple groups. The classic method to use for this is an analysis of variance (ANOVA) and its many variants (ANCOVA, MANOVA, etc.). Again, you can easily do that in `R` using the `aov()` function.
 
 ```{r anova}
-anova <- aov(xenophobia ~ as.factor(agec), data = ggss_2021)
+anova <- aov(xenophobia ~ party, data = allbus_2021_cda)
 
 anova
 ```
@@ -279,87 +284,6 @@ To get some more detailed information, you need to use the `summary()` function 
 
 ```{r anova-summary}
 summary(anova)
-```
-
----
-
-## Testing ANOVA assumptions #XYZ
-
-If you conduct any actual analyses, you should test the assumptions for conducting an ANOVA. We sort of gloss over that that here, but you can easily find many tutorials on this online (such as [this one](https://www.datanovia.com/en/lessons/ancova-in-r/#assumptions), for example). One assumption check that is commonly performed in the context of ANOVA is [Levene's Test for Homogeneity of Variance](https://en.wikipedia.org/wiki/Levene%27s_test). Several packages offer functions for that, including [`car`](https://cran.r-project.org/web/packages/car/index.html) or [`rstatix`](https://rpkgs.datanovia.com/rstatix/index.html), the latter of which is also designed to work nicely with pipes.
-
-```{r levene-test, eval = FALSE}
-library(rstatix)
-
-ggss_2021 %>% 
-  levene_test(ps03 ~ as.factor(agec))
-```
-
----
-
-## Alternatives for ANOVA #XYZ
-
-As we have seen throughout the previous sessions, there are different/alternative functions and packages for most things in `R`. Two interesting packages for ANOVA are [`ez`](https://cran.r-project.org/web/packages/ez/index.html) and [`afex`](https://github.com/singmann/afex), both of which can, e.g., also be used for mixed within-between ANOVA.<sup>1</sup>
-
-.footnote[
-[1] Another good options for ANOVA as well as t-tests and other tests is the [`rstatix` package](https://rpkgs.datanovia.com/rstatix/index.html) which provides a "pipe-friendly framework, coherent with the 'tidyverse' design philosophy, for performing basic statistical tests, including t-test".
-]
-
----
-
-## ANOVA with `ez` #XYZ
-
-```{r ez}
-library(ez, eval = FALSE)
-
-ez_anova = ezANOVA(data = corona_survey[!is.na(corona_survey$risk_self),],
-                   dv = risk_self,
-                   wid = id,
-                   between = age_cat)
-
-ez_anova
-```
-
-As you can see, one nice thing about `ezANOVA` is that is also reports the results of Levene's test for our ANOVA.
-
----
-
-## ANOVA with `afex` #XYZ
-
-```{r afex, eval = FALSE}
-library(afex)
-
-afex_anova <- aov_ez(id = "id",
-                     dv = "risk_self",
-                     data = corona_survey,
-                     between = "age_cat")
-
-afex_anova
-```
-
----
-
-## Effect sizes #XYZ
-
-In many disciplines and journals, it is standard practice to also report effect sizes (in addition to test statistics and p-values) for t-tests and ANOVAS. The [`effectsize` package](https://easystats.github.io/effectsize/) that is part of the [`easystats` collection of packages](https://easystats.github.io/easystats/) offers some helpful options for that<sup>1</sup>: For example for Cohen's d...
-
-```{r cohens-d, eval = FALSE}
-library(effectsize)
-
-cohens_d(risk_self ~ sex, data = corona_survey)
-```
-
-.footnote[
-[1] The [`rstatix` package](https://rpkgs.datanovia.com/rstatix/index.html) also provides a couple of "pipe-friendly" functions for calculating effect sizes.
-]
-
----
-
-## Effect sizes #XYZ
-
-... or Eta².
-
-```{r eta2, eval = FALSE}
-eta_squared(anova)
 ```
 
 ---
@@ -378,7 +302,10 @@ This may not come as a surprise at this point, but regression models are also ea
 
 ```{r linmodel, eval = FALSE}
 simple_linear_model <- 
-  lm(xenophobia ~ as.factor(agec) + sex + eastwest + trust + contact, data = ggss_2021)
+  lm(
+    xenophobia ~ age + sex + eastwest + trust + contact + party, 
+    data = allbus_2021_cda
+  )
 
 simple_linear_model
 ```
@@ -429,7 +356,7 @@ You can inspect the contrast matrix using:
 
 .pull-left[
 ```{r contrast-matrix, eval = FALSE}
-contrasts(ggss_2021$agec)
+contrasts(allbus_2021_cda$party)
 ```
 ]
 
@@ -442,11 +369,14 @@ contrasts(ggss_2021$agec)
 
 ## Changing the reference category for a categorical predictor
 
-If you want to change the refence category for a categorical predictor, you can use the `base R` function `relevel()` within the regression formula.
+If you want to change the reference category for a categorical predictor, you can use the `base R` function `relevel()` within the regression formula.
 
 ```{r ref-cat, eval=FALSE}
-lm_relevel <-  lm(risk_self ~ relevel(age_cat_num, ref = "10") + sex + left_right,
-                           data = corona_survey)
+lm_relevel <-  
+  lm(
+    xenophobia ~ age + sex + eastwest + trust + contact + relevel(party, ref = 6),
+    data = allbus_2021_cda
+  )
 
 summary(lm_relevel)
 
@@ -471,7 +401,7 @@ How to include a factor variable in a regression model can be changed in `R`. Fo
 Let's try one alternative option: The so-called effect coding or deviation coding, which compares the mean at a given level to the overall mean. You can create effect-coded dummies by changing the contrasts as follows:
 
 ```{r effect-coding}
-contrasts(corona_survey$age_cat_num) <- contr.sum(10)
+contrasts(allbus_2021_cda$party) <- contr.sum(8)
 ```
 
 ---
@@ -479,7 +409,7 @@ contrasts(corona_survey$age_cat_num) <- contr.sum(10)
 ## Effect coding contrast matrix
 
 ```{r effect-constrast}
-contrasts(corona_survey$age_cat_num)
+contrasts(allbus_2021_cda$party)
 ```
 
 ---
@@ -487,8 +417,11 @@ contrasts(corona_survey$age_cat_num)
 ## Effect coding regression
 
 ```{r effect-coded-reg, eval = FALSE}
-simple_linear_model_effect_coded <- lm(risk_self ~ age_cat_num + sex + left_right, 
-                                       data = corona_survey)
+simple_linear_model_effect_coded <- 
+  lm(
+    xenophobia ~ age + sex + eastwest + trust + contact + party, 
+    data = allbus_2021_cda
+  )
 
 summary(simple_linear_model_effect_coded)
 ```
@@ -505,18 +438,40 @@ class: middle
 
 ---
 
+## Revert to dummy coding
+
+We can easily switch back to the default dummy coding using the `contr.treatment()` function.
+
+.pull-left[
+```{r dummy-coding}
+contrasts(allbus_2021_cda$party) <- 
+  contr.treatment(8, base = 1)
+
+contrasts(allbus_2021_cda$party)
+```
+]
+
+.pull-right[
+```{r dummy-coding-2}
+contrasts(allbus_2021_cda$party) <- 
+  contr.treatment(8, base = 6)
+
+contrasts(allbus_2021_cda$party)
+```
+]
+
+See what I did?
+
+---
+
 ## Generalized linear regression
 
 What we have seen so far are estimates for linear OLS regression models. A standard `R` installation provides a multitude of other estimators/link functions, so-called family objects, e.g., binomial logistic or Poisson regression models through the `glm()` function. See `?family` for an overview.
 
-Let's look at the the example of logistic regression. For this  purpose, we recode our subjective risk of infection variable into a binary one:
+Let's look at the the example of logistic regression. For this  purpose, say we are interested in the effect of the binary indicator of social trust on all the other variables.
 
-```{r recode-risk}
-corona_survey <- corona_survey %>% 
-  mutate(risk_self_bin = case_when(risk_self > 4  ~ 1,
-                                   risk_self <= 4 ~ 0))
-
-table(corona_survey$risk_self_bin)
+```{r table-trust}
+table(allbus_2021_cda$trust)
 ```
 
 ---
@@ -524,9 +479,12 @@ table(corona_survey$risk_self_bin)
 ## Logistic regression
 
 ```{r log-reg, eval = FALSE}
-simple_linear_model_logistic <- glm(risk_self_bin ~ age_cat_num + sex + left_right,
+simple_linear_model_logistic <- 
+  glm(
+    trust ~ age + sex + eastwest + contact + party, 
     family = binomial(link = "logit"),
-    data = corona_survey)
+    data = allbus_2021_cda
+  )
 
 summary(simple_linear_model_logistic)
 ```
@@ -562,9 +520,12 @@ r2_nagelkerke(simple_linear_model_logistic)
 For the fun of it, let's change the link function in our regression model from logit to probit.
 
 ```{r probit-reg, eval = FALSE}
-simple_linear_model_probit <- glm(risk_self_bin ~ age_cat_num + sex + left_right,
-                                  family = binomial(link = "probit"),
-                                  data = corona_survey)
+simple_linear_model_probit <- 
+  glm(
+    trust ~ age + sex + eastwest + contact + party, 
+    family = binomial(link = "probit"),
+    data = allbus_2021_cda
+  )
 
 summary(simple_linear_model_probit)
 ```
@@ -596,8 +557,10 @@ anova(simple_linear_model_logistic, simple_linear_model_probit)
 The `performance` package we have previously used for calculating Nagelkerke's R² for our logistic regression model also provides a handy function for comparing model performance.
 
 ```{r compare-perf}
-compare_performance(simple_linear_model_logistic, simple_linear_model_probit,
-                    metrics = c("AIC", "BIC", "R2"))
+compare_performance(
+  simple_linear_model_logistic, simple_linear_model_probit,
+  metrics = c("AIC", "BIC", "R2")
+)
 ```
 
 ---
@@ -688,24 +651,38 @@ class:middle
 
 ## (Simple) model predictions
 
-It is also quite straightforward to produce simple predictions from an estimated model using the `predict()` function in `R`. We can feed the `predict()` function with our own data to figure out what our model actually predicts when something changes (in the example below that is the age category). This can provide additional insights into our models. *Note*: For the following code to work, we need to change the `sex` variable to numeric and then fit our simple linear model again, using that as a predictor.
+It is also quite straightforward to produce simple predictions from an estimated model using the `predict()` function in `R`. We can feed the `predict()` function with our own data to figure out what our model actually predicts when something changes.
 
+--
+
+.pull-left[
 .small[
 ```{r predict}
-corona_survey <- corona_survey %>% 
-  mutate(sex_num = as.numeric(sex))
+simple_linear_model_new <-  
+  lm(xenophobia ~ age + eastwest + party, data = allbus_2021_cda)
 
-simple_linear_model_new <-  lm(risk_self ~ age_cat_num + sex_num + left_right,
-                               data = corona_survey)
+predictions_data <-  
+  data.frame(
+    age = rep(mean(allbus_2021_cda$age, na.rm = TRUE), times = 4),
+    eastwest = rep(1:2, each = 2),
+    party = as.factor(rep(c(1, 42), times = 2))
+  )
 
-predictions_data <-  data.frame(left_right = rep(mean(corona_survey$left_right, na.rm = TRUE), 2),
-                                sex_num = rep(mean(corona_survey$sex_num), 2),
-                                age_cat_num = as.factor(c(1, 10)))
+predictions_data
+```
+]
+]
 
+--
+
+.pull-right[
+.small[
+```{r predict-2}
 predict(object = simple_linear_model_new,
         newdata = predictions_data,
         interval = "confidence")
 ```
+]
 ]
 
 ---
@@ -715,12 +692,15 @@ predict(object = simple_linear_model_new,
 In an OLS context, predictions of this kind are straightforward to interpret. For non-linear models, such as in logistic regression, this is more difficult:
 
 ```{r pred-log}
-simple_linear_model_logistic_new <- glm(risk_self_bin ~ age_cat_num + sex_num + left_right,
-                                        family = binomial(link = "logit"),
-                                        data = corona_survey)
+simple_linear_model_logistic_new <- 
+  glm(
+    trust ~ age + eastwest + party,
+    family = binomial(link = "logit"),
+    data = allbus_2021_cda
+  )
 
-predictions <-  predict(object = simple_linear_model_logistic_new,
-                        newdata = predictions_data)
+predictions <- 
+  predict(object = simple_linear_model_logistic_new, newdata = predictions_data)
 ```
 
 Predictions have to be converted into probabilities:
@@ -735,42 +715,53 @@ exp(predictions) / (1 + exp(predictions))
 
 AME provide a similar interpretation for a one-unit change as in OLS models: the average change of the dependent variable when all other variables are held constant (at their empirical value). The [`margins` package](https://cran.r-project.org/web/packages/margins/index.html) provides a simple function for AME.
 
-```{r ame, eval=FALSE}
-library(margins)
+.pull-left[
+```{r ame, eval = FALSE}
+library(marginaleffects)
 
-margins(simple_linear_model_logistic)
+plot_cme(
+  simple_linear_model_logistic_new, 
+  effect = "eastwest", 
+  condition = "party"
+)
 ```
+]
 
-.right[`r emo::ji("left_arrow_curving_right")`]
+.pull-right[
+```{r ame-2, echo = FALSE}
+library(marginaleffects)
 
----
-
-class: middle
-```{r ref.label = "ame", echo = FALSE}
+plot_cme(
+  simple_linear_model_logistic_new, 
+  effect = "eastwest", 
+  condition = "party"
+)
 ```
+]
 
 ---
 
 ## Regression tables
 
-As we have seen in the session on *Exploratory Data Analysis*, there are different options for creating tables as output in `R`. The ones we have looked at in the EDA session, [`stargazer`](https://cran.r-project.org/web/packages/stargazer/index.html) and [`gtsummary`](http://www.danieldsjoberg.com/gtsummary/) can be used for creating regression tables. The functions from these packages can also be used for comparing multiple regression models in one table.
+As we have seen in the session on *Exploratory Data Analysis*, there are different options for creating tables as output in `R`. The ones we have looked at in the EDA session, [`stargazer`](https://cran.r-project.org/web/packages/stargazer/index.html) and [`gtsummary`](http://www.danieldsjoberg.com/gtsummary/), can be used for creating regression tables. The functions from these packages can also be used for comparing multiple regression models in one table.
 
 ---
 
-## Regression tables with the `stargazer` package
+## Example: Regression tables with the `stargazer` package
 
 ```{r stargazer, eval = FALSE}
 library(stargazer)
 
-stargazer(simple_linear_model,
-          simple_linear_model_effect_coded,
-          simple_linear_model_logistic,
-          simple_linear_model_probit,
-          type = "text",
-          dep.var.labels=c("Infection risk", "Infection risk binary"),
-          covariate.labels=c("Age category 1", "Age category 2", "Age category 3", "Age category 4",
-                             "Age category 5", "Age category 6", "Age category 7", "Age category 8", "Age category 9",
-                             "Sex (Female)", "Political orientation (left-right)"))
+stargazer(
+  lm(xenophobia ~ age + sex + eastwest, data = allbus_2021_cda),
+  lm(xenophobia ~ age + sex + eastwest + trust, data = allbus_2021_cda),
+  glm(trust ~ age + sex + eastwest, data = allbus_2021_cda, family = binomial(link = "logit")),
+  glm(trust ~ age + sex + eastwest, data = allbus_2021_cda, family = binomial(link = "probit")),
+  type = "text",
+  dep.var.labels = c("Xenophobia", "Trust"),
+  covariate.labels =
+    c("Age", "Sex", "Region (Reference = Western Germany", "Social Trust")
+)
 ```
 
 .right[`r emo::ji("left_arrow_curving_right")`]
@@ -778,14 +769,14 @@ stargazer(simple_linear_model,
 ---
 
 class: center, middle
-.small[
+.ssmall[
 ```{r ref.label = "stargazer", echo = FALSE}
 ```
 ]
 
 ---
 
-## Regression tables with the `stargazer` package
+## Example: Regression tables with the `stargazer` package
 
 As for the summary table, the `stargazer()` output can also be saved in various formats, such as `LaTeX`.
 
@@ -794,54 +785,19 @@ As for the summary table, the `stargazer()` output can also be saved in various 
 # If you have not done so before, you need to create a directory for output files first
 # dir.create("./output")
 
-stargazer(simple_linear_model,
-          simple_linear_model_effect_coded,
-          simple_linear_model_logistic,
-          simple_linear_model_probit,
-          type = "latex",
-          dep.var.labels=c("Infection risk", "Infection risk binary"),
-          covariate.labels=c("Age category 1", "Age category 2", "Age category 3", "Age category 4",
-                             "Age category 5", "Age category 6", "Age category 7", "Age category 8", "Age category 9",
-                             "Sex (Female)", "Political orientation (left-right)"),
-          out = "./output/stargazer_regression.tex")
+stargazer(
+  lm(xenophobia ~ age + sex + eastwest, data = allbus_2021_cda),
+  lm(xenophobia ~ age + sex + eastwest + trust, data = allbus_2021_cda),
+  glm(trust ~ age + sex + eastwest, data = allbus_2021_cda, family = binomial(link = "logit")),
+  glm(trust ~ age + sex + eastwest, data = allbus_2021_cda, family = binomial(link = "probit")),
+  type = "latex",
+  dep.var.labels = c("Xenophobia", "Trust"),
+  covariate.labels =
+    c("Age", "Sex", "Region (Reference = Western Germany", "Social Trust")
+  out = "./output/stargazer_regression.tex"
+)
 ```
 ]
-
----
-
-## Regression tables with `gtsummary`
-
-The `gtsummary` package also provides a function for creating regression tables. *Note*: Remember that, by default, the output of the `gtsummary` functions will be shown in the `Viewer` tab in *RStudio*.
-
-```{r gts-reg, eval=FALSE}
-library(gtsummary)
-
-tbl_regression(simple_linear_model,
-               label = list(sex ~ "Sex",
-                            age_cat_num ~ "Age category",
-                            left_right ~ "Political orientation (left-right)"))
-```
-
----
-
-## Regression tables with `gtsummary`
-
-We can also export the `gtsummary` output into a *Word* document using a function from the `flextable` package.
-
-```{r gts-reg-docx, eval=FALSE}
-# If you have not done so before, you need to create a directory for output files first
-# dir.create("./output")
-
-library(flextable)
-
-tbl_regression(simple_linear_model,
-               label = list(sex ~ "Sex",
-                            age_cat_num ~ "Age category",
-                            left_right ~ "Political orientation (left-right)")) %>% 
-as_flex_table() %>% 
-  save_as_docx("Results of the OLS regression model" = .,
-               path = "./output/gt_regression.docx")
-```
 
 ---
 
@@ -852,12 +808,12 @@ Instead of or in addition to tables, we often want to report the results of our 
 ```{r report-t-test}
 library(report)
 
-t.test(risk_self ~ sex, data = corona_survey) %>% 
+t.test(xenophobia ~ eastwest, data = allbus_2021_cda) %>% 
   report()
 ```
 
 .small[
-*Note*: While `report` is format-agnostic as it produces plain-text output, a nice tool for getting your outpur from `R` into *Microsoft Word* is the [`tidystats` Word add-in](https://www.tidystats.io/word-add-in.html).
+*Note*: While `report` is format-agnostic as it produces plain-text output, a nice tool for getting your output from `R` into *Microsoft Word* is the [`tidystats` Word add-in](https://www.tidystats.io/word-add-in.html).
 ]
 
 ---
@@ -888,7 +844,7 @@ simple_linear_model_logistic %>%
 
 class: center, middle
 .small[
-```{r ref.label = "report-regression", echo = FALSE}
+```{r ref.label = "report-regression", echo = FALSE, eval = FALSE}
 ```
 ]
 
@@ -897,7 +853,7 @@ class: center, middle
 ## tidy models with `broom`
 
 .pull-left[
-We have already entered the area of reporting statistical results. We will have a separate session on reporting on with `R Markdown` tomorrow. One thing to note at this point is that more and more developers in `R` were unsatisfied with the diverse output some of the standard regression procedures provide. The outputs may be helpful to look at, but they're usually not great for further processing. For that purpose, we need data frames/tibbles.
+We have already entered the area of reporting statistical results. We will have a separate session on reporting  with `R Markdown` tomorrow. One thing to note at this point is that more and more developers in `R` were unsatisfied with the diverse output some of the standard regression procedures provide. The outputs may be helpful to look at, but they're usually not great for further processing. For that purpose, we need data frames/tibbles.
 ]
 
 .pull-right[
