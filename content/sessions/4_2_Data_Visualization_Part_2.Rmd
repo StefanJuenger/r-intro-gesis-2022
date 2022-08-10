@@ -342,7 +342,6 @@ linear_model %>%
     type = "pred", 
     terms = "age"
   )
-
 ```
 ]
 
@@ -503,7 +502,7 @@ compare_performance(
 ]
 
 .pull-right[
-```{r ref.label = "comparing-model-fit", eval = FALSE, echo = FALSE, out.width = "90%"}
+```{r ref.label = "comparing-model-fit", echo = FALSE, out.width = "90%"}
 ```
 ]
 
