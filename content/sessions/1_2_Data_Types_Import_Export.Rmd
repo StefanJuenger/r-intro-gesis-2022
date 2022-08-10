@@ -200,7 +200,7 @@ rbind(numeric_vector, character_vector)
 
 Matrices are the basic rectangular data format in R.
 
-```{r matrix}
+```{r matrix-2}
 fancy_matrix <- matrix(1:16, nrow = 4)
 
 fancy_matrix
@@ -406,7 +406,7 @@ fancy_data["who"]
 
 ## Difference between `[]` and `[[]]`
 
-```{r hadley-tweet, echo=FALSE, out.width="80%"}
+```{r hadley-tweet, echo=FALSE, out.width="80%", eval = FALSE}
 tweet_screenshot("https://twitter.com/hadleywickham/status/643381054758363136",
             theme = "dark")
 ```
@@ -695,10 +695,10 @@ unicorns
 ```{r read-stata-example-display, eval = FALSE}
 library(haven)
 
-ggss_2021 <- 
-  read_stata("./data/ZA5280_v1-0-0.dta")
+allbus_2021_stata <- 
+  read_stata("./data/allbus_2021/ZA5280_v1-0-0.dta")
 
-ggss_2021
+allbus_2021_stata
 ```
 
 .right[`r emo::ji("left_arrow_curving_right")`]
@@ -892,10 +892,10 @@ What these data typically include are labels. These labels are used to describe 
 Nowadays, if you use the `haven` package, labels are built-in for the corresponding file types. For example:
 
 ```{r read-spss}
-ggss_2021 <-
-  haven::read_sav("./data/ZA5280_v1-0-0.sav")
+allbus_2021 <-
+  haven::read_sav("./data/allbus_2021/ZA5280_v1-0-0.sav")
 
-ggss_2021["agec"]
+allbus_2021["agec"]
 ```
 
 ---
@@ -917,14 +917,14 @@ In addition, when you exchange your data with colleagues who do not use `R` or w
 For variables:
 
 ```{r get-labels}
-sjlabelled::get_label(ggss_2021$agec)
+sjlabelled::get_label(allbus_2021$agec)
 ```
 
 For values:
 
 .tinyish[
 ```{r get-values}
-sjlabelled::get_labels(ggss_2021$agec)
+sjlabelled::get_labels(allbus_2021$agec)
 ```
 ]
 
@@ -933,10 +933,10 @@ sjlabelled::get_labels(ggss_2021$agec)
 ## Setting labels: Variables
 
 ```{r}
-ggss_2021$agec <- 
-  sjlabelled::set_label(ggss_2021$agec, label = "Age, categorized")
+allbus_2021$agec <- 
+  sjlabelled::set_label(allbus_2021$agec, label = "Age, categorized")
 
-sjlabelled::get_label(ggss_2021$agec)
+sjlabelled::get_label(allbus_2021$agec)
 ```
 
 ---
@@ -944,9 +944,9 @@ sjlabelled::get_label(ggss_2021$agec)
 ## Setting labels: Values
 .tinyish[
 ```{r}
-ggss_2021$agec <- 
+allbus_2021$agec <- 
   sjlabelled::set_labels(
-    ggss_2021$agec,
+    allbus_2021$agec,
     labels = 
       c(
         "18-29 years", "30-44 years", "45-59 years", "60-74 years", 
@@ -954,7 +954,7 @@ ggss_2021$agec <-
       )
   )
 
-sjlabelled::get_labels(ggss_2021$agec)
+sjlabelled::get_labels(allbus_2021$agec)
 ```
 ]
 
