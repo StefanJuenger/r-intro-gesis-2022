@@ -525,8 +525,8 @@ colnames(allbus_2021)[4] <- "respondent_id"
 An easier to use and more versatile option for renaming columns/variables is the `dplyr` function `rename()`.
 
 ```{r rename}
-allbus_antisemitsm <- allbus_antisemitsm %>% 
-  rename(satisf_democracy= ps03, # new_name = old_name
+allbus_antisemitsm <- allbus_2021 %>% 
+  rename(satisf_democracy = ps03, # new_name = old_name
          polit_views = pa01,
          sm_info_seeking = lm35,
          antisemit_1 = mj01,
@@ -534,7 +534,7 @@ allbus_antisemitsm <- allbus_antisemitsm %>%
          antisemit_3 = mj03)
 
 
-names(allbus_democracy_satisf)
+names(allbus_antisemitsm)
 ```
 
 ---
@@ -652,16 +652,16 @@ Similar to selecting columns/variables, there are two options for filtering rows
 
 Option 1
 ```{r filter-base}
-gp_covid_male <- gp_covid[gp_covid$sex == 1, ]
+allbus_male <-allbus_2021[which(allbus_2021$sex == 1), ]
 
-dim(gp_covid_male)
+dim(allbus_male)
 ```
 
 Option 2
 ```{r filter-subset}
-gp_covid_male <- subset(gp_covid, sex == 1)
+allbus_male <- subset(allbus_2021, sex == 1)
 
-dim(gp_covid_male)
+dim(allbus_male)
 ```
 
 ---
@@ -671,10 +671,10 @@ dim(gp_covid_male)
 The `dplyr` solution for filtering rows/observations is the verb `filter()`.
 
 ```{r dplyr-filter-1}
-gp_covid_male <- gp_covid %>% 
+allbus_male <- allbus_2021 %>% 
   filter(sex == 1)
 
-dim(gp_covid_male)
+dim(allbus_male)
 ```
 
 ---
@@ -682,10 +682,10 @@ dim(gp_covid_male)
 ## Filtering rows based on multiple conditions
 
 ```{r filter-2-cond}
-gp_covid_old_men <- gp_covid %>% 
-  filter(sex == 1, age_cat > 7)
+allbus_old_men <-allbus_2021 %>% 
+  filter(sex == 1, agec > 6)
 
-dim(gp_covid_old_men)
+dim(allbus_old_men)
 ```
 
 ---
@@ -701,16 +701,16 @@ woRkshoptools::include_picture("./dplyr_filter.jpg")
 
 ## `dplyr::filter` - multiple conditions
 
-By default, multiple conditions in `filter()` are added as & (and). You can, however, also specify multiple conditions differently.
+By default, multiple conditions in `filter()` are added as *&* (and). You can, however, also specify multiple conditions differently.
 
 **or** (cases for which at least one of the conditions is true)
 
 ```{r filter-or}
-gp_covid_old_andor_male <- gp_covid %>% 
+allbus_old_andor_male <- allbus_2021 %>% 
   filter(sex == 1 |
-           age_cat > 7)
+           agec > 6)
 
-dim(gp_covid_old_andor_male)
+dim(allbus_old_andor_male)
 ```
 
 ---
@@ -720,11 +720,11 @@ dim(gp_covid_old_andor_male)
 **xor** (cases for which only one of the two conditions is true)
 
 ```{r filter-xor}
-gp_covid_old_or_male <- gp_covid %>%
+allbus_old_or_male <- allbus_2021 %>%
   filter(xor(sex == 1, 
-             age_cat > 7))
+             agec > 6))
 
-dim(gp_covid_old_or_male)
+dim(allbus_old_or_male )
 ```
 
 ---
@@ -736,10 +736,10 @@ Similar to `select()` there are some helper functions for `filter()` for advance
  - Filter rows based on a range in a numeric variable
 
 ```{r between}
-gp_covid_centrist <- gp_covid %>% 
-    filter(between(political_orientation, 4, 6))
+allbus_centrist <- allbus_2021 %>% 
+    filter(between(pa01, 4, 6))
 
-dim(gp_covid_centrist)
+dim(allbus_centrist)
 ```
 
 *Note*: The range specified in `between()` is inclusive (on both sides).
@@ -751,10 +751,10 @@ dim(gp_covid_centrist)
 - Filter rows based on the values of specific variables matching certain criteria
 
 ```{r if-all}
-gp_covid_risk_low <- gp_covid_risk %>% 
-  filter(if_all(everything(), ~ . < 4)) # read: if the values of all vars in this df are < 4
+allbus_antisemit_high  <- allbus_2021 %>% 
+  filter(if_all(starts_with ("mj"), ~ . >5)) # read: if the values of variables starting with mj in this df are > 5 (indicating high approval)
 
-dim(gp_covid_risk_low)
+dim(allbus_high)
 ```
 
 *Note*: The helper function `if_any()` can be used to specify that at least one of the variables needs to match a certain criterion.
@@ -767,16 +767,16 @@ Of course, you can also combine the selection of columns and the filtering of ro
 
 `Base R` option 1
 ```{r colsrows-base}
-gp_covid_risk_male <- gp_covid[gp_covid$sex == 1, c("hzcy001a", "hzcy002a", "hzcy003a", "hzcy004a", "hzcy005a")]
+allbus_antisemit_male  <- allbus_2021[which(allbus_2021$sex == 1), c("mj01", "mj02", "mj03", "mj04", "mj05", "mj06")]
 
-dim(gp_covid_risk_male)
+dim(allbus_male)
 ```
 
 `Base R` option 2
 ```{r colsrows-subset}
-gp_covid_risk_male  <- subset(gp_covid, sex == 1, select = c(hzcy001a, hzcy002a, hzcy003a, hzcy004a, hzcy005a))
+allbus_antisemit_male  <- subset(allbus_2021, sex == 1, select = c( mj01, mj02, mj03, mj04, mj05, mj06))
 
-dim(gp_covid_risk_male)
+dim(allbus_antisemit_male )
 ```
 
 ---
@@ -786,23 +786,23 @@ dim(gp_covid_risk_male)
 The `tidyverse` approach solution for combining the selection of columns and the filtering of rows is chaining these steps together in a pipe (in this case, the order of the pipe steps does not matter).
 
 ```{r dplyr-select-filter}
-gp_covid_risk_male <- gp_covid %>% 
+allbus_antisemit_male  <- allbus_2021 %>% 
   filter(sex == 1) %>% 
-  select(hzcy001a:hzcy005a)
+  select(mj01:mj06)
 
-dim(gp_covid_risk_male)
+dim(allbus_antisemit_male)
 ```
 
 ---
 
 ## (Re-)Arranging the order of rows
 
-Again, while this does not directly matter for analyses or plotting (unless you want to filter rows by their numeric index), you can rearrange the order of rows in a data set. In `base R` this can be achived as follows:
+Again, while this does not directly matter for analyses or plotting (unless you want to filter rows by their numeric index), you can rearrange the order of rows in a data set. In `base R` this can be achieved as follows:
 
 ```{r base-sort-1-var}
-gp_covid <- gp_covid[order(gp_covid$age_cat),]
+allbus_2021<- allbus_2021[order(allbus_2021$agec),]
 
-head(gp_covid[, 6:13])
+head(allbus_2021[, 5:16])
 ```
 
 ---
@@ -812,9 +812,9 @@ head(gp_covid[, 6:13])
 Of course, it is also possible to sort a data frame in descending order of a variable.
 
 ```{r base-sort-1-var-desc}
-gp_covid <- gp_covid[order(desc(gp_covid$age_cat)),]
+allbus_2021<- allbus_2021[order(desc(allbus_2021$agec)),]
 
-head(gp_covid[, 6:13])
+head(allbus_2021[, 5:16])
 ```
 
 ---
@@ -824,9 +824,9 @@ head(gp_covid[, 6:13])
 You can also sort your data frame by more than one variable.
 
 ```{r base-sort-mult}
-gp_covid <- gp_covid[order(gp_covid$age_cat, gp_covid$education_cat),]
+allbus_2021 <- allbus_2021[order(allbus_2021$agec, allbus_2021$educ),]
 
-head(gp_covid[, 6:13])
+head(allbus_2021[, 6:13])
 ```
 
 ---
@@ -836,9 +836,9 @@ head(gp_covid[, 6:13])
 The `dplyr` verb for changing the order of rows in a data set is `arrange()` and you can use it in the same ways as the `base R` equivalent: Sorting by a single variable in ascending order, ...
 
 ```{r arrange}
-gp_covid %>% 
-  arrange(age_cat) %>% 
-  select(sex:household) %>% 
+allbus_2021 %>% 
+  arrange(agec) %>% 
+  select(sex:agec) %>% 
   glimpse()
 ```
 
@@ -849,9 +849,9 @@ gp_covid %>%
 ... sorting by a single variable in descending order, ...
 
 ```{r arrange-desc}
-gp_covid %>% 
-  arrange(desc(age_cat)) %>% 
-  select(sex:household) %>% 
+allbus_2021 %>% 
+  arrange(desc(agec)) %>% 
+  select(sex:agec) %>% 
   glimpse()
 ```
 
@@ -862,9 +862,9 @@ gp_covid %>%
 ... sorting by more than one variable.
 
 ```{r arrange-mult}
-gp_covid %>% 
-  arrange(age_cat, education_cat) %>% 
-  select(sex:household) %>% 
+allbus_2021 %>% 
+  arrange(agec, educ) %>% 
+  select(sex:agec) %>% 
   glimpse()
 ```
 
