@@ -167,7 +167,7 @@ woRkshoptools::include_picture("./stefan.png")
 - got hooked by `R` somewhere around 2008 or 2009 because of the plots
 - wrote horrible code and estimated multilevel models that took forever to be estimated
 - switched to `R` for geospatial data in 2015, wrote  his first (bad) [`R` package](https://github.com/StefanJuenger/georefum) for geo-stuff
-- tried *Python*, uses *Python* occasionally, but is forever in love with `R` `r emo::ji("heart")`
+- tried *Python*, uses *Python* occasionally, but still in love with `R` `r emo::ji("heart")`
 
 ---
 
