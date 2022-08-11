@@ -1,0 +1,94 @@
+---
+title: 'Exercise 2_2_4: Factors & conditional recoding'
+author: 'Johannes Breuer, Stefan Jünger, & Veronika Batzdorfer'
+date: 'Introduction to R for Data Analysis'
+---
+
+```{r child = "content/config/exercises_setup.Rmd"}
+```
+
+In this final set of exercises for the second data wrangling session, we want to work with factors and conditional recoding.
+
+The packages we need here are the same as before (`sjlabelled`, `tidyverse`, `haven`) plus the `naniar` package.
+
+```{r libraries, include=FALSE}
+library(sjlabelled)
+library(tidyverse)
+library(haven)
+library(naniar)
+```
+
+As in the previous exercises, to be on the safe side, we can import the data once more.
+
+```{r load-data}
+allbus_2021 <- read_sav("./data/allbus_2021/ZA5280_v1-0-0.sav") %>% 
+  remove_all_labels()
+```
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+First, let's create an unordered factor based on the variable representing marital status (`mstat`). The factor levels should be the English translations of the first five value labels listed in the codebook: "Married and living with spouse", "Married and living separately", "Widowed", "Divorced", "Unmarried".
+**NB**: As we only want to focus on five categories (for simplicity), we should set all values > 5 to `NA` for this purpose. The easiest way to achieve this is to use a function from the `naniar` package that replaces specific values (or those that meet a certain condition) for a selection of variables.
+```
+
+```{block, opts.label = "clues"}
+The `dplyr` function we need to use here (in combination with `mutate()`) is `recode_factor()`. The function for replacing values with `NA` from the `naniar` package that we want to use here is `replace_with_na_at()`
+```
+
+```{r first-exercise, solution = TRUE}
+allbus_2021 <- allbus_2021 %>% 
+  replace_with_na_at(.vars = "mstat",
+                     condition = ~.x > 5) %>% 
+  mutate(mstat_fac = recode_factor(mstat,
+                                   `1` = "Married and living with spouse",
+                                   `2` = "Married and living separately",
+                                   `3` = "Widowed",
+                                   `4` = "Divorced",
+                                   `5` = "Unmarried"))
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Based on what we did in task 1, let's create another unordered factor named `unmarried` that has the value/level "unmarried" if the respondent is not and has never been married and "is or has been married" otherwise.
+*Note*: For creating the new factor variable, we can use the `as.factor()` function from `base R`.
+```
+
+```{block, opts.label = "clues"}
+For this simple conditional recode, we can use the `ifelse()` function from `base R`.
+```
+
+```{r second-exercise, solution = TRUE}
+allbus_2021 <- allbus_2021 %>% 
+  mutate(unmarried = as.factor(
+    ifelse(mstat == 5, "unmarried", "is or has been married")
+    ))
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Finally, let's create an ordered factor based on the numeric income variable (`di01a`) named `inc_cat` with the following levels: "up to 1499 Euro", "1500 to 2499 Euro", "2500 to 3499 Euro", "3500 to 4499 Euro", "4500 to 5499 Euro", "5500 to 6499 Euro", "more than 6500 Euro".
+```
+
+```{block, opts.label = "clues"}
+We can use `case_when()` from `dplyr` for the conditional recode based on the numeric income variable and combine it with `factor` from `base R` for creating an ordered factor. We can also use the `between()` (helper) function we have encountered in the first data wrangling session with(in) `case_when()`.
+**NB**: For the levels to be in the correct order, we need to specify this within the `factor()` function.
+```
+
+```{r third-exercise, solution = TRUE}
+allbus_2021 <- allbus_2021 %>%
+  mutate(inc_cat = case_when(
+    di01a < 1500 ~ "up to 1499 Euro",
+    between(di01a, 1500, 2499) ~ "1500 to 2499 Euro",
+    between(di01a, 2500, 3499) ~ "2500 to 3499 Euro",
+    between(di01a, 3500, 4499) ~ "3500 to 4499 Euro",
+    between(di01a, 4500, 5499) ~ "4500 to 5499 Euro",
+    between(di01a, 5500, 6499) ~ "5500 to 6499 Euro",
+    di01a > 6499 ~ "more than 6500 Euro"
+  )) %>%
+  mutate(inc_cat = factor(inc_cat,
+                          levels = c("up to 1499 Euro",
+                                     "1500 to 2499 Euro",
+                                     "2500 to 3499 Euro",
+                                     "3500 to 4499 Euro",
+                                     "4500 to 5499 Euro",
+                                     "5500 to 6499 Euro",
+                                     "more than 6500 Euro"),
+                          ordered = TRUE))
+```

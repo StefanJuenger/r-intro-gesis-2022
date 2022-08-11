@@ -1,0 +1,67 @@
+---
+title: 'Exercise 2_2_1: Create & transform variables'
+author: 'Johannes Breuer, Stefan Jünger, & Veronika Batzdorfer'
+date: 'Introduction to R for Data Analysis'
+---
+
+```{r child = "content/config/exercises_setup.Rmd"}
+```
+
+In this first short set of exercises for the second data wrangling session, we will focus on creating and transforming variables using functions from the `dplyr` package.
+
+**NB**: For the following exercises, it will be helpful to look at the bespoke (mini-)codebook we have created for this workshop.
+
+Before we can start, we need to load the packages we have seen on the slides for this session so far.
+
+```{r libraries, message = F}
+library(sjlabelled)
+library(tidyverse)
+library(haven)
+```
+
+To avoid potential issues due to different data set versions produced by coding along during the session, we will start with a blank slate. Hence, we will import the *ALLBUS* 2021 `.sav` file (again),
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Before we start with the variable creation & transformation, let's import the *ALLBUS* 2021 `.sav` file and assign it to an object named `allbus_2021`. We want the user-defined missing values from the *SPSS* file to be converted to `NA` in the data import and also remove all labels.
+```
+
+```{block, opts.label = "clues"}
+For importing the `.sav` file we can use a function from the `haven` package. The conversion of *SPSS* user-defined missings to `NA` is the default in this function (meaning we do not need to specify that optional argument). For getting rid of all labels we can use a function from the `sjlabelled` package.
+```
+
+```{r first-exercise, solution = TRUE}
+allbus_2021 <- read_sav("./data/allbus_2021/ZA5280_v1-0-0.sav") %>% 
+  remove_all_labels()
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+To start with the wrangling, let's use the `dplyr`function for creating and transforming variables to create a new variable representing political orientation (on the left-right spectrum) named `pol_view_new` that ranges from 0 to 9 instead of from 1 to 10 as is the case for the original variable.
+```
+
+```{block, opts.label = "clues"}
+The name of the original variable is `pa01`. For this transformation, we we simply need to subtract 1 from the existing variable.
+```
+
+```{r second-exercise, solution = TRUE}
+gp_covid <- allbus_2021 %>% 
+  mutate(pol_view_new = pa01 - 1)
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+By combining the function used for the previous task with another one from the `dplyr` package, recode the values of the variable measuring trust in the federal government into a new variable named `distrust_gov` that captures distrust instead of trust.
+```
+
+```{block, opts.label = "clues"}
+The name of the variable we want to transform is `pt12` and it ranges from 1 to 7. Remember that the correct syntax for recoding values with the corresponding `dplyr` function is old value (enclosed in backticks) = new value.
+```
+
+```{r third-exercise, solution = TRUE}
+gp_covid <-allbus_2021 %>% 
+  mutate(distrust_gov = recode(pt12,
+                               `7` = 1, # `old_value` = new_value
+                               `6` = 2,
+                               `5` = 3, 
+                               `3` = 5,
+                               `2` = 6,
+                               `1` = 7))
+```

@@ -1,0 +1,99 @@
+---
+title: 'Exercise 2_2_2: Missing values'
+author: 'Johannes Breuer, Stefan Jünger, & Veronika Batzdorfer'
+date: 'Introduction to R for Data Analysis'
+---
+
+```{r child = "content/config/exercises_setup.Rmd"}
+```
+
+In the following exercises, we will explore some of the options for dealing with missing values. As before, we will focus on functions from the `tidyverse` (more specifically, from `dplyr` plus one `tidyr`).   
+
+If you have not yet done so in your current `R` session, please load the same packages that we have used in the previous set of exercises (`sjlabelled`, `tidyverse`, `haven`; ideally also in that order).
+
+```{r libraries, include=FALSE}
+library(sjlabelled)
+library(tidyverse)
+library(haven)
+```
+
+We should also import the data again.
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Import the *ALLBUS* 2021 `.sav` and assign it to an object named `allbus_2021_missings`. However, unlike in the previous set of exercises, for our missing value operations, we do not want to user-defined missing values from the *SPSS* file to be converted to `NA` when the data are imported.
+Same as before, we want to remove all labels.
+```
+
+```{block, opts.label = "clues"}
+To override the default behavior of converting user-defined missing values into `NA`, we need to provide an appropriate value for the `user_na` argument of the import function we need. To check what the appropriate value is, you can look at the function help file (`?read_sav()`).
+```
+
+```{r first-exercise, solution = TRUE}
+allbus_2021_missings <- read_sav("./data/allbus_2021/ZA5280_v1-0-0.sav",
+                        user_na = FALSE) %>% 
+  remove_all_labels()
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+As a first exercise, let's turn all negative values for the variable measuring satisfaction with democracy in Germany into `NA`s using a function from the `dplyr` package. 
+```
+
+```{block, opts.label = "clues"}
+To to this, we need to combine `mutate()` with the `dplyr` function for recoding specific values as `NA`. The name of the variable is `ps03` and the values we need to turn into `NA`s are: -42, -11, -9, -8.
+```
+
+```{r second-exercise, solution = TRUE}
+allbus_2021_missings <- allbus_2021_missings %>% 
+  mutate(ps03 = na_if(ps03, -42)) %>% 
+  mutate(ps03 = na_if(ps03, -11)) %>% 
+  mutate(ps03 = na_if(ps03, -9)) %>%
+  mutate(ps03 = na_if(ps03, -8))
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+After recoding a set of values as `NA` for one variable, let's now do the same for a whole dataframe. For this purpose, first create a new dataframe named `contact` that only contains variables assessing in which contexts respondents have contact with immigrants. Then convert the following values to `NA` for all variables in this dataframe: -42, -11, -10, -9.
+```
+
+```{block, opts.label = "clues"}
+The names of the variables we are looking for are: `mc01`, `mc02`, `mc03`, and `mc04`. For converting values to `NA` for all columns/variables in a dataframe, we do not need the `mutate()` function.
+```
+
+```{r third-exercise, solution = TRUE}
+contact <- allbus_2021_missings %>% 
+  select(mc01:mc04)
+
+contact <- contact %>% 
+  na_if(-42) %>% 
+  na_if(-11) %>% 
+  na_if(-10) %>% 
+  na_if(-9)
+```
+
+```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
+As `na_if()` only takes only takes single values as its second argument (i.e., the value to replace with `NA`), let's use a function from the `sjlabelled` function to achieve the same thing as in the previous task with fewer lines of code.
+```
+
+```{block, opts.label = "clues"}
+The function we are looking for can also be included in a pipe chain and takes a vector of values to be recoded as `NA` as its second (required) argument. 
+```
+
+```{r fourth-exercise, solution = TRUE}
+library(sjlabelled)
+
+contact <- contact %>% 
+  set_na(na = c(-42, -11, -10, -9))
+```
+
+```{block, box.title = "5", box.body = list(fill = "white"), box.icon = "fa-star"}
+As we final exercise, let's build on what we did in task 2 and use a function from the `tidyr` package to answer the following question: How many of the respondents do not have a missing value for the item assessing satisfaction with democracy in Germany? This time, do not assign the result of your code to a new object.
+```
+
+```{block, opts.label = "clues"}
+To count the number of cases, you can use the base `R` function `nrow()` at the end of your pipe.
+```
+
+```{r fifth-exercise, solution = TRUE}
+allbus_2021_missings %>% 
+  drop_na(ps03) %>% 
+  nrow()
+```
