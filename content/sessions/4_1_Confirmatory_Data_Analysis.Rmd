@@ -300,9 +300,9 @@ TukeyHSD(anova)
 
 class: center, middle
 
-# [Exercise](https://jobreu.github.io/r-intro-gesis-2021/exercises/Exercise_4_1_1_t-test_ANOVA.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+# [Exercise](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_4_1_1_t-test_ANOVA.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
 
-## [Solutions](https://jobreu.github.io/r-intro-gesis-2021/solutions/Exercise_4_1_1_t-test_ANOVA.html)
+## [Solutions](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_4_1_1_t-test_ANOVA.html)
 
 ---
 
@@ -589,9 +589,9 @@ While `glm()` already provides quite a few estimators and link functions, depend
 
 class: center, middle
 
-# [Exercise](https://jobreu.github.io/r-intro-gesis-2021/exercises/Exercise_4_1_2_Regression_Analysis.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+# [Exercise](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_4_1_2_Regression_Analysis.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
 
-## [Solutions](https://jobreu.github.io/r-intro-gesis-2021/solutions/Exercise_4_1_2_Regression_Analysis.html)
+## [Solutions](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_4_1_2_Regression_Analysis.html)
 
 ---
 
@@ -931,9 +931,9 @@ As we've said at the beginning of this session, we only looked at some of the ba
 
 class: center, middle
 
-# [Exercise](https://jobreu.github.io/r-intro-gesis-2021/exercises/Exercise_4_1_3_Regression_Reporting.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+# [Exercise](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_4_1_3_Regression_Reporting.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
 
-## [Solutions](https://jobreu.github.io/r-intro-gesis-2021/solutions/Exercise_4_1_3_Regression_Reporting.html)
+## [Solutions](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_4_1_3_Regression_Reporting.html)
 
 ---
 
