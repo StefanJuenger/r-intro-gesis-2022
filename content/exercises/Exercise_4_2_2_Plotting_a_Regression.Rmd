@@ -1,0 +1,75 @@
+---
+title: 'Exercise 4_2_2: Plotting a Regression'
+author: 'Johannes Breuer, Stefan Jünger, Veronika Batzdorfer'
+date: 'Introduction to R for Data Analysis'
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r child = "./content/config/exercises_setup.Rmd"}
+```
+
+You can continue to work with the analyses you did in the previous set of exercises. 
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Re-use your analysis from the previous set of exercises and run an interaction model between your IV and the other covariate. Plot the interaction as a coefficient plot.
+```
+
+```{block, opts.label = "clues"}
+For the coefficient plot, you can use the `easystats` packages we have used in the lecture. 
+```
+
+```{r first-exercise, solution = TRUE}
+library(dplyr)
+library(haven)
+library(parameters)
+library(performance)
+library(see)
+
+allbus_2021_dvII_2 <- 
+  read_spss("./data/allbus_2021/ZA5280_v1-0-0.sav") %>% 
+  mutate(political_orientation = as.numeric(pa01))
+  
+linear_model_interaction <-
+  lm(
+    political_orientation ~ age * eastwest,
+    data = allbus_2021_dvII_2
+  )
+
+model_parameters(linear_model_interaction) %>% 
+  plot()
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Imagine that you want to use the plot in a publication. Color figures usually cost extra. So, to save some money, try to make let the plot "turn grey".
+```
+
+```{block, opts.label = "clues"}
+Remember that the `easytats` plots are based on `ggplot2`. You could choose from one of `ggplot2`'s built-in themes from this list: https://ggplot2.tidyverse.org/reference/ggtheme.html. In another step, you could adjust the color of the scale, e.g., with `scale_colour_grey()`. Be creative. 
+```
+
+```{r second-exercise, solution = TRUE}
+model_parameters(linear_model_interaction) %>% 
+  plot() +
+  scale_colour_grey(start = 0,
+                    end = .5,
+                    guide = "none") +
+  theme_minimal()
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Plot the interaction effect as a prediction.
+```
+
+```{block, opts.label = "clues"}
+For this purpose, you need the `plot_model()` function from `sjPlot`.
+```
+
+```{r third-exercise, solution = TRUE}
+library(sjPlot)
+
+plot_model(
+  linear_model_interaction,
+  type = "int"
+)
+```
