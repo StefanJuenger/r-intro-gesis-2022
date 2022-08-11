@@ -288,6 +288,16 @@ summary(anova)
 
 ---
 
+## Post-hoc test
+
+Unfortunately, the previous output only indicates that there are statistically significant differences in the groups. To find out which groups differ from each other we can, for example, compute *Tukey Honest Significant Differences*.
+
+```{r tukey}
+TukeyHSD(anova)
+```
+
+---
+
 class: center, middle
 
 # [Exercise](https://jobreu.github.io/r-intro-gesis-2021/exercises/Exercise_4_1_1_t-test_ANOVA.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
