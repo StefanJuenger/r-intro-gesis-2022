@@ -1,0 +1,72 @@
+---
+title: 'Exercise 4_2_1: Plotting Diagnostics'
+author: 'Johannes Breuer, Stefan Jünger, Veronika Batzdorfer'
+date: 'Introduction to R for Data Analysis'
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r child = "./content/config/exercises_setup.Rmd"}
+```
+
+In the following exercises, you will work on your own 'research question' using the *ALLBUS 2021*. If you have not already done so, you can load the data first using the following code:
+
+```{r load-gp-covid}
+library(haven)
+
+allbus_2021_dvII_1 <- 
+  read_spss("./data/allbus_2021/ZA5280_v1-0-0.sav") 
+```
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Take a few minutes to choose a dependent variable (DV) and an independent variable (IV) from the codebook that lives in the `./data` folder or the full [Allbus 2021 codebook](https://dbk.gesis.org/dbksearch/download.asp?id=67378). Don't overthink your choices!
+```
+
+```{block, opts.label = "clues"}
+If you're really struggling to find something you like, what about the following variables:
+
+1. `mi05` (accepting refugees from war-torn countries) as DV and `st01` (general trust in people) as IV
+2. `pa01` (left-right self-placement) as DV and `agec` as IV
+3. `fr12` (man taking care of the household and children) as DV and `sex` IV
+
+Be aware that you may have to do some recoding, and that your sample is likely reduced due to filter questions.
+```
+
+```{r first-exercise, solution = TRUE}
+# We will use option 2 from the list in the following.
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Run a linear regression model with your variables and `educ` as covariate. If it is part of your predictor variables (IV), choose another one. Then check visually if the residuals are normally distributed.
+```
+
+```{block, opts.label = "clues"}
+You need the `performance` and `see` packages for this task (and `dplyr` for the preparatory wrangling part).
+```
+
+```{r second-exercise, solution = TRUE}
+library(dplyr)
+library(performance)
+library(see)
+
+allbus_2021_dvII_1 <-
+  allbus_2021_dvII_1 %>% 
+  mutate(political_orientation = as.numeric(pa01))
+
+linear_model <-
+  lm(
+    political_orientation ~ agec + educ,
+    data = allbus_2021_dvII_1
+  )
+
+check_normality(linear_model) %>%
+  plot()
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Now, do the full range of model checks using a function from the `performance` package.
+```
+
+```{r third-exercise, solution = TRUE}
+check_model(linear_model)
+```
