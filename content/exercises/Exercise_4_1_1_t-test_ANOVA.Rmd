@@ -1,0 +1,70 @@
+---
+title: 'Exercise 4_1_1: t-test & ANOVA'
+author: 'Johannes Breuer, Stefan Jünger, Veronika Batzdorfer'
+date: 'Introduction to R for Data Analysis'
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r child = "./content/config/exercises_setup.Rmd"}
+```
+
+As in the slides, we will, again, use the data from the **German General Social Survey - ALLBUS 2021*. If they are not (still/yet) in your workspace, you first need to load them.
+
+```{r load}
+library(haven)
+
+allbus_2021 <- read_spss("./data/allbus_2021/ZA5280_v1-0-0.sav")
+```
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Let's start with a very simple analysis: Compute a t-test to compare the means of the two `eastwest` groups in the data for the variable `pa01`. You may get an error message complaining that the variable is not numeric.
+```
+
+```{block, opts.label = "clues"}
+For the t-test you can use a `base R` function named after this test. For converting the variable to numeric you have to use the function `as.numeric()`.
+```
+
+```{r first-exercise, solution = TRUE}
+t.test(as.numeric(pa01) ~ eastwest, data = allbus_2021)
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Next, use a `base R` function to run an ANOVA to test the relationship between the left-right self-placement and age groups.
+```
+
+```{block, opts.label = "clues"}
+We can get some (more) detailed information about the results using the `summary()` function.
+```
+
+```{r second-exercise, solution = TRUE}
+anova <- aov(as.numeric(pa01) ~ agec, data = allbus_2021)
+
+summary(anova)
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Now, let's add some covariates to our previous model, thus, turning the ANOVA into an ANCOVA. The covariates we want to include are sex and, again, German region.
+```
+
+```{block, opts.label = "clues"}
+Remember that you can simply add covariates in a formula in `R` with `+`.
+```
+
+```{r third-exercise, solution = TRUE}
+ancova <- aov(as.numeric(pa01) ~ agec + sex + eastwest, data = allbus_2021)
+
+summary(ancova)
+```
+
+```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
+Again, as in the case of an ANOVA the output may not be too informative. Compute *Tukey Honest Significant Differences* to get an idea about what's going on.
+```
+
+```{block, opts.label = "clues"}
+There is the `TukeyHSD()` function for this purpose.
+```
+
+```{r fourth-exercise, solution = TRUE}
+TukeyHSD(ancova)
+```
