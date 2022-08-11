@@ -26,7 +26,7 @@ Take a few minutes to choose a dependent variable (DV) and an independent variab
 If you're really struggling to find something you like, what about the following variables:
 
 1. `mi05` (accepting refugees from war-torn countries) as DV and `st01` (general trust in people) as IV
-2. `pa01` (left-right self-placement) as DV and `agec` as IV
+2. `pa01` (left-right self-placement) as DV and `age` as IV
 3. `fr12` (man taking care of the household and children) as DV and `sex` IV
 
 Be aware that you may have to do some recoding, and that your sample is likely reduced due to filter questions.
@@ -37,7 +37,7 @@ Be aware that you may have to do some recoding, and that your sample is likely r
 ```
 
 ```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
-Run a linear regression model with your variables and `educ` as covariate. If it is part of your predictor variables (IV), choose another one. Then check visually if the residuals are normally distributed.
+Run a linear regression model with your variables and `eastwest` as covariate. If it is part of your predictor variables (IV), choose another one. Then check visually if the residuals are normally distributed.
 ```
 
 ```{block, opts.label = "clues"}
@@ -55,7 +55,7 @@ allbus_2021_dvII_1 <-
 
 linear_model <-
   lm(
-    political_orientation ~ agec + educ,
+    political_orientation ~ age + eastwest,
     data = allbus_2021_dvII_1
   )
 
