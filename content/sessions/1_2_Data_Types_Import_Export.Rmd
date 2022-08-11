@@ -493,9 +493,9 @@ However, there are more flexible ways of doing this as we will see in the sessio
 class: center, middle
 
 
-# [Exercise](https://jobreu.github.io/r-intro-gesis-2021/exercises/Exercise_1_2_1_Data_Types.html) time `r emo::ji("weight_lifting_woman")``r emo::ji("muscle")``r emo::ji("running_man")``r emo::ji("biking_man")`
+# [Exercise](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_1_2_1_Data_Types.html) time `r emo::ji("weight_lifting_woman")``r emo::ji("muscle")``r emo::ji("running_man")``r emo::ji("biking_man")`
 
-## [Solutions](https://jobreu.github.io/r-intro-gesis-2021/solutions/Exercise_1_2_1_Data_Types.html)
+## [Solutions](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_1_2_1_Data_Types.html)
 
 ---
 
@@ -962,9 +962,9 @@ sjlabelled::get_labels(allbus_2021$agec)
 
 class: center, middle
 
-# [Exercise](https://jobreu.github.io/r-intro-gesis-2021/exercises/Exercise_1_2_2_Flat_Files.html) time `r emo::ji("weight_lifting_woman")``r emo::ji("muscle")``r emo::ji("running_man")``r emo::ji("biking_man")`
+# [Exercise](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_1_2_2_Flat_Files.html) time `r emo::ji("weight_lifting_woman")``r emo::ji("muscle")``r emo::ji("running_man")``r emo::ji("biking_man")`
 
-## [Solutions](https://jobreu.github.io/r-intro-gesis-2021/solutions/Exercise_1_2_2_Flat_Files.html)
+## [Solutions](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_1_2_2_Flat_Files.html)
 
 ---
 
@@ -1119,6 +1119,6 @@ class: center, middle
 
 Please first download the [GGSS 2021](https://search.gesis.org/research_data/ZA5280) as .sav, .dta, and .csv file.
 
-# [Exercise](https://jobreu.github.io/r-intro-gesis-2021/exercises/Exercise_1_2_3_Statistical_Software_Files.html) time `r emo::ji("weight_lifting_woman")``r emo::ji("muscle")``r emo::ji("running_man")``r emo::ji("biking_man")`
+# [Exercise](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_1_2_3_Statistical_Software_Files.html) time `r emo::ji("weight_lifting_woman")``r emo::ji("muscle")``r emo::ji("running_man")``r emo::ji("biking_man")`
 
-## [Solutions](https://jobreu.github.io/r-intro-gesis-2021/solutions/Exercise_1_2_3_Statistical_Software_Files.html)
+## [Solutions](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_1_2_3_Statistical_Software_Files.html)
