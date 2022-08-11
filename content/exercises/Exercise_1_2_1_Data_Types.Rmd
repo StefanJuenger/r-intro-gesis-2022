@@ -1,10 +1,10 @@
 ---
 title: 'Exercise 1_2_1: Data Types'
-author: 'Johannes Breuer, Stefan Jünger'
+author: 'Johannes Breuer, Stefan Jünger, Veronika Batzdorfer'
 date: 'Introduction to R for Data Analysis'
 ---
 
-```{r child = "../config/exercises_setup.Rmd"}
+```{r child = "./content/config/exercises_setup.Rmd"}
 ```
 
 ```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
@@ -52,7 +52,7 @@ cool_matrix
 ```
 
 ```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
-Create a list that includes all of the objects you have created in the previous tasks in this set of exercises    .
+Create a list that includes all of the objects you have created in the previous tasks in this set of exercises.
 ```
 
 ```{block, opts.label = "clues"}
