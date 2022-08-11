@@ -1,0 +1,132 @@
+---
+title: 'Exercise 4_1_3: Regression reporting'
+author: 'Johannes Breuer, Stefan Jünger'
+date: 'Introduction to R for Data Analysis'
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r child = "./content/config/exercises_setup.Rmd"}
+```
+
+After running a few regression analyses in the previous exercises, we will now explore some options for reporting their results.
+
+If necessary, load the data first....
+
+```{r load}
+library(dplyr)
+library(haven)
+
+allbus_2021_cda_3 <- 
+  read_spss("./data/allbus_2021/ZA5280_v1-0-0.sav") %>% 
+  mutate(
+    trust_parliament = as.numeric(pt03),
+    party = pv01,
+    political_orientation = as.numeric(pa01),
+    satisfaction_democracy = ifelse(as.numeric(ps03) <= 2, 1, 0)
+  )
+```
+
+In addition to the `parameters` package, which we have already used in the previous exercises on regression analysis, this time we also need the following packages: `stargazer`, `report`, and `broom`. 
+
+```{r pkgs, eval = F}
+if (!require(stargazer)) install.packages("stargazer")
+if (!require(report)) install.packages("report")
+if (!require(broom)) install.packages("broom")
+```
+
+Before we can report anything, we, of course, first need to run a regression analysis (again)...
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Run a simple linear regression model with the trust in parliament (`trust_parliament`) as the outcome and age (`age`), sex (`sex`), German region (`eastwest`), and political orientation (`political_orientation`) as predictors. We are also interested in an interaction effect of German region and political orientation. 
+```
+
+```{block, opts.label = "clues"}
+Remember that you can include interaction effects in a formula in `R` using `*`. If you want to, you can have a look at the results via `summary()`.
+```
+
+```{r first-exercise, solution = TRUE}
+reg_model <- 
+  lm(
+    trust_parliament ~ age + sex + eastwest*political_orientation,
+    data = allbus_2021_cda_3
+  )
+
+summary(reg_model)
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Using `base R`, print only the coefficients from the model.
+```
+
+```{block, opts.label = "clues"}
+You can use the same operator that you use in `base R` for accessing variables in a dataframe to select the element we want from the `lm` object.
+```
+
+```{r second-exercise, solution = TRUE}
+reg_model$coefficients
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Using a function from a package that allows us to view model parameters, print some more interesting information on the results of our model (including confidence intervals and p-values) in a nice tabular format.
+```
+
+```{block, opts.label = "clues"}
+We can use a function from the `parameters` package for printing model parameters here.
+```
+
+```{r third-exercise, solution = TRUE}
+model_parameters(reg_model)
+```
+
+```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
+For further use in a publication, we also want to create a typical regression table using the `stargazer` package. We want the output to be in plain text format.
+```
+
+```{block, opts.label = "clues"}
+If you want to, you can also specify labels for the variables in your models as arguments in the `stargazer` function.
+```
+
+```{r fourth-exercise, solution = TRUE}
+library(stargazer)
+
+stargazer(
+  reg_model,
+  type = "text",
+  dep.var.labels = c("Trust in Parliament"),
+  covariate.labels = 
+    c(
+      "Age", "Female (Reference: Male)", "Diverse (Reference: Male)", 
+      "Region (Reference: Western Germany)", "Political Orientation",
+      "Region X Political Orientation"
+      )
+  )
+```
+
+```{block, box.title = "5", box.body = list(fill = "white"), box.icon = "fa-star"}
+To produce custom tables and plots, we also want to store the key parameters of our model in a tidy tibble.
+```
+
+```{block, opts.label = "clues"}
+There's a function in the `broom` package for that.
+```
+
+```{r fifth-exercise, solution = TRUE}
+library(broom)
+
+tidy(reg_model)
+```
+
+```{block, box.title = "6", box.body = list(fill = "white"), box.icon = "fa-star"}
+Of course, we can't write a paper that just consists of tables and plots (though some would surely very much appreciate that). We also need to produce some actual text. We all know the "You should be writing" memes, so we're in luck that `R` can also help us out here as well. Let's use a function that produces some model language describing the results of our regression model. 
+```
+
+```{block, opts.label = "clues"}
+The package we can use to save some time that we would otherwise spend typing or copying and pasting is called `report`.
+```
+
+```{r sixth-exercise, solution = TRUE}
+library(report)
+
+report(reg_model)
+```
