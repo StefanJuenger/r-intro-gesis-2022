@@ -33,10 +33,10 @@ By the end of this course you should...
 
 .center[
 ```{r data-science-pic, echo = FALSE, out.width="60%"}
-include_picture("./data-science.png")
+knitr::include_graphics("https://d33wubrfki0l68.cloudfront.net/795c039ba2520455d833b4034befc8cf360a70ba/558a5/diagrams/data-science-explore.png")
 ```
 ]
-<small><small>Source: http://r4ds.had.co.nz/</small></small>
+<small><small>Source: [*R for Data Science*](http://r4ds.had.co.nz/)</small></small>
 
 .small[
 - **Import**: read in data in different formats (e.g., .csv, .xls, .sav, .dta)
@@ -194,7 +194,7 @@ tweet_screenshot("https://twitter.com/meghansharris/status/1552710056122191878",
 ## Keep calm and carry on learning `R`
 
 ```{r first-then, out.width = "55%", echo = F}
-woRkshoptools::include_picture("r_first_then.png")
+knitr::include_graphics("https://github.com/allisonhorst/stats-illustrations/blob/main/rstats-artwork/r_first_then.png?raw=true")
 ```
 .center[
 <small><small>Artwork by [Allison Horst](https://github.com/allisonhorst/stats-illustrations)</small></small>
@@ -1084,7 +1084,7 @@ tweet_screenshot("https://twitter.com/daranzolin/status/1420220994262749186",
 - code (chunks) executed in the wrong order
 
 ```{r r-break-gif, out.width = "20%", echo = F}
-woRkshoptools::include_picture("./breakr.gif")
+knitr::include_graphics("https://github.com/allisonhorst/stats-illustrations/blob/main/rstats-artwork/breakr.gif?raw=true")
 ```
 .center[
 <small><small>GIF by [Allison Horst](https://github.com/allisonhorst/stats-illustrations)</small></small>
