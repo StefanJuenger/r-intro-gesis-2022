@@ -58,10 +58,10 @@ allbus_2021$pa01 <-
 get_label(allbus_2021$pa01)
 ```
 
-Your collaborators ask you to share the data after changing labels and stuff. Unfortunately, they do not use `R` or `SPSS` and, hence, asks you to export your data as a *Stata* file.
+Your collaborators ask you to share the data after changing labels and stuff. Unfortunately, they do not use `R`, `SPSS` or even `Stata` and, hence, asks you to export your data as a *SAS* file.
 
 ```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
-Export your data as a *Stata* file.
+Export your data as a *SAS* file (its file extension is `sas7bdat`).
 ```
 
 ```{block, opts.label = "clues"}
@@ -69,5 +69,5 @@ The `haven` package provides a function for writing such files that is called an
 ```
 
 ```{r exportstata, solution = TRUE, eval = FALSE}
-write_stata(gp_covid, "Allbus_STATA_format.dta")
+write_sas(gp_covid, "Allbus_SAS_format.sas7bdat)
 ```
