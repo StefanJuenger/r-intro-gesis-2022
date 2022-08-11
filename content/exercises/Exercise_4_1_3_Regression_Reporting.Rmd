@@ -1,6 +1,6 @@
 ---
 title: 'Exercise 4_1_3: Regression reporting'
-author: 'Johannes Breuer, Stefan Jünger'
+author: 'Johannes Breuer, Stefan Jünger, Veronika Batzdorfer'
 date: 'Introduction to R for Data Analysis'
 editor_options: 
   chunk_output_type: console
