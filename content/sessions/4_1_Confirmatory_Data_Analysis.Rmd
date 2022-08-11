@@ -85,10 +85,13 @@ library(dplyr)
 allbus_2021_cda <-
   allbus_2021_cda %>% 
   mutate(
-    xenophobia = rowSums(across(ma01b:ma04)) - 4, # sum score
-    trust = ifelse(st01 == 1, 1, 0), # dichotomization
-    contact = rowSums(across(mc01:mc04)) * -1 + 8, # sum score + inversion
-    party = as.factor(pv01) # factor conversion
+    # sum score + numeric conversion
+    xenophobia = rowSums(across(ma01b:ma04, ~as.numeric(.x))) - 4, 
+    # dichotomization
+    trust = ifelse(st01 == 1, 1, 0), 
+    # sum score + numeric conversion + inversion
+    contact = rowSums(across(mc01:mc04, ~as.numeric(.x))) * -1 + 8, 
+    party = pv01
   )
 ```
 
@@ -667,7 +670,7 @@ simple_linear_model_new <-
 predictions_data <-  
   data.frame(
     age = rep(mean(allbus_2021_cda$age, na.rm = TRUE), times = 4),
-    eastwest = rep(1:2, each = 2),
+    eastwest = as.factor(rep(1:2, each = 2)),
     party = as.factor(rep(c(1, 42), times = 2))
   )
 
