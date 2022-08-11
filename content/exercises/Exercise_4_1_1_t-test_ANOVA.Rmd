@@ -14,7 +14,7 @@ As in the slides, we will, again, use the data from the **German General Social 
 ```{r load}
 library(haven)
 
-allbus_2021 <- read_spss("./data/allbus_2021/ZA5280_v1-0-0.sav")
+allbus_2021_cda_1 <- read_spss("./data/allbus_2021/ZA5280_v1-0-0.sav")
 ```
 
 ```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
@@ -26,7 +26,7 @@ For the t-test you can use a `base R` function named after this test. For conver
 ```
 
 ```{r first-exercise, solution = TRUE}
-t.test(as.numeric(pa01) ~ eastwest, data = allbus_2021)
+t.test(as.numeric(pa01) ~ eastwest, data = allbus_2021_cda_1)
 ```
 
 ```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
@@ -38,7 +38,7 @@ We can get some (more) detailed information about the results using the `summary
 ```
 
 ```{r second-exercise, solution = TRUE}
-anova <- aov(as.numeric(pa01) ~ agec, data = allbus_2021)
+anova <- aov(as.numeric(pa01) ~ agec, data = allbus_2021_cda_1)
 
 summary(anova)
 ```
@@ -52,7 +52,8 @@ Remember that you can simply add covariates in a formula in `R` with `+`.
 ```
 
 ```{r third-exercise, solution = TRUE}
-ancova <- aov(as.numeric(pa01) ~ agec + sex + eastwest, data = allbus_2021)
+ancova <- 
+  aov(as.numeric(pa01) ~ agec + sex + eastwest, data = allbus_2021_cda_1)
 
 summary(ancova)
 ```
