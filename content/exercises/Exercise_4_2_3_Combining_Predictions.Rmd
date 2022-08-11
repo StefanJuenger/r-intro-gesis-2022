@@ -1,0 +1,128 @@
+---
+title: 'Exercise 4_2_3: Combining Predictions'
+author: 'Johannes Breuer, Stefan Jünger, Veronika Batzdorfer'
+date: 'Introduction to R for Data Analysis'
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r child = "./content/config/exercises_setup.Rmd"}
+```
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Let's re-estimate our model from the previous exercise, just with another dependent variable. Again, consult the codebook that lives in the `./data` folder or the full [Allbus 2021 codebook](https://dbk.gesis.org/dbksearch/download.asp?id=67378) and choose another variable that may make sense to be inserted into a regression.
+```
+
+```{block, opts.label = "clues"}
+If you're having a hard time finding suitable variables, what about one of the dependent variables from the first set of exercises for this session:
+
+1. `mi05` (accepting refugees from war-torn countries)
+2. `ls01` (satisfaction with general living situation)
+3. `fr12` (man taking care of the household and children)
+
+Be aware that you may have to conduct some recoding.
+```
+
+```{r first-exercise, solution = TRUE}
+# We chose ls01 for the following tasks/solutions.
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Re-run your analysis just by switching the dependent variables.
+```
+
+```{r second-exercise, solution = TRUE}
+library(dplyr)
+library(haven)
+library(parameters)
+
+allbus_2021_dvII_3 <- 
+  read_spss("./data/allbus_2021/ZA5280_v1-0-0.sav") %>% 
+  mutate(life_satisfaction = as.numeric(ls01))
+
+
+linear_model_2 <-
+  lm(
+    life_satisfaction  ~ age + eastwest,
+    data = allbus_2021_dvII_3
+  )
+
+model_parameters(linear_model_2)
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Now extract the prediction data for your main independent variable for this model.
+```
+
+```{block, opts.label = "clues"}
+You can use the function `get_model_data()` from the `sjPlot` package. You should set the option `type = "pred"` and provide the name of your independent variable in the `terms` option.
+```
+
+```{r third-exercise, solution = TRUE}
+library(sjPlot)
+
+predictions_model_2 <-
+  get_model_data(
+    linear_model_2,
+    type = "pred",
+    terms = "age"
+  )
+```
+
+```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
+Repeat the previous step for your original model and combine both datasets. The resulting data should be a `data.frame` or a `tibble`.
+```
+
+```{block, opts.label = "clues"}
+- For combining the data, you simply have append both data sets rowwise. You can either use the `bind_rows()` function from the `dplyr` package or `rbind()` from `base R`. 
+- Make sure that you add an indicator variable for the model for each of the data sets before during the combination.
+- You can convert any (well, a lot of...) data objects to a `tibble` using `as_tibble()` from the `tibble` package.
+```
+
+```{r fourth-exercise, solution = TRUE}
+library(dplyr)
+library(tibble)
+
+linear_model<-
+  lm(
+    political_orientation ~ age + eastwest,
+    data = allbus_2021_dvII_2
+  )
+
+predictions_model <-
+  get_model_data(
+    linear_model,
+    type = "pred",
+    terms = "age"
+  )
+
+predictions <-
+  bind_rows(
+    predictions_model %>% 
+      mutate(model = "Model 1"),
+    predictions_model_2 %>% 
+      mutate(model = "Model 2")
+  ) %>% 
+  as_tibble()
+```
+
+```{block, box.title = "5", box.body = list(fill = "white"), box.icon = "fa-star"}
+Create a faceted `ggplot` with the regression predictions (without further customizing anything).
+```
+
+```{block, opts.label = "clues"}
+You can use `facet_wrap()` here.
+```
+
+```{r fifth-exercise, solution = TRUE}
+library(ggplot2)
+
+ggplot(
+  predictions,
+  aes(x, predicted)
+  ) + 
+  geom_line() +
+  geom_line(aes(x, conf.low), linetype = "dashed") +
+  geom_line(aes(x, conf.high), linetype = "dashed") +
+  facet_wrap(~model)
+```
