@@ -1,6 +1,6 @@
 ---
 title: "Introduction to R for Data Analysis"
-subtitle: "Data Wrangling Part - 1"
+subtitle: "Data Wrangling - Part 1"
 author: "Johannes Breuer, Stefan Jünger, & Veronika Batzdorfer"
 date: "2022-08-16"
 presenter: Veronika
@@ -12,40 +12,50 @@ layout: true
 
 ---
 
-## Data wrangling `r ji("cowboy_hat_face")`
+## Data wrangling 
+
+
 
 ```{r, wrangling-cartoon, out.width = "95%", echo = F}
-woRkshoptools::include_picture("data_cowboy.png")
+woRkshoptools::include_picture("./wrangl.jpg")
 ```
-<small><small>Artwork by [Allison Horst](https://github.com/allisonhorst/stats-illustrations)</small></small>
 
+
+
+The process of re-**shaping**, re-**formatting**, and re-**arranging** raw data for analysis
 ---
 
-## What is data wrangling?
+## Steps of data wrangling
 
-The process of: re-shaping, re-formatting, and re-arranging raw data for analysis
 
-Common data wrangling steps when working with tabular data in the social & behavioral sciences (e.g., from surveys) include:
-- **renaming** variables
+
+Steps when working with tabular data in the social & behavioral sciences (e.g., from surveys) include:
+
 - **selecting** a subset of variables
+- **renaming** variables
+- **relocating** variables
 - **filtering** a subset of cases
-- **recoding** variables/values (incl. missing values)
+
+
+- **recoding** variables/values
+- **missing values** recoding
 - **creating/computing** new variables
 
 --
 
-The (in)famous **80/20-rule**: 80% wrangling, 20% analysis (of course, this ratio relates to the time required for writing the code, not the computing time).
+<small>The (in)famous **80/20-rule**: 80% wrangling, 20% analysis (of course, this ratio relates to the time required for writing the code, not the computing time).<small>
 
 ---
 
 ## The `tidyverse`
 
 
-> The `tidyverse` is a .highlight[coherent system of packages for data manipulation, exploration and visualization] that share a .highlight[common design philosophy] ([Rickert, 2017](https://rviews.rstudio.com/2017/06/08/what-is-the-tidyverse/)).
+> The `tidyverse` is a coherent system of packages for .highlight[data manipulation, exploration and visualization] that share a common design philosophy ([Rickert, 2017](https://rviews.rstudio.com/2017/06/08/what-is-the-tidyverse/)).
 
 ```{r tidyverse-hex, out.width = "25%", echo = F}
-woRkshoptools::include_picture("./hex-tidyverse.png")
+knitr::include_graphics("https://github.com/rstudio/hex-stickers/raw/master/thumbs/tidyverse.png")
 ```
+
 
 ---
 
@@ -53,11 +63,13 @@ woRkshoptools::include_picture("./hex-tidyverse.png")
 
 Data wrangling can also be done with `base R`. However, the syntax for this is typically (more) verbose and not intuitive and, hence, difficult to learn, remember, and read (plus many `tidyverse` operations are faster than their base `R` equivalents).
 
----
 
-## Benefits of the `tidyverse`
 
-`Tidyverse` syntax is designed to increase **human-readability**. This makes it especially **attractive for `R` novices** as it can facilitate the experience of **self-efficacy** (see [Robinson, 2017](http://varianceexplained.org/r/teach-tidyverse/)). The `tidyverse` also aims for **consistency** (e.g., data frame as first argument and output) and uses **smarter defaults** (e.g., no partial matching of data frame and column names).
+`Tidyverse` syntax is designed to increase
+
+- **human-readability** making it **attractive for `R` novices** as it can facilitate **self-efficacy** (see [Robinson, 2017](http://varianceexplained.org/r/teach-tidyverse/))
+- **consistency** (e.g., data frame as first argument and output) 
+- **smarter defaults** (e.g., no partial matching of data frame and column names).
 
 ---
 
@@ -68,11 +80,11 @@ Data wrangling can also be done with `base R`. However, the syntax for this is t
   - ... can be nice when learning `R`
   - ... can get difficult when searching for solutions to certain problems
 
-Often, `tidyverse` functions are under heavy development
-- they change and can potentially break your code
-  - Example: [Converting tables into long or wide format](https://tidyr.tidyverse.org/news/index.html#pivoting)
+- Often, `tidyverse` functions are under heavy development
+  - they change and can potentially break your code
+    - E.g.: [Converting tables into long or wide format](https://tidyr.tidyverse.org/news/index.html#pivoting)<small>
   
-- to learn more about the `tidyverse` lifecycle you can watch this [talk by Hadley Wickham](https://www.youtube.com/watch?v=izFssYRsLZs) or read the corresponding [documentation](https://lifecycle.r-lib.org/articles/stages.html#deprecated)
+To learn more about the `tidyverse` lifecycle you can watch this [talk by Hadley Wickham](https://www.youtube.com/watch?v=izFssYRsLZs) or read the corresponding [documentation](https://lifecycle.r-lib.org/articles/stages.html#deprecated)
 
 ---
 
@@ -80,14 +92,14 @@ Often, `tidyverse` functions are under heavy development
 
 Similar to other fierce academic debates over, e.g., `R` vs. `Python` or Frequentism vs. Bayesianism, people have argued [for](http://varianceexplained.org/r/teach-tidyverse/) and [against](https://blog.ephorie.de/why-i-dont-use-the-tidyverse) using/teaching the `tidyverse`.
 
-Our personal experience with teaching the `tidyverse` is something like this...
+But what's unites both:
 
 
-```{r tidy-bf, out.width="50%", echo=FALSE}
-woRkshoptools::include_picture("./tidyverse_meme.png")
+```{r tidy-bf, out.width="60%", echo=FALSE}
+knitr::include_graphics("https://miro.medium.com/max/1280/0*ifjhcLyODu0nXjVx.jpg")
 ```
 .center[
-<small><small>Source: https://s.unhb.de/ReoyN</small></small>
+<small><small>Source: https://bit.ly/3PmcL4t</small></small>
 ]
 
 ---
@@ -116,9 +128,9 @@ There is, however, a very detailed [blog post by Jason Mercer](https://wetlandsc
 
 ## Structure & focus of this session
 
-For most of the data wrangling tasks we discuss in this section, we will show how do do them with `base R` and the `tidyverse`, so that you can get a sense of the differences.
+- focus on differences between `base R` and the `tidyverse`
 
-Our main focus, however, will be on the use of packages (and functions) from the `tidyverse` and how they can be used to clean and transform your data.
+- our main focus will be on the use of packages (and functions) from the `tidyverse` and how they can be used to clean and transform your data.
 
 Of course, it is possible to combine `base R` and `tidyverse` code. However, in the long run, you should try to aim for consistency.
 
@@ -147,11 +159,11 @@ While there is much more to the `tidyverse` than this, three important concepts 
 
 3. Pipes
 
-We already discussed tibbles in the session on *Data Import & Export*, so we will focus on tidy data and pipes here.
+<small>(We already discussed tibbles in the session on *Data Import & Export*, so we will focus on tidy data and pipes here.)<small>
 
 ---
 
-## Tidy data
+## Tidy data `r ji("cowboy_hat_face")`
 
 The 3 rules of tidy data:
 
@@ -163,7 +175,7 @@ The 3 rules of tidy data:
 
 
 ```{r tidy-data, echo = FALSE}
-woRkshoptools::include_picture("./tidy_data.png")
+knitr::include_graphics("https://d33wubrfki0l68.cloudfront.net/6f1ddb544fc5c69a2478e444ab8112fb0eea23f8/91adc/images/tidy-1.png")
 ```
 <small><small>Source: https://r4ds.had.co.nz/tidy-data.html</small></small>
 
@@ -173,8 +185,8 @@ woRkshoptools::include_picture("./tidy_data.png")
 
 ## Wide vs. long format
 
-```{r wide-long-pic, echo = FALSE, out.width="70%"}
-woRkshoptools::include_picture("./wide-long.png")
+```{r wide-long-pic, echo = FALSE, out.width="45%"}
+knitr::include_graphics("https://raw.githubusercontent.com/gadenbuie/tidyexplain/main/images/static/png/original-dfs-tidy.png")
 ```
 <small><small>Source: https://github.com/gadenbuie/tidyexplain#tidy-data</small></small>
 
@@ -220,27 +232,37 @@ More about pipes: https://r4ds.had.co.nz/pipes.html
 
 ## Pipes
 
-There `%>%` pipe used in the `tidyverse` is part of the [`magrittr` package](https://magrittr.tidyverse.org/) which also includes other specialized types of pipes.
+- The `%>%` used in the `tidyverse` is part of the [`magrittr` package](https://magrittr.tidyverse.org/) which also includes other specialized types of pipes.
 
-*RStudio* offers a keyboard shortcut for inserting the `%>%` pipe: <kbd>Ctrl + Shift + M</kbd> (*Windows* & *Linux*)/<kbd>Cmd + Shift + M</kbd> (*Mac*)
+- *RStudio* offers a keyboard shortcut for inserting **`%>%`**: <kbd>Ctrl + Shift + M</kbd> (*Windows* & *Linux*)/<kbd>Cmd + Shift + M</kbd> (*Mac*)
 
-Since [version 4.1.0](https://cran.r-project.org/bin/windows/base/NEWS.R-4.1.0.html), `base R` also offers its own pipe `|>`, which is similar to but not the same as the `%>%` pipe.
+- Since [version 4.1.0](https://cran.r-project.org/bin/windows/base/NEWS.R-4.1.0.html), `base R` also offers its own pipe `|>`, which is similar to but not the same as the `%>%` pipe.
 
 ---
 
 ## Data set
 
-For the examples and exercises in this session we will, again, use data from the *German General Social Survey (ALLBUS) 2021*.
+For the examples and exercises in this session we will, again, use data from the [*German General Social Survey (ALLBUS) 2021*](https://search.gesis.org/research_data/ZA5280).
 
-Remember that to code along and for the exercises the *ALLBUS* files should be in a folder called `data` in the same folder as the other materials for this course.
+.highlight[Remember]: to code along/ for the exercises the *ALLBUS* data file should be in a sub-folder called `data` in the same folder, as the other materials for this course.
 
 ---
+## Note: Tidy vs. untidy data
 
+The *GESIS German General Social Survey (ALLBUS) 2021* is already tidy.
+If you collect data yourself, the raw data may be `untidy`, e.g.:
+- cells may hold more than one value
+- a variable that should be in one column is spread across multiple columns (e.g., parts of a date or name).
+
+
+If you need to make your data tidy or change it from wide to long format or vice versa (which may, e.g., be necessary if you work with longitudinal survey data from multiple waves), the [`tidyr` package](https://tidyr.tidyverse.org/) from the `tidyverse` is a good option.
+
+---
 ## Interlude 1: Citing data
 
 If you (re-)use existing data sets, please cite them in your publications, theses, teaching materials, etc. Data repositories normally provide information on how to cite the data. For example, the APA-style citation for *Public Use File (PUF) of the German General Social Survey (ALLBUS) 2021* is:
 
-GESIS - Leibniz-Institut für Sozialwissenschaften (2022). ALLBUS/GGSS 2021 (Allgemeine Bevölkerungsumfrage der Sozialwissenschaften/German General Social Survey 2021). *GESIS, Cologne. ZA5280 Data file Version 1.0.0, https://doi.org/10.4232/1.13954*.
+GESIS - Leibniz-Institut für Sozialwissenschaften (2022). ALLBUS/GGSS 2021 (Allgemeine Bevölkerungsumfrage der Sozialwissenschaften/ German General Social Survey 2021). *GESIS, Cologne. ZA5280 Data file Version 1.0.0, https://doi.org/10.4232/1.13954*.
 
 ---
 
@@ -260,7 +282,7 @@ It is always advisable to consult the codebook (if there is one) before starting
 
 Side note: If you want to (semi-)automatically generate a codebook for your own dataset, there are several options in `R`:
 
-- The [`codebook` package](https://rubenarslan.github.io/codebook/) which includes an *RStudio*-Addin and also offers a [web app](https://rubenarslan.ocpu.io/codebook/www/)
+- the [`codebook` package](https://rubenarslan.github.io/codebook/) which includes an *RStudio*-Addin and also offers a [web app](https://rubenarslan.ocpu.io/codebook/www/)
 
 - the `makeCodebook()` function from the [`dataReporter` package](https://github.com/ekstroem/dataReporter) (see this [blog post](http://sandsynligvis.dk/articles/18/codebook.html) for a short tutorial of the initial dataMaid package)
 
@@ -278,27 +300,20 @@ allbus_2021 <- read_sav("./data/allbus_2021ZA5280_v1-0-0.sav")
 
 ---
 
-## Note: Tidy vs. untidy data
-
-As a lot of work (by many people) has already gone into this data set, the *Public Use File (PUF) of the GESIS German General Social Survey (ALLBUS) 2021* is already tidy. If you collect data yourself, this may not be the case (at least for the raw data). For example, cells may hold more than one value or a variable that should be in one column is spread across multiple columns (e.g., parts of a date or name).
-
-```{r magrittr, echo=FALSE, out.width="50%"}
-woRkshoptools::include_picture("./real_world_data.jpg")
-```
-
-If you need to make your data tidy or change it from wide to long format or vice versa (which may, e.g., be necessary if you work with longitudinal survey data from multiple waves), the [`tidyr` package](https://tidyr.tidyverse.org/) from the `tidyverse` is a good option.
-
----
 
 ## `dplyr`
 
-The `tidyverse` examples in the following will make use of functions from the [`dplyr` package](https://dplyr.tidyverse.org/):
-- `dplyr` functions are verbs that signal an action  
-- first argument = a data frame  
-- all subsequent arguments = what to do with the data frame
-- the output normally also is a data frame (tibble) 
-- columns (= variables in a tidy data frame) can be referenced without quotation marks (non-standard evaluation)
-- actions (verbs) can be applied to columns (variables) and rows (cases/observations)
+The `tidyverse` examples in the following will make use of [`dplyr` functions](https://dplyr.tidyverse.org/) that are **verbs** that signal an action (e.g. `group_by()`, `glimpse()`, `filter()`)
+Their structure is:
+1. The first argument is a data frame.
+2. The subsequent arguments describe what to do with the data frame.
+3. The result is a new data frame (tibble).
+
+  - **columns** (= variables in a tidy data frame) can be referenced without quotation marks (non-standard evaluation)
+  - **actions** (verbs) can be applied to columns (variables) and rows (cases/observations)
+
+
+
 
 ---
 
@@ -326,12 +341,12 @@ class: middle
 
 ## Selecting variables
 
-We might want to reduce our data frame (or create a new one) to only include a *subset of specific variables*. Say, for example, we want to select only the variables that measure antisemitism, satisfaction with democracy, political views and information seeking on social media from our full data set. There are two options for doing this with `base R`:
+We might want to reduce our data frame (or create a new one) to only include a **subset of specific variables**. Say, for example, we want to select only the variables that measure attitudes towards *immigration* (`mi05-mi11`) from our full data set. There are two options for doing this with `base R`:
 
 Option 1
 .small[
 ```{r select-vars-base}
-allbus_antisemitsm <- allbus_2021[, c("ps03", "pa01", "lm35", "mj01", "mj02", "mj03")]
+allbus_immigration <- allbus_2021[, c("mi05", "mi06", "mi07", "mi08", "mi09", "mi10","mi11")]
 # When subsetting with [], the first value refers to rows, the second to columns
 # [, c("var1", "var2", ...)] means we want to select all rows but only some specific columns.
 ```
@@ -340,7 +355,7 @@ allbus_antisemitsm <- allbus_2021[, c("ps03", "pa01", "lm35", "mj01", "mj02", "m
 Option 2
 .small[
 ```{r subset}
-allbus_antisemitsm <- subset(allbus_2021, TRUE, select = c(ps03, pa01, lm35, mj01, mj02, mj03))
+allbus_immigration <- subset(allbus_2021, TRUE, select = c(mi05,mi06,mi07,mi08,mi09,mi10,mi11))
 # Again, here the 2nd argument refers to the rows.
 # Setting it to TRUE means that we want to include all rows in the subset.
 ```
@@ -353,9 +368,9 @@ allbus_antisemitsm <- subset(allbus_2021, TRUE, select = c(ps03, pa01, lm35, mj0
 You can also select variables based on their numeric index.
 
 ```{r subset-base-index}
-allbus_demo <- allbus_2021[, 271:276]
+allbus_immigration <- allbus_2021[, 39:45]
 
-names(allbus_demo)
+names(allbus_immigration)
 ```
 
 ---
@@ -365,15 +380,16 @@ names(allbus_demo)
 In the `tidyverse`, we can create a subset of variables with the `dplyr` verb `select()`.
 
 ```{r select}
-allbus_antisemitsm <- allbus_2021 %>% 
-  select(ps03,
-         pa01,
-         lm35,
-         mj01,
-         mj02,
-         mj03)
+allbus_immigration <- allbus_2021 %>% 
+  select(mi05,
+         mi06,
+         mi07,
+         mi08,
+         mi09,
+         mi10,
+         mi11)
 
-head(allbus_antisemitsm)
+head(allbus_immigration)
 ```
 
 ---
@@ -383,10 +399,10 @@ head(allbus_antisemitsm)
 There also is a shorthand notation for selecting a set of consecutive columns with `select()`.
 
 ```{r select-range}
-allbus_range <- allbus_2021 %>% 
-  select(mj01:mj06)
+allbus_immigration <- allbus_2021 %>% 
+  select(mi05:mi11)
 
-head(allbus_range)
+head(allbus_immigration)
 ```
 
 *Note*: You can also use this shorthand notation for the `select` argument of the `base R` function `subset()`.
@@ -398,10 +414,10 @@ head(allbus_range)
 Same as for `base R`, you can also use the numeric index of variables in combination with `select()` from `dplyr`.
 
 ```{r select-index}
-allbus_select<- allbus_2021 %>% 
-  select(6:13)
+allbus_immigration <- allbus_2021 %>% 
+  select(39:45)
 
-names(allbus_select)
+names(allbus_immigration)
 ```
 
 ---
@@ -447,16 +463,16 @@ dim(allbus_2021_cut)
 
 ## Advanced ways of selecting variables
 
-`dplyr` offers several helper functions for selecting variables. For a full list of those, you can check the [documentation for the `select()` function](https://dplyr.tidyverse.org/reference/select.html).
+`dplyr` offers several helper functions for selecting variables. For a full list of those, you can check the [documentation for the `select()` function](https://dplyr.tidyverse.org/reference/select.html) or `?select()`.
 
 ```{r select-helper}
 allbus_2021_mj <- allbus_2021 %>% 
   select(starts_with("mj"))
 
-allbus_2021_born <-allbus_2021 %>% 
-  select(ends_with("born"))
+allbus_2021_stat <-allbus_2021 %>% 
+  select(ends_with("stat"))
 
-glimpse(allbus_2021_born)
+glimpse(allbus_2021_stat)
 ```
 
 ---
@@ -485,7 +501,7 @@ names(allbus_2021)
 
 ## What's in a name?
 
-As you can see, only a few of the variable names in the *GESIS German General Social Survey (ALLBUS) 2021* data set are self-explanatory. The other variable names are composed of codes representing the study wave, study name, variable number and whether they are original or derived variables (have a look at the [*GESIS ALLBUS 2021* codebook](https://github.com/StefanJuenger/r-intro-gesis-2022) if you want to know more), but they are not intuitive to understand. Hence, for analyzing them, especially if you want to create tables and/or plots, it can make sense to rename them. This is also a common step if you work with your own data. Depending on what method or tool(s) you used to collect the data, the variable names in your raw data may also not be what you want or need them to be.
+As you can see, only a few of the variable names in the *GESIS German General Social Survey (ALLBUS) 2021* data set are self-explanatory. The other variable names are composed of codes representing the study wave, study name, variable number and whether they are original or derived variables. Hence, for analyzing them, especially if you want to create tables and/or plots, it can make sense to **rename** them. This is also a common step if you work with your own data. Depending on what method or tool(s) you used to collect the data, the variable names in your raw data may also not be what you want or need them to be.
 
 ---
 
@@ -497,8 +513,8 @@ It is good practice to use consistent naming conventions. Since `R` is case-sens
 
 # Become an ace of case
 
-```{r, case-cartoon, out.width = "90%", echo = F}
-woRkshoptools::include_picture("./coding_cases.png")
+```{r, case-cartoon, out.width = "80%", echo = F}
+knitr::include_graphics("https://github.com/allisonhorst/stats-illustrations/raw/main/other-stats-artwork/coding_cases.png")
 ```
 <small><small>Artwork by [Allison Horst](https://github.com/allisonhorst/stats-illustrations) </small></small>
 
@@ -509,7 +525,7 @@ woRkshoptools::include_picture("./coding_cases.png")
 You can rename individual columns/variables in `base R` as follows:
 
 ```{r rename-base, eval=FALSE}
-colnames(allbus_2021)[colnames(allbus_2021) == "lm35"] <- "sm_info_seeking"
+colnames(allbus_2021)[colnames(allbus_2021) == "lm35"] <- "internet_info_seek"
 ```
 
 As for subsetting, you can also rename variables based on their numeric index.
@@ -525,16 +541,17 @@ colnames(allbus_2021)[4] <- "respondent_id"
 An easier to use and more versatile option for renaming columns/variables is the `dplyr` function `rename()`.
 
 ```{r rename}
-allbus_antisemitsm <- allbus_2021 %>% 
-  rename(satisf_democracy = ps03, # new_name = old_name
-         polit_views = pa01,
-         sm_info_seeking = lm35,
-         antisemit_1 = mj01,
-         antisemit_2 = mj02,
-         antisemit_3 = mj03)
+allbus_immigration <- allbus_2021 %>% 
+  rename(immig_war = mi05, # new_name = old_name
+         immig_prosecut = mi06,
+         immig_economic = mi07,
+         immig_east = mi08,
+         immig_eu = mi09,
+         immig_noneu = mi10,
+         immig_family = mi11)
 
 
-names(allbus_antisemitsm)
+names(allbus_immigration)
 ```
 
 ---
@@ -543,13 +560,15 @@ names(allbus_antisemitsm)
 
 For some more advanced renaming options, you can use the `dplyr` function `rename_with()`.
 
+*Note*: The [`janitor` package](https://sfirke.github.io/janitor/) (which is `tidyverse`-oriented) can be used to facilitate several common data cleaning tasks. Among other things, it contains the function `clean_names()` that takes a data frame and creates column names that "are unique and consist only of the _ character, numbers, and letters" (from the help file for this function), with the default being `r ji("snake")` snake_case (but support for many other types of cases).
+
 ```{r rename-with}
-allbus_antisemitsm %>% 
+allbus_immigration %>% 
   rename_with(toupper) %>% 
   names()
 ```
 
-*Note*: The [`janitor` package](https://sfirke.github.io/janitor/) (which is `tidyverse`-oriented) can be used to facilitate several common data cleaning tasks. Among other things, it contains the function `clean_names()` that takes a data frame and creates column names that "are unique and consist only of the _ character, numbers, and letters" (from the help file for this function), with the default being `r ji("snake")` snake_case (but support for many other types of cases). 
+ 
 
 ---
 
@@ -559,8 +578,8 @@ We can use `rename_with()` in combination with `gsub()` (which we've already enc
 
 ```{r rename-with-prefix}
 allbus_2021 %>% 
-  select(mj01:mj06) %>% 
-  rename_with(~ gsub("mj", "antisemit", .x,
+  select(mi05:mi11) %>% 
+  rename_with(~ gsub("mi", "immigrat_", .x,
                      fixed = TRUE)) %>% 
   names()
 ```
@@ -573,15 +592,16 @@ A nice thing about the `dplyr` verb `select` is that you can use it to select an
 
 .small[
 ```{r select-rename}
-allbus_antisemitsm <- allbus_2021 %>% 
-  select(satisf_democracy= ps03,
-         polit_views = pa01,
-         sm_info_seeking = lm35,
-         antisemit_1 = mj01,
-         antisemit_2 = mj02,
-         antisemit_3 = mj03)
+allbus_immigration <- allbus_2021 %>% 
+  select(immig_war = mi05, 
+         immig_prosecut = mi06,
+         immig_economic = mi07,
+         immig_east = mi08,
+         immig_eu = mi09,
+         immig_noneu = mi10,
+         immig_family = mi11)
 
-head(allbus_antisemitsm)
+head(allbus_immigration)
 ```
 ]
 
@@ -592,10 +612,10 @@ head(allbus_antisemitsm)
 Although the positions of columns in a data frame do not matter for analyses or plotting (unless you want to select columns using their numerical index), you might want to change them. For this purpose, `dplyr` provides the `relocate()` function.
 
 ```{r relocate}
-allbus_antisemitsm  <- allbus_antisemitsm %>% 
-  relocate(satisf_democracy, .after = polit_views)
+allbus_immigration <- allbus_immigration %>% 
+  relocate(immig_economic, .after = immig_noneu)
 
-glimpse(allbus_antisemitsm)
+glimpse(allbus_immigration)
 ```
 
 *Note*: You can also move a column before a specific other column by providing a variable name to the `.before` argument (instead of `.after`).
@@ -605,7 +625,7 @@ glimpse(allbus_antisemitsm)
 ## `dplyr::relocate()`
 
 ```{r, relocate-cartoon, out.width = "85%", echo = F}
-woRkshoptools::include_picture("./dplyr_relocate.png")
+knitr::include_graphics("https://github.com/allisonhorst/stats-illustrations/blob/main/rstats-blanks/relocate_blank.png")
 ```
 <small><small>Artwork by [Allison Horst](https://github.com/allisonhorst/stats-illustrations)</small></small>
 
@@ -613,9 +633,9 @@ woRkshoptools::include_picture("./dplyr_relocate.png")
 
 class: center, middle
 
-# [Exercise](https://jobreu.github.io/r-intro-gesis-2021/exercises/Exercise_2_1_1_Select_Rename.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+# [Exercise](https://github.com/StefanJuenger/r-intro-gesis-2022/blob/main/exercises/Exercise_2_1_1_Selecting_Renaming_Steps.Rmd) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
 
-## [Solutions](https://jobreu.github.io/r-intro-gesis-2021/solutions/Exercise_2_1_1_Select_Rename.html)
+## [Solutions](https://github.com/StefanJuenger/r-intro-gesis-2022/blob/main/exercises/Exercise_2_1_1_Selecting_Renaming_Steps.Rmd)
 
 ---
 
@@ -682,8 +702,8 @@ dim(allbus_male)
 ## Filtering rows based on multiple conditions
 
 ```{r filter-2-cond}
-allbus_old_men <-allbus_2021 %>% 
-  filter(sex == 1, agec > 6)
+allbus_old_men <- allbus_2021 %>% 
+  filter(sex == 1, agec > 3, eastwest !=1)
 
 dim(allbus_old_men)
 ```
@@ -693,7 +713,7 @@ dim(allbus_old_men)
 ## `dplyr::filter()`
 
 ```{r, filter-cartoon, out.width = "95%", echo = F}
-woRkshoptools::include_picture("./dplyr_filter.jpg")
+knitr::include_graphics("https://github.com/allisonhorst/stats-illustrations/raw/main/rstats-artwork/dplyr_filter.jpg")
 ```
 <small><small>Illustration by [Allison Horst](https://github.com/allisonhorst/stats-illustrations) </small></small>
 
@@ -708,7 +728,7 @@ By default, multiple conditions in `filter()` are added as *&* (and). You can, h
 ```{r filter-or}
 allbus_old_andor_male <- allbus_2021 %>% 
   filter(sex == 1 |
-           agec > 6)
+           agec > 3)
 
 dim(allbus_old_andor_male)
 ```
@@ -722,7 +742,7 @@ dim(allbus_old_andor_male)
 ```{r filter-xor}
 allbus_old_or_male <- allbus_2021 %>%
   filter(xor(sex == 1, 
-             agec > 6))
+             agec > 3))
 
 dim(allbus_old_or_male )
 ```
@@ -751,10 +771,10 @@ dim(allbus_centrist)
 - Filter rows based on the values of specific variables matching certain criteria
 
 ```{r if-all}
-allbus_antisemit_high  <- allbus_2021 %>% 
-  filter(if_all(starts_with ("mj"), ~ . >5)) # read: if the values of variables starting with mj in this df are > 5 (indicating high approval)
+allbus_trust_high  <- allbus_2021 %>% 
+  filter(if_all(starts_with ("pt"), ~ . >5)) # read: if the values of variables starting with mj in this df are > 5 (indicating high approval)
 
-dim(allbus_high)
+dim(allbus_antisemit_high)
 ```
 
 *Note*: The helper function `if_any()` can be used to specify that at least one of the variables needs to match a certain criterion.
@@ -769,14 +789,14 @@ Of course, you can also combine the selection of columns and the filtering of ro
 ```{r colsrows-base}
 allbus_antisemit_male  <- allbus_2021[which(allbus_2021$sex == 1), c("mj01", "mj02", "mj03", "mj04", "mj05", "mj06")]
 
-dim(allbus_male)
+dim(allbus_antisemit_male)
 ```
 
 `Base R` option 2
 ```{r colsrows-subset}
-allbus_antisemit_male  <- subset(allbus_2021, sex == 1, select = c( mj01, mj02, mj03, mj04, mj05, mj06))
+allbus_antisemit_male  <- subset(allbus_2021, sex == 1, select = c(mj01, mj02, mj03, mj04, mj05, mj06))
 
-dim(allbus_antisemit_male )
+dim(allbus_antisemit_male)
 ```
 
 ---

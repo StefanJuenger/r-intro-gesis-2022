@@ -68,7 +68,7 @@ head(allbus_2021$year)
 
 ## Creating & transforming variables
 
-Another simple variable transformation is adding or subtracting a constant from its values, which, in `base R`, you can do as follows:
+Another simple variable transformation is adding or subtracting a constant, which, in `base R`, you can do as follows:
 
 ```{r simple-transform-base}
 allbus_2021$sex_new <- allbus_2021$sex - 1
@@ -97,7 +97,7 @@ typeof(allbus_2021$id_char)
 
 The `dplyr` package provides a very versatile function for creating and transforming variables: `mutate()`, which you can also use to create a new variable that is a constant, ...
 
-```{r mutate-constant, eval=FALSE}
+```{r mutate-constant}
 allbus_2021 <- allbus_2021 %>% 
   mutate(year = 2021)
 
@@ -112,7 +112,7 @@ allbus_2021 %>%
 
 ... applies a simple transformation to an existing variable, ...
 
-```{r mutate-transform, eval=FALSE}
+```{r mutate-transform}
 allbus_2021 <- allbus_2021 %>% 
   mutate(sex_new = sex - 1)
 
@@ -127,7 +127,7 @@ allbus_2021 %>%
 
 ... or changes the data type of an existing variable.
 
-```{r mutate-type, eval=FALSE}
+```{r mutate-type}
 allbus_2021 <- allbus_2021 %>% 
   mutate(id_char = as.character(respid))
 
@@ -186,7 +186,7 @@ If we (want to) work with data sets from multiple sources (or also just multiple
 
 ## Harmonization example
 
-Let's say we want to recode the 5-point political interest measure from the *ALLBUS*, so that it matches the 4-point measure from the [*European Values Study* (EVS)](https://europeanvaluesstudy.eu/). We can download [an `HTML` document containing the code we need](https://osf.io/f2uta/download) via the *QuestionLink* website, and then use the code to recode the variable.
+Let's say, we want to recode the 5-point political interest measure from the *ALLBUS*, so that it matches the 4-point measure from the [*European Values Study* (EVS)](https://europeanvaluesstudy.eu/). We can download [an `HTML` document containing the code we need](https://osf.io/f2uta/download) via the *QuestionLink* website, and then use the code to recode the variable.
 
 ```{r question-link-example}
 allbus_2021 <- allbus_2021 %>% 
@@ -198,7 +198,13 @@ allbus_2021 <- allbus_2021 %>%
                              `5` = 4.15))
 ```
 
-*Note*: The `HTML` document also contains some information on the 
+---
+
+class: center, middle
+
+# [Exercise](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_2_1_Create_Transform_Vars.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+
+## [Solutions](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_2_1_Create_Transform_Vars.html)
 
 ---
 
@@ -406,9 +412,9 @@ allbus_2021 <- allbus_2021 %>%
 
 class: center, middle
 
-# [Exercise](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_1_3_Mutate_Recode_Missings.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+# [Exercise](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_2_2_Missing_Values.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
 
-## [Solutions](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_1_3_Mutate_Recode_Missings.html)
+## [Solutions](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_2_2_Missing_Values.html)
 
 ---
 
@@ -482,14 +488,6 @@ knitr::include_graphics("https://github.com/allisonhorst/stats-illustrations/blo
 
 ---
 
-class: center, middle
-
-# [Exercise](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_2_2_Define_your_Cases.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
-
-## [Solutions](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_2_2_Define_your_Cases.html)
-
----
-
 ## Applying the same transformation(s) to multiple variables
 
 The `dplyr` package provides a handy tool for applying transformations, such as recoding values or specifying missing values across a set of variables: `across()`.
@@ -513,7 +511,7 @@ allbus_2021 <- allbus_2021 %>%
 
 ## Recode values `across()` defined variables 
 
-Likewise, we could also use `across()` to recode multiple variables in the same manner. Here, we want to recode the items measuring trust so that they reflect distrust instead. In this case, we probably want to create new variables. We can do so by using the `.names` argument of the `across()` function (for details on this, check the help file for the function).
+We can also use `across()` to recode multiple variables. Here, we want to recode the items measuring trust so that they reflect distrust instead. In this case, we probably want to create new variables. We can do so by using the `.names` argument of the `across()` function (for details, check the help file for the function).
 
 ```{r recode-across}
 allbus_2021 <- 
@@ -530,9 +528,7 @@ allbus_2021 <-
         `2` = 6,
         `1` = 7
       ),
-      .names = "{.col}_R"
-    )
-  )
+      .names = "{.col}_R"))
 ```
 
 ---
@@ -587,16 +583,6 @@ allbus_2021 <- allbus_2021 %>%
 
 ---
 
-class: middle
-
-```{r meanscore-output}
-allbus_2021 %>% 
-  select(mean_trust, pt01:pt20) %>% 
-  glimpse()
-```
-
----
-
 ## Sum score
 
 In the same manner, we can also create sum scores. Let's say, we want do this for the questions assessing in which contexts respondents have contact with immigrants. In this case, as we have not done so before, we first need to specify the right values as missing. For the sum score to be easier to interpret, we also want to recode the values, so that 0 means no and 1 means yes.
@@ -630,16 +616,6 @@ allbus_2021 <- allbus_2021 %>%
 
 ---
 
-class: middle
-
-```{r sumscore-output}
-allbus_2021 %>% 
-  select(sum_contact, mc01:mc04) %>% 
-  glimpse()
-```
-
----
-
 ## More options for aggregate variables
 
 If you want to use other functions than just `mean()` or `sum()` for creating aggregate variables, you need to use the [`rowwise()` function from `dplyr`](https://dplyr.tidyverse.org/articles/rowwise.html) in combination with [`c_across()`](https://dplyr.tidyverse.org/reference/c_across.html) which is a special variant of the `dplyr` function `across()` for row-wise operations/aggregations.
@@ -648,9 +624,9 @@ If you want to use other functions than just `mean()` or `sum()` for creating ag
 
 class: center, middle
 
-# [Exercise](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_2_1_Across_the_Tidyverse.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+# [Exercise](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_2_3_Across_Aggregate.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
 
-## [Solutions](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_2_1_Across_the_Tidyverse.html)
+## [Solutions](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_2_3_Across_Aggregate.html)
 
 ---
 
@@ -736,6 +712,14 @@ allbus_2021 <- allbus_2021 %>%
 
 ---
 
+class: center, middle
+
+# [Exercise](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_2_4_Factors_Conditional_Recode.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+
+## [Solutions](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_2_4_Factors_Conditional_Recode.html)
+
+---
+
 ## Outlook: Working with strings in `R` 
 
 As stated before, we won't be able to cover the specifics of working with strings in `R` in this course. However, it may be good to know that the `tidyverse` package [`stringr`](https://stringr.tidyverse.org/index.html) offers a collection of convenient functions for working with strings.
@@ -750,7 +734,7 @@ The `stringr` package provides a good [introduction vignette](https://cran.r-pro
 
 ## Sidenote: Regular expressions
 
-If you want (or have) to work with [regular expressions](https://en.wikipedia.org/wiki/Regular_expression), you should also check out the [`rebus` package](https://github.com/richierocks/rebus) which allows you to create regular expressions in R in a human-readable way. Another helpful tool is the *RStudio* addin [`RegExplain`](https://www.garrickadenbuie.com/project/regexplain/).  
+If you want (or have) to work with [regular expressions](https://en.wikipedia.org/wiki/Regular_expression), there are several packages that can facilitate this process by allowing you to create regular expressions in in a (more) human-readable: e.g., [`rex`](https://github.com/r-lib/rex), [`RVerbalExpressions `](https://rverbalexpressions.netlify.app/index.html), or [`rebus` package](https://github.com/richierocks/rebus) which allows you to create regular expressions in R in a human-readable way. Another helpful tool is the *RStudio* addin [`RegExplain`](https://www.garrickadenbuie.com/project/regexplain/).  
 
 ---
 

@@ -302,30 +302,26 @@ By the end of the course participants should be:
 
 [2_1_2 Filter Arrange](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_1_2_Filter_Arrange.html)
 
-[2_1_3 Mutate Recode Missings](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_1_3_Mutate_Recode_Missings.html)
+[2_2_1 Create & Transform Variables](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_2_1_Create_Transform_Vars.html)
 
-[2_2_1 Across the Tidyverse](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_2_1_Across_the_Tidyverse.html)
+[2_2_2 Missing Values](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_2_2_Missing_Values.html)
 
-[2_2_2 Define your Cases](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_2_2_Define_your_Cases.html)
+[2_2_3 Across & Aggregate Variables](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_2_3_Across_Aggregate.html)
 
-[2_2_3 If I had a Function](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_2_3_If_I_had_a_Function.html)
-
-[2_2_4 Purrr Joy of Writing Loops](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_2_4_Purrr_Joy_of_Writing_Loops.html)
+[2_2_4 Factors & Conditional Recoding](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_2_4_Factors_Conditional_Recode.html)
 
 ### Solutions
 [2_1_1 Select Rename](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_1_1_Select_Rename.html)
 
 [2_1_2 Filter Arrange](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_1_2_Filter_Arrange.html)
 
-[2_1_3 Mutate Recode Missings](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_1_3_Mutate_Recode_Missings.html)
+[2_2_1 Create & Transform Variables](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_2_1_Create_Transform_Vars.html)
 
-[2_2_1 Across the Tidyverse](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_2_1_Across_the_Tidyverse.html)
+[2_2_2 Missing Values](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_2_2_Missing_Values.html)
 
-[2_2_2 Define your Cases](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_2_2_Define_your_Cases.html)
+[2_2_3 Across & Aggregate Variables](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_2_3_Across_Aggregate.html)
 
-[2_2_3 If I had a Function](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_2_3_If_I_had_a_Function.html)
-
-[2_2_4 Purrr Joy of Writing Loops](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_2_4_Purrr_Joy_of_Writing_Loops.html)
+[2_2_4 Factors & Conditional Recoding](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_2_4_Factors_Conditional_Recode.html)
 
 ## Day 3
 ### Slides

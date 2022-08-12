@@ -1,0 +1,55 @@
+---
+title: 'Exercise 2_2_3: Across & aggregate variables'
+author: 'Johannes Breuer, Stefan Jünger, & Veronika Batzdorfer'
+date: 'Introduction to R for Data Analysis'
+---
+
+```{r child = "content/config/exercises_setup.Rmd"}
+```
+
+*Note*: For these exercises, we need the same packages as for the previous ones in this session: `sjlabelled`, `tidyverse`, `haven`.
+
+```{r libraries, include=FALSE}
+library(sjlabelled)
+library(tidyverse)
+library(haven)
+```
+
+Also, to make sure we're all "on the same page" before we start the exercises, we should probably also import the data once more (and remove the labels).
+
+```{r load-data}
+allbus_2021 <- read_sav("./data/allbus_2021/ZA5280_v1-0-0.sav") %>% 
+  remove_all_labels()
+```
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+In this set of exercises, we want to work with the items from the *ALLBUS* 2021 that measure xenophobia (negative attitudes towards immigrants): `ma01b`, `ma02`, `ma03`, `ma04`. Using the `across()` function, the first thing we want to do with those variables is to convert the following values to `NA`: -42, -11, -10, -9.
+```
+
+```{block, opts.label = "clues"}
+The easiest (and shortest) option for doing this is to combine `across()` with a function from the `sjlabelled` package for specifying missing values.
+```
+
+```{r first-exercise, solution = TRUE}
+allbus_2021 <- allbus_2021 %>%
+  mutate(
+    across(ma01b:ma04,
+         ~set_na(
+           .x,
+           na = c(-42, -11, -10, -9))))
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Now that we have properly defined the missing values for these variables, let's create a new variable called `xenophobia` which is the mean score of these items. 
+```
+
+```{block, opts.label = "clues"}
+The function we need to combine with `across()` for this is `rowMeans()`. Remember to specify that `NA`s should be ignored when the mean scores are computed (if you also want to include respondents that have not provided valid answers to all four questions).
+```
+
+```{r second-exercise, solution = TRUE}
+allbus_2021 <- allbus_2021 %>%
+  mutate(xenohpobia = rowMeans(across(
+    ma01b:ma04),
+    na.rm = TRUE))
+```
