@@ -1,0 +1,74 @@
+---
+title: 'Exercise 3_1_2: Frequencies & proportions'
+author: 'Johannes Breuer, Stefan Jünger, & Veronika Batzdorfer'
+date: 'Introduction to R for Data Analysis'
+---
+
+```{r child = "content/config/exercises_setup.Rmd"}
+```
+
+We will continue to work with the same data as in the previous set of exercises. By now, you should (hopefully) have saved them as an `.rds` file and, hence, be able to easily load them (in case they are not already/still in your current `R` workspace/working environment).
+This time, in addition to `base R` and the `tidyverse`, we also need the `janitor` package.
+
+```{r libraries, include=FALSE}
+library(tidyverse)
+library(janitor)
+```
+
+```{r load}
+allbus_2021_eda <- readRDS("./data/allbus_2021_eda.rds")
+```
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Using `base R`, print a simple table with the frequencies of the variable `agec`. Also include the counts for missing values.
+```
+
+```{block, opts.label = "clues"}
+The argument for including missing values in the resulting table is `useNA = "always"`.
+```
+
+```{r first-exercise, solution = TRUE}
+table(allbus_2021_eda$agec, useNA = "always")
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Next, use a combination of `base R` functions to get the proportions for the variable `sex` rounded to four decimal places.
+```
+
+```{block, opts.label = "clues"}
+You need to wrap `table()` into two other functions: One for creating the proportion table and another one for rounding the decimal places.
+```
+
+```{r second-exercise, solution = TRUE}
+round(prop.table(table(allbus_2021_eda$sex)), 4)
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Now, use functions from the `dplyr` package to get the frequencies and proportions for the `sex` variable (without worrying about the number of decimal places this time).
+```
+
+```{block, opts.label = "clues"}
+We first need to count the cases and then transform the resulting variable to get proportions.
+```
+
+```{r third-exercise, solution = TRUE}
+allbus_2021_eda %>% 
+  count(sex) %>%
+  mutate(proportion = n/sum(n)) %>% 
+  ungroup()
+```
+
+```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
+As a final exercise, use a function from the `janitor` package to display the counts and percentages for the categories in the `agec` variable. The output sbe rounded to 3 decimal places and include percentage signs.
+```
+
+```{block, opts.label = "clues"}
+You can format the `tabyl()` output using the `adorn_pct_formatting` function.
+```
+
+```{r fourth-exercise, solution = TRUE}
+allbus_2021_eda %>% 
+  tabyl(agec) %>% 
+  adorn_pct_formatting(digits = 3, 
+                       affix_sign = TRUE)
+```

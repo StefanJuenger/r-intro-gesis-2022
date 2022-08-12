@@ -4,6 +4,8 @@ subtitle: "Getting Started with R and RStudio"
 author: "Johannes Breuer, Stefan Jünger, & Veronika Batzdorfer"
 date: "2022-08-15"
 presenter: Johannes
+editor_options: 
+  chunk_output_type: console
 ---
 layout: true 
 
@@ -178,6 +180,16 @@ woRkshoptools::include_picture("./stefan.png")
 - began to learn *R* for text mining, but the data, workflows and documentation were not *tidy* at all
 - fallen for the R universe of code sharing and development like [TidyTuesday](https://github.com/rfordatascience/tidytuesday)
 - in love with *Python* as well (particularly for NLP tasks)
+
+---
+
+## More love stoRies
+
+... in this *Twitter* thread
+
+```{r r-love, echo=FALSE}
+tweet_embed("https://twitter.com/tanya_shapiro/status/1558141982974902272")
+```
 
 ---
 

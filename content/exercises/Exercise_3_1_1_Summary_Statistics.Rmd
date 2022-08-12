@@ -1,0 +1,75 @@
+---
+title: 'Exercise 3_1_1: Summary statistics'
+author: 'Johannes Breuer, Stefan Jünger, & Veronika Batzdorfer'
+date: 'Introduction to R for Data Analysis'
+---
+
+```{r child = "content/config/exercises_setup.Rmd"}
+```
+
+For this exercise, we will use the same subset of the *ALLBUS* 2021 data as in the lecture. If you have stored that data set as an `.rds` file as shown in the slides, you can simply load it with the following command:
+
+```{r load}
+allbus_2021_eda <- readRDS("./data/allbus_2021_eda.rds")
+```
+
+If you have not saved the wrangled data as an `.rds` file yet, you need to go through the data wrangling pipeline shown in the EDA slides (again).
+
+Also, in addition to `base R` and packages from the `tidyverse`, we will use the `datawizard` package in this exercise, so make sure that you have it installed.
+
+```{r libraries, include=FALSE}
+library(tidyverse)
+library(datawizard)
+```
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+To get started with the EDA vibe, use a `base R` function, print some basic summary statistics for the variables `xenophobia` and `contact`.
+```
+
+```{block, opts.label = "clues"}
+We can use the `dplyr` function for selecting variables and pipe the result into the required function.
+```
+
+```{r first-exercise, solution = TRUE}
+allbus_2021_eda %>% 
+  select(xenophobia, contact) %>% 
+  summary()
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Use a function from the `datawizard` package to get summary statistics (descriptions of the distribution) for the following variables in our data set: `sat_dem`, `xenophobia`, `contact`. We do not want information on quartiles or the IQR.
+```
+
+```{block, opts.label = "clues"}
+You can check the arguments for the function we need via `?describe_distribution`.
+```
+
+```{r second-exercise, solution = TRUE, message = FALSE, warning = FALSE}
+library(datawizard)
+
+allbus_2021_eda %>% 
+  select(sat_dem,
+         xenophobia,
+         contact) %>%
+  describe_distribution(iqr = FALSE)
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Now, let's use functions from `dplyr` to create grouped summary statistics. Compute separate means for the variables `xenophobia` and `contact` for the different age groups in the data set. The resulting summary variables should be called `xenophobia_mean` and `contact_mean`. You should exclude respondents with missing values for the variables of interest.
+```
+
+```{block, opts.label = "clues"}
+You need to group and summarize the data.
+```
+
+```{r third-exercise, solution = TRUE}
+allbus_2021_eda %>% 
+  select(agec,
+         xenophobia,
+         contact) %>% 
+  drop_na() %>% 
+  group_by(agec) %>% 
+  summarize(xenophobia_mean = mean(xenophobia),
+            contact_mean = mean(contact))
+
+```

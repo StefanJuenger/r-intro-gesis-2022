@@ -1,0 +1,105 @@
+---
+title: 'Exercise 3_1_3: Crosstabs & correlations'
+author: 'Johannes Breuer, Stefan Jünger, & Veronika Batzdorfer'
+date: 'Introduction to R for Data Analysis'
+---
+
+```{r child = "content/config/exercises_setup.Rmd"}
+```
+
+As before, we may need to load the data again, if they are not in our workspace.
+
+```{r load}
+allbus_2021_eda <- readRDS("./data/allbus_2021_eda.rds")
+```
+
+Besides `base R` and the `tidyverse`, for this set of exercises, we also need the `janitor` and the `correlation` package. So, make sure to install and load them.
+
+```{r libraries, include=FALSE}
+library(tidyverse)
+library(janitor)
+library(correlation)
+```
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+As a first exercise, use `base R` to create a crosstab for the variables `agec` (rows) and `party_vote` (columns) showing row percentages.
+```
+
+```{block, opts.label = "clues"}
+We need to combine `round()`, `table()`, and `prop.table()` here, add an argument to `prop.table()` to get row totals, and transform the results to represent percentages. Extra hint: Rows are the second dimension in `R` dataframes.
+```
+
+```{r first-exercise, solution = TRUE}
+round(prop.table(table(allbus_2021_eda$agec, allbus_2021_eda$party_vote), 1)*100, 2)
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Now, let's use the `janitor` package to get the same results. 
+```
+
+```{block, opts.label = "clues"}
+We want to create a `tably()` object and add some additional functions to get the row percentages. As the `table()` function excludes missing values by default, we need to make sure that missing values for the `party_vote` variable are excluded here as well.
+```
+
+```{r second-exercise, solution = TRUE}
+library(janitor)
+
+allbus_2021_eda %>% 
+  filter(!is.na(party_vote)) %>% 
+  tabyl(agec, party_vote) %>% 
+  adorn_percentages(denominator = "row") %>% 
+  adorn_pct_formatting(digits = 2)
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+As a final exercise on crosstabs, compute a chi-square test for the `tabyl` we have created before. 
+```
+
+```{block, opts.label = "clues"}
+This time, we need to filter our missing values for our variables of interest. We do not need the percentage sign or the row percentages for this.
+```
+
+```{r third-exercise, solution = TRUE}
+allbus_2021_eda %>% 
+  filter(!is.na(party_vote),
+         !is.na(agec)) %>% 
+  tabyl(agec, party_vote) %>% 
+  chisq.test()
+```
+
+```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
+Let's turn to correlations: Use the `correlation` package to calculate and print correlations between the following variables: `left_right`, `sat_dem`, `xenophobia`, `contact`
+```
+
+```{block, opts.label = "clues"}
+The name of the function you need is the same as that of the package we use here.
+```
+
+```{r fourth-exercise, solution = TRUE, message=FALSE}
+library(correlation)
+
+allbus_2021_eda %>% 
+  select(left_right,
+         sat_dem,
+         xenophobia,
+         contact) %>% 
+  correlation()
+```
+
+```{block, box.title = "5", box.body = list(fill = "white"), box.icon = "fa-star"}
+As a final exercise, compute the correlations between `sat_dem`, `xenophobia`, and `contact`,  using the same function and variables as in the previous exercise, but group them by `agec` this time.
+```
+
+```{block, opts.label = "clues"}
+You need to group the data by `agec` before computing the correlations.
+```
+
+```{r fifth-exercise, solution = TRUE, message=FALSE}
+allbus_2021_eda %>% 
+  select(agec,
+         sat_dem,
+         xenophobia,
+         contact) %>% 
+  group_by(agec) %>% 
+  correlation()
+```

@@ -7,29 +7,35 @@ if (!require("easypackages")) {
   library(easypackages)
 }
 
-# load (hopefully...) all packages of the course to code along
+# load (hopefully...) all packages of the course to code along (and do the exercises)
 packages(
+  "corrr",
+  "correlation",
   "broom",
-  "dplyr",
-  "ggplot2",
+  "datasauRus",
+  "datawizard",
+  "flextable",
+  "gtsummary",
   "haven",
+  "janitor",
   "marginaleffects",
   "naniar",
   "parameters",
   "patchwork",
   "performance",
   "randomNames",
-  "readr",
   "readxl",
   "remotes",
   "report",
+  "rstatix",
   "see",
   "sjlabelled",
   "sjPlot",
   "stargazer",
-  "tibble",
   "tidyverse"
 )
 
-# please cite all packages you use in your publications and elsewhere
-# cite_packages()
+# please cite R and all packages you use in your publications and elsewhere
+# to get the citation for R, you can use the function citation()
+# with citation("packagename") you get the suggested citation for an individual package
+# with the function cite_packages() from the grateful package, you can cite all packages used in a project
