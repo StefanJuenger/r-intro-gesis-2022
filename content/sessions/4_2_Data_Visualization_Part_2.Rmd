@@ -67,7 +67,7 @@ As in the previous sessions, we will use the data from the from the *ALLBUS/GGSS
 ```{r load-allbus}
 library(haven)
 
-allbus_2021_cda <- 
+allbus_2021_dvII <- 
   read_spss("./data/allbus_2021/ZA5280_v1-0-0.sav")
 ```
 
@@ -82,12 +82,12 @@ We are still interested in xenophobic attitudes, like to investigate how social 
 ```{r central-variables}
 library(dplyr)
 
-allbus_2021_cda <-
-  allbus_2021_cda %>% 
+allbus_2021_dvII <-
+  allbus_2021_dvII %>% 
   mutate(
-    xenophobia = rowSums(across(ma01b:ma04)) - 4, # sum score
+    xenophobia = rowSums(across(ma01b:ma04, ~as.numeric(.x))) - 4, # sum score
     trust = ifelse(st01 == 1, 1, 0), # dichotomization
-    contact = rowSums(across(mc01:mc04)) * -1 + 8, # sum score + inversion
+    contact = rowSums(across(mc01:mc04, ~as.numeric(.x))) * -1 + 8, # sum score + inversion
     afd = ifelse(pv01 == 42, 1, 0)
   )
 ```
@@ -102,7 +102,7 @@ We start with estimating a linear regression model including our variables of in
 linear_model <- 
   lm(
     xenophobia ~ age + sex + eastwest + trust + contact + afd, 
-    data = allbus_2021_cda
+    data = allbus_2021_dvII
   )
 
 library(parameters)
@@ -189,24 +189,6 @@ check_heteroscedasticity(
 
 ---
 
-## Check outliers (`easystats`)
-
-The same applies for outlier analysis.
-
-.pull-left[
-```{r check-outliers, eval = FALSE}
-check_outliers(linear_model) %>% 
-  plot()
-```
-]
-
-.pull-right[
-```{r ref.label = "check-outliers", echo = FALSE, out.width = "90%"}
-```
-]
-
----
-
 ## There is more
 
 In the collection of `easystats` packages, there are [way more procedures](https://easystats.github.io/see/articles/performance.html) you can apply to check your models. To replicate the summary plot from `base R` with some nicer formatting, we can use the following function from the `performance` package:
@@ -226,9 +208,9 @@ check_model(linear_model)
 
 class: center, middle
 
-# [Exercise](https://jobreu.github.io/r-intro-gesis-2021/exercises/Exercise_4_2_1_Plotting_Diagnostics.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+# [Exercise](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_4_2_1_Plotting_Diagnostics.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
 
-## [Solutions](https://jobreu.github.io/r-intro-gesis-2021/solutions/Exercise_4_2_1_Plotting_Diagnostics.html)
+## [Solutions](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_4_2_1_Plotting_Diagnostics.html)
 
 ---
 
@@ -385,7 +367,7 @@ Let's now turn to a possible interaction between age and contact. Does contact t
 linear_model_interaction <-
   lm(
     xenophobia ~ age + sex + eastwest + trust + contact + afd + age:contact,
-    data = allbus_2021_cda
+    data = allbus_2021_dvII
   )
 
 model_parameters(linear_model_interaction)
@@ -451,9 +433,9 @@ linear_model_interaction %>%
 
 class: center, middle
 
-# [Exercise](https://jobreu.github.io/r-intro-gesis-2021/exercises/Exercise_4_2_2_Plotting_a_Regression.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+# [Exercise](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_4_2_2_Plotting_a_Regression.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
 
-## [Solutions](https://jobreu.github.io/r-intro-gesis-2021/solutions/Exercise_4_2_2_Plotting_a_Regression.html)
+## [Solutions](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_4_2_2_Plotting_a_Regression.html)
 
 ---
 
@@ -473,10 +455,10 @@ We then can run a logistic regression based on the binary variable from the medi
 
 ```{r log-reg}
 linear_model_plain <-
-  lm(xenophobia ~ trust + contact + afd, data = allbus_2021_cda)
+  lm(xenophobia ~ trust + contact + afd, data = allbus_2021_dvII)
 
 linear_model_controls <-
-  lm(xenophobia ~ age + sex + eastwest + trust + contact + afd, data = allbus_2021_cda)
+  lm(xenophobia ~ age + sex + eastwest + trust + contact + afd, data = allbus_2021_dvII)
 
 model_parameters(linear_model_plain)
 
@@ -817,9 +799,9 @@ Things can get messy if we have to work with statistical models that are not inc
 
 class: center, middle
 
-# [Exercise](https://jobreu.github.io/r-intro-gesis-2021/exercises/Exercise_4_2_3_Combining_Predictions.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+# [Exercise](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_4_2_3_Combining_Predictions.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
 
-## [Solutions](https://jobreu.github.io/r-intro-gesis-2021/solutions/Exercise_4_2_3_Combining_Predictions.html)
+## [Solutions](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_4_2_3_Combining_Predictions.html)
 
 ---
 
