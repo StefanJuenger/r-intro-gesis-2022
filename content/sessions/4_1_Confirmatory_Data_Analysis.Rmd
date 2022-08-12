@@ -480,6 +480,23 @@ contrasts(allbus_2021_cda$party) <-
 
 ---
 
+## Sidenote: weighting
+
+Of course, you also can use, e.g., survey design weights to adjust to estimates in `R`. For the `lm()` function, you would use the `weights` option.
+
+```{r weight}
+weighted_regression <-
+  lm(
+    xenophobia ~ age + sex + trust + contact + party,
+    weights = wghtpew,
+    data = allbus_2021_cda
+  )
+
+summary(weighted_regression)
+```
+
+---
+
 ## Generalized linear regression
 
 What we have seen so far are estimates for linear OLS regression models. A standard `R` installation provides a multitude of other estimators/link functions, so-called family objects, e.g., binomial logistic or Poisson regression models through the `glm()` function. See `?family` for an overview.
