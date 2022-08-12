@@ -620,14 +620,7 @@ glimpse(allbus_immigration)
 
 *Note*: You can also move a column before a specific other column by providing a variable name to the `.before` argument (instead of `.after`).
 
----
 
-## `dplyr::relocate()`
-
-```{r, relocate-cartoon, out.width = "85%", echo = F}
-knitr::include_graphics("https://github.com/allisonhorst/stats-illustrations/blob/main/rstats-blanks/relocate_blank.png")
-```
-<small><small>Artwork by [Allison Horst](https://github.com/allisonhorst/stats-illustrations)</small></small>
 
 ---
 
@@ -774,7 +767,7 @@ dim(allbus_centrist)
 allbus_trust_high  <- allbus_2021 %>% 
   filter(if_all(starts_with ("pt"), ~ . >5)) # read: if the values of variables starting with mj in this df are > 5 (indicating high approval)
 
-dim(allbus_antisemit_high)
+dim(allbus_trust_high)
 ```
 
 *Note*: The helper function `if_any()` can be used to specify that at least one of the variables needs to match a certain criterion.
