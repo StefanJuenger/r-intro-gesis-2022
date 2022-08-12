@@ -329,6 +329,8 @@ By the end of the course participants should be:
 
 [3_2 Data Visualization Part 1](https://stefanjuenger.github.io/r-intro-gesis-2022/slides/3_2_Data_Visualization_Part_1.html)  
 
+[Appendix - Exploring Missingness & Outliers](https://stefanjuenger.github.io/r-intro-gesis-2022/slides/3_3_Appendix_Missingness_Outliers.html) 
+
 ### Exercises
 [3_1_1 Summary Statistics](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_3_1_1_Summary_Statistics.html)
 
