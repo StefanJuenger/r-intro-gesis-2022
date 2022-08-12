@@ -28,7 +28,7 @@ allbus_2021_cda_2 <-
 In case you have not done so yet, please also install the `performance` package for this set of exercises.
 
 ```{r pkgs, eval = F}
-if (!require(summaryrtools)) install.packages("performance")
+if (!require(performance)) install.packages("performance")
 ```
 
 In the following exercise, we will cover/repeat some of the basics of regression analysis in `R`.
