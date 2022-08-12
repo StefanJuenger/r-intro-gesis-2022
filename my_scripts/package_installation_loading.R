@@ -30,3 +30,6 @@ packages(
   "tibble",
   "tidyverse"
 )
+
+# please cite all packages you use in your publications and elsewhere
+# cite_packages()
