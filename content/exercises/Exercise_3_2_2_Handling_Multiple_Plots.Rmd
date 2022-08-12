@@ -1,0 +1,84 @@
+---
+title: 'Exercise 3_2_2: Handling Multiple Plots'
+author: 'Johannes Breuer, Stefan Jünger, Veronika Batzdorfer'
+date: 'Introduction to R for Data Analysis'
+---
+
+```{r child = "./content/config/exercises_setup.Rmd"}
+```
+
+Again, for your convenience, you can load the data for this exercise using the following code:
+
+```{r loadgpcovid, message=FALSE, eval=TRUE}
+library(dplyr)
+library(haven)
+
+allbus_2021_dvI <- 
+  read_sav(
+    "./data/allbus_2021ZA5280_v1-0-0.sav"
+  ) %>% 
+  sjlabelled::set_na(na = c(-1:-99, 97, 98))
+```
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Plot 4 bar plots of 4 variables of your choice from the data set in two rows and two columns.
+```
+
+```{block, opts.label = "clues"}
+You have to use the `par()` function in combination with its `mfrow` option.
+```
+
+```{r barplots, solution = TRUE}
+tab_1 <- table(allbus_2021_dvI$fr09)
+tab_2 <- table(allbus_2021_dvI$fr10)
+tab_3 <- table(allbus_2021_dvI$fr11)
+tab_4 <- table(allbus_2021_dvI$fr12)
+par(mfrow = c(2, 2))
+barplot(tab_1)
+barplot(tab_2)
+barplot(tab_3)
+barplot(tab_4)
+```
+
+That's interesting. One may wonder what the median is in each of these distributions. You know what's perfect for visualizing this statistic? Boxplots!
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Use the same plotting approach, but change the barplot to a boxplot.
+```
+
+```{block, opts.label = "clues"}
+Creating the tables beforehand is not needed anymore.
+```
+
+```{r boxplots, solution = TRUE}
+par(mfrow = c(2, 2))
+boxplot(allbus_2021_dvI$fr09)
+boxplot(allbus_2021_dvI$fr10)
+boxplot(allbus_2021_dvI$fr11)
+boxplot(allbus_2021_dvI$fr12)
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Store the boxplots from the previous exercises combined in one `png` image.
+```
+
+```{block, opts.label = "clues"}
+The name of the function is the same as the file format we want for out output (with the required argument of a file path).
+```
+
+```{r png, solution = TRUE}
+png("Boxlots.png")
+par(mfrow = c(2, 2))
+boxplot(allbus_2021_dvI$fr09)
+boxplot(allbus_2021_dvI$fr10)
+boxplot(allbus_2021_dvI$fr11)
+boxplot(allbus_2021_dvI$fr12)
+
+dev.off()
+```
+
+Before we later start with the other exercises, you should clean your graphics device with `dev.off()`
+
+```{r cleandevice , message=FALSE}
+dev.off()
+```

@@ -69,7 +69,11 @@ There's more that we won't cover:
 
 As before, we will use the data from the from the *GESIS German General Social Survey (ALLBUS) 2021*.
 
-```{r load_allbus_2021}
+```{r load_allbus_2021_dvI }
+library(sjlabelled)
+library(tidyverse)
+library(haven)
+
 allbus_2021_dvI <- 
   haven::read_sav(
     "./data/allbus_2021ZA5280_v1-0-0.sav"
@@ -83,7 +87,10 @@ allbus_2021_dvI <-
         na.rm = TRUE
       )
   ) %>% 
-  ungroup()
+ 
+  remove_all_labels() %>% 
+  ungroup() %>% 
+  as_tibble()
 ```
 
 ---
@@ -96,7 +103,7 @@ A standard `R` installation doesn't require any additional packages for creating
 
 .pull-left[
 ```{r graphics_barplot, eval = FALSE}
-hist(allbus_2021$sum_trust, breaks =15)
+hist(allbus_2021_dvI$sum_trust, breaks =15)
 ```
 ]
 
@@ -112,7 +119,7 @@ The most basic function to plot in R is `plot()`.
 
 .pull-left[
 ```{r basic_plot, eval = FALSE}
-plot(allbus_2021$sum_trust)
+plot(allbus_2021_dvI$sum_trust)
 ```
 ]
 
@@ -127,8 +134,8 @@ plot(allbus_2021$sum_trust)
 .pull-left[
 ```{r basic_scatter, eval = FALSE}
 plot(
-  allbus_2021$agec, 
-  allbus_2021$sum_trust
+  allbus_2021_dvI$agec, 
+  allbus_2021_dvI$sum_trust
 )
 ```
 ]
@@ -144,8 +151,8 @@ plot(
 .pull-left[
 ```{r basic_scatter_jittered, eval = FALSE}
 plot(
-  jitter(allbus_2021$agec, 2), 
-  jitter(allbus_2021$sum_trust, 2),
+  jitter(allbus_2021_dvI$agec, 2), 
+  jitter(allbus_2021_dvI$sum_trust, 2),
   pch = 16
 )
 ```
@@ -162,8 +169,8 @@ plot(
 .pull-left[
 ```{r titles_labels, eval = FALSE}
 plot(
-  jitter(allbus_2021$agec, 2), 
-  jitter(allbus_2021$sum_trust, 2),
+  jitter(allbus_2021_dvI$agec, 2), 
+  jitter(allbus_2021_dvI$sum_trust, 2),
   pch = 16,
   main = 
     "Relationship Age and Trust in Institutions",
@@ -186,34 +193,20 @@ plot(
 .tinyish[
 .pull-left[
 ```{r axis_labels, eval = FALSE}
-plot(
-  jitter(allbus_2021$agec, 2), 
-  jitter(allbus_2021$sum_trust, 2),
-  pch = 16,
-  main = 
-    "Relationship Age and Trust in Institutions",
-  xlab = 
-    "Age of Respondents",
-  ylab = 
-    "Trust in Institutions",
-  yaxt = 
-    "n"
-)
-axis(
-  side = 2, 
-  at = 1:8,
-  labels = c(
-    "1-no trust at all", 
-    "2 ",
-    "3 ",
-    "4 ", 
-    "5 ",
-    "6 ",
-    "7-very high trust",
-    ""
-  ),
- las = 3, cex.axis =0.7
-)
+ 
+boxplot(sum_trust ~ agec,
+        data = allbus_2021_dvI,
+        lwd = 2, 
+        main = "Relationship Age and Trust in Institutions",
+        xlab = "Age of Respondents",
+        ylab = 'Trust in Institutions')
+
+  stripchart(sum_trust ~ agec, vertical = TRUE,
+             data = allbus_2021_dvI, 
+             method = "jitter",
+             add = TRUE,
+             pch = 1)
+
 ```
 ]
 ]
@@ -231,18 +224,12 @@ Adding more and more elements to your plot also means that the code you have to 
 .tinyish[
 .pull-left[
 ```{r record_plot, eval = FALSE}
-plot(
-  jitter(allbus_2021$agec, 2), 
-  jitter(allbus_2021$sum_trust, 2),
-  pch = 16,
-  main = 
-    "Relationship Age and Trust in Institutions",
-  xlab = 
-    "Age of Respondents",
-  ylab = 
-    "Trust in Institutions",
-  yaxt = "n"
-)
+boxplot(sum_trust ~ agec,
+        data = allbus_2021_dvI,
+        lwd = 2, 
+        main = "Relationship Age and Trust in Institutions",
+        xlab = "Age of Respondents",
+        ylab = 'Trust in Institutions')
 
 my_scatterplot <- recordPlot()
 ```
@@ -261,22 +248,13 @@ my_scatterplot <- recordPlot()
 .tinyish[
 .pull-left[
 ```{r apply_recording, eval = FALSE}
-my_scatterplot
-axis(
-  side = 2, 
-  at = 1:8,
-  labels = c(
-    "1-no trust at all", 
-    "2 ",
-    "3 ",
-    "4 ", 
-    "5 ",
-    "6 ",
-    "7-very high trust",
-    ""
-  ),
-   las = 3, cex.axis = 0.7
-)
+
+  stripchart(sum_trust ~ agec, vertical = TRUE,
+             data = allbus_2021_dvI, 
+             method = "jitter",
+             add = TRUE,
+             pch = 1)
+
 ```
 ]
 ]
@@ -349,8 +327,8 @@ We can also create different *plot types*, such as
 .pull-left[
 ```{r boxplot, eval = FALSE}
 boxplot(
-  allbus_2021$sum_trust ~
-    as.factor(allbus_2021$agec)
+  allbus_2021_dvI$sum_trust ~
+    allbus_2021_dvI$eastwest
 )
 ```
 ]
@@ -398,7 +376,7 @@ It's nice that `R` provides such pleasant plotting opportunities. However, to in
 ## Exporting with *RStudio*
 
 ```{r echo = FALSE}
-woRkshoptools::include_picture("saveGraphic.PNG")
+knitr::include_graphics("https://github.com/jobreu/r-intro-gesis-2021/blob/main/content/img/saveGraphic.PNG?raw=true")
 ```
 
 ---
@@ -408,19 +386,19 @@ Alternatively, you can also export plots with the commands `png()`, `pdf()` or `
 
 ```{r, eval = FALSE}
 png("Plot.png")
-plot(allbus_2021$agec)
+plot(allbus_2021_dvI$agec)
 dev.off()
 ```
 
 ```{r, eval = FALSE}
 pdf("Plot.pdf")
-plot(allbus_2021$agec)
+plot(allbus_2021_dvI$agec)
 dev.off()
 ```
 
 ```{r, eval = FALSE}
 jpeg("Plot.jpeg")
-plot(allbus_2021$agec)
+plot(allbus_2021_dvI$agec)
 dev.off()
 ```
 
@@ -469,13 +447,13 @@ plot_call +
 ## `ggplot2` examples 
 .pull-left[
 ```{r radar fig, echo = FALSE}
-woRkshoptools::include_picture("143_radar_chart_multi_indiv_2.png")
+knitr::include_graphics("https://github.com/jobreu/r-intro-gesis-2021/blob/main/content/img/143_radar_chart_multi_indiv_2.png?raw=true")
 ```
 ]
 
 .pull-right[
 ```{r density fig, echo = FALSE}
-woRkshoptools::include_picture("21_ggplot2_ddensity_plot.png")
+knitr::include_graphics("https://github.com/jobreu/r-intro-gesis-2021/blob/main/content/img/21_ggplot2_ddensity_plot.png?raw=true")
 ```
 ]
 
@@ -487,13 +465,13 @@ woRkshoptools::include_picture("21_ggplot2_ddensity_plot.png")
 ## `ggplot2` examples 
 .pull-left[
 ```{r scatter fig, echo = FALSE}
-woRkshoptools::include_picture("51_scatterplot_linear_model_with_CI_ggplot2.png")
+knitr::include_graphics("https://github.com/jobreu/r-intro-gesis-2021/blob/main/content/img/51_scatterplot_linear_model_with_CI_ggplot2.png?raw=true")
 ```
 ]
 
 .pull-right[
 ```{r map fig, echo = FALSE}
-woRkshoptools::include_picture("328_Hexbin_map_USA_4.png")
+knitr::include_graphics("https://github.com/jobreu/r-intro-gesis-2021/blob/main/content/img/328_Hexbin_map_USA_4.png?raw=true")
 ```
 ]
 
@@ -506,7 +484,7 @@ woRkshoptools::include_picture("328_Hexbin_map_USA_4.png")
 .tinyish[
 .pull-left[
 ```{r base_barplot, eval = FALSE}
-ggplot(allbus_2021, aes(x = agec)) + 
+ggplot(allbus_2021_dvI , aes(x = agec)) + 
   geom_bar()
 ```
 ]
@@ -525,7 +503,7 @@ ggplot(allbus_2021, aes(x = agec)) +
 .pull-left[
 ```{r base_boxplot, eval = FALSE}
 ggplot(
-  allbus_2021, 
+  allbus_2021_dvI , 
   aes(
     x = as.factor(agec), 
     y = sum_trust)
@@ -573,7 +551,7 @@ You can use one single data frame to create a plot in `ggplot2`. This creates a 
 <br>
 
 ```{r data_science_pic, out.width = "65%", echo = FALSE}
-woRkshoptools::include_picture("data-science_man.png")
+knitr::include_graphics("https://github.com/jobreu/r-intro-gesis-2021/blob/main/content/img/data-science_man.png?raw=true")
 ```
 
 <small><small>Source: http://r4ds.had.co.nz</small></small>
@@ -593,7 +571,7 @@ We may want to get used to it as this format has some benefits:
 
 .pull-right[
 ```{r long_pic, out.width = "40%", echo = FALSE}
-woRkshoptools::include_picture("long.png")
+knitr::include_graphics("https://github.com/jobreu/r-intro-gesis-2021/blob/main/content/img/long.png?raw=true")
 ```
 <small><small>Source: https://github.com/gadenbuie/tidyexplain#tidy-data</small></small>
 ]
@@ -616,7 +594,7 @@ We will systematically explore which elements are used in `ggplot` in this sessi
 .pull-left[
 ```{r scatter, eval = FALSE}
 ggplot(
-  data = allbus_2021,
+  data = allbus_2021_dvI,
   aes(
     x = agec, 
     y = sum_trust
@@ -640,7 +618,7 @@ ggplot(
 .pull-left[
 ```{r jitter, eval = FALSE}
 ggplot(
-  data = allbus_2021,
+  data = allbus_2021_dvI,
   aes(
     x = agec, 
     y = sum_trust
@@ -694,7 +672,7 @@ ggplot()
 
 .pull-left[
 ```{r ggplot_data, eval = FALSE}
-ggplot(data = allbus_2021)
+ggplot(data = allbus_2021_dvI )
 ```
 ]
 
@@ -713,7 +691,7 @@ ggplot(data = allbus_2021)
 `ggplot` requires information about the variables to plot.
 
 ```{r ggplot_aes, eval = FALSE}
-ggplot(data = allbus_2021) +
+ggplot(data = allbus_2021_dvI ) +
   aes(x = agec, y = sum_trust)
 ```
 ]
@@ -732,7 +710,7 @@ ggplot(data = allbus_2021) +
 Finally, `ggplot` needs information *how* to plot the variables.
 
 ```{r ggplot_geom, eval = FALSE}
-ggplot(data = allbus_2021) +
+ggplot(data = allbus_2021_dvI ) +
   aes(x = agec, y = sum_trust) +
   geom_point()
 ```
@@ -752,8 +730,8 @@ ggplot(data = allbus_2021) +
 We can also add more than one `geom`.
 
 ```{r ggplot_line, eval = FALSE}
-ggplot(data = allbus_2021) +
-  aes(x = eastwest, y = sum_trust) +
+ggplot(data = allbus_2021_dvI) +
+  aes(x = agec, y = sum_trust) +
   geom_jitter() +
   geom_smooth(method = "lm", se = FALSE)
 ```
@@ -783,15 +761,15 @@ class: center, middle
 For creating grouped plots, we need grouping variables...
 
 ```{r left-right}
-allbus_2021 <-
-  allbus_2021 %>% 
+allbus_2021_dvI  <-
+  allbus_2021_dvI  %>% 
   sjlabelled::remove_all_labels() %>% 
   mutate(
     pol_leaning_cat = 
       case_when(
-        between(political_orientation, 0, 3) ~ "left",
-        between(political_orientation, 4, 7) ~ "center",
-        political_orientation > 7 ~ "right"
+        between(pa01, 0, 3) ~ "left",
+        between(pa01, 4, 7) ~ "center",
+       pa01 > 7 ~ "right"
       ) 
   ) %>% 
   filter(pol_leaning_cat != "NA")
@@ -807,11 +785,11 @@ We can add different colors for different groups in our data.
 
 ```{r ggplot_group, eval = FALSE}
 ggplot(
-  data = allbus_2021,
+  data = allbus_2021_dvI,
   aes(
     x = agec, 
     y = sum_trust, 
-    group = eastwest
+    group = pol_leaning_cat
   )
 ) +
   geom_smooth(method = "lm", se = FALSE)
@@ -832,12 +810,12 @@ We can also change the colors that are used in the plot.
 
 ```{r ggplot_group_man, eval = FALSE}
 ggplot(
-  data = allbus_2021,
+  data = allbus_2021_dvI ,
   aes(
     x = agec, 
     y = sum_trust, 
-    group = eastwest,
-    color = eastwest
+    group = pol_leaning_cat,
+    color = pol_leaning_cat
     
   )
 ) +
@@ -859,7 +837,7 @@ The legend is drawn automatically, that's handy!
 .pull-left[
 ```{r ggplot_group_dark2, eval = FALSE}
 ggplot(
-  data = allbus_2021,
+  data = allbus_2021_dvI ,
   aes(
     x = agec, 
     y = sum_trust, 
@@ -908,7 +886,7 @@ If you want to, you can play around with some of those themes in the exercises f
 .pull-left[
 ```{r facet_wrap, eval = FALSE}
 ggplot(
-  data = allbus_2021,
+  data = allbus_2021_dvI ,
   aes(
     x = agec, 
     y = sum_trust
@@ -946,7 +924,7 @@ The most direct interface for manipulating your theme is the `theme()` argument.
 .pull-left[
 ```{r grid_layout, eval = FALSE}
 ggplot(
-  data = allbus_2021,
+  data = allbus_2021_dvI,
   aes(
     x = agec, 
     y = sum_trust
@@ -981,7 +959,7 @@ ggplot(
 .pull-left[
 ```{r axis_labels-ggplot, eval = FALSE}
 ggplot(
-  data = allbus_2021,
+  data = allbus_2021_dvI ,
   aes(
     x = agec, 
     y = sum_trust
@@ -1017,19 +995,19 @@ ggplot(
 ## A note on plotting options
 
 .pull-left[
-Admittedly, working with combined aesthetics and different data inputs can become challenging.
+Working with combined aesthetics and different data inputs can become challenging.
 
 Particularly, plotting similar aesthetics which interfere with the automatic procedures can create conflicts.
 
 Some 'favourites' include:
 - Multiple legends
 - and various color scales for similar `geoms` 
-- ... and there's more!
+
 ]
 
 .pull-right[
 ```{r der_schrei, echo = FALSE}
-woRkshoptools::include_picture("800px-The_Scream.jpg")
+knitr::include_graphics("https://github.com/jobreu/r-intro-gesis-2021/blob/main/content/img/800px-The_Scream.jpg?raw=true")
 ```
 ]
 
@@ -1043,11 +1021,12 @@ woRkshoptools::include_picture("800px-The_Scream.jpg")
 In contrast to standard `R` plots, `ggplot2` outputs are standard objects like any other object in `R` (they are lists). So there is no graphics device involved from which we have to record our plot to re-use it later. We can just use it directly.
 
 ```{r eval = FALSE}
-my_fancy_plot <-
-  ggplot(
+my_fancy_plot <- 
+  ggplot(data = allbus_2021_dvI,
   aes(
     x = agec, 
     y = sum_trust
+  )
   ) + 
   geom_point()
 
@@ -1074,14 +1053,14 @@ library(patchwork)
 
 my_barplot <- 
   ggplot(
-    allbus_2021, 
+    allbus_2021_dvI , 
     aes(x = agec)
   ) + 
   geom_bar()
 
 my_boxplot <-  
   ggplot(
-    allbus_2021, 
+    allbus_2021_dvI , 
     aes(y = agec)
   ) + 
   geom_boxplot()
@@ -1114,11 +1093,13 @@ my_barplot / my_boxplot
 ## Combining with `base R` graphics
 .pull-left[
 ```{r combine_base, eval = FALSE}
+ library(gridGraphics)
+
 (my_barplot | 
-   ~barplot(table(allbus_2021$agec))
+   ~barplot(table(allbus_2021_dvI$agec))
 ) /
   (my_boxplot | 
-     ~boxplot(allbus_2021$agec)
+     ~boxplot(allbus_2021_dvI$agec)
   )
 ```
 ]
@@ -1145,7 +1126,7 @@ Exporting `ggplot2` graphics is fairly easy with the `ggsave()` function. It aut
 ```{r eval = FALSE}
 nice_plot <- 
   ggplot(
-    allbus_2021, 
+    allbus_2021_dvI , 
     aes(x = agec)
   ) + 
   geom_bar()
@@ -1167,13 +1148,13 @@ In the session on *Exploratory Data Analysis* (EDA), we have said that visualiza
 
 ---
 
-## Plotting structure of missing data
+## Plotting the structure of missing data
 
 .pull-left[
 ```{r missing-plot, eval = FALSE}
 library(visdat)
 
-vis_miss(allbus_2021[,3:20])
+vis_miss(allbus_2021_dvI [,3:20])
 ```
 ]
 
@@ -1190,11 +1171,11 @@ vis_miss(allbus_2021[,3:20])
 ```{r fancy_barplot_i, eval = FALSE}
 library(scales)
 
-allbus_2021 %>% 
+allbus_2021_dvI %>% 
   ggplot(
     aes(
-      x = education_cat, 
-      fill = education_cat
+      x = educ, 
+      fill = educ
     )
   ) + 
   geom_bar(
@@ -1220,9 +1201,8 @@ allbus_2021 %>%
 
 .pull-left[
 ```{r fancy_barplot_ii, eval = FALSE}
-#allbus_2021$pv01<-haven::as_factor(allbus_2021$pv01)
 
-allbus_2021 %>% 
+allbus_2021_dvI  %>% 
   mutate(
     choice_of_party = 
       recode_factor(
@@ -1253,45 +1233,6 @@ allbus_2021 %>%
 ```
 ]
 
----
-
-## Barplots in descriptive statistics
-
-```{r barplot-descriptives, eval = FALSE}
-library(summarytools)
-
-allbus_2021 %>% 
-  select(educ, sum_trust) %>% 
-  dfSummary( 
-    plain.ascii  = FALSE,
-    style        = 'grid',
-    varnumbers = FALSE,
-    valid.col    = FALSE,
-    tmp.img.dir  = "/tmp"
-  ) %>% 
-  print(method = "render")
-```
-
----
-
-## Barplots in descriptive statistics
-
-.tinyish[
-```{r barplot-descriptives-print, echo = FALSE}
-library(summarytools)
-
-allbus_2021 %>% 
-  select(educ, sum_trust) %>% 
-  dfSummary( 
-    plain.ascii  = FALSE,
-    style        = 'grid',
-    varnumbers = FALSE,
-    valid.col    = FALSE,
-    tmp.img.dir  = "/tmp"
-  ) %>% 
-  print(method = "render")
-```
-]
 
 ---
 
@@ -1302,7 +1243,7 @@ allbus_2021 %>%
 library(correlation)
 library(ggraph)
 
-allbus_2021 %>% 
+allbus_2021_dvI  %>% 
   select(pt01:pt20) %>% 
   correlation() %>% 
   plot()
@@ -1322,7 +1263,7 @@ allbus_2021 %>%
 ```{r correlation-plot-ii, eval = FALSE}
 library(GGally)
 
-allbus_2021 %>% 
+allbus_2021_dvI  %>% 
   select(pt01:pt20) %>% 
   ggcorr(
     label = TRUE,

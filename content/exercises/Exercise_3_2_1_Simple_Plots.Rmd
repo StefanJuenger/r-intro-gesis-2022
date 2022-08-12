@@ -1,0 +1,68 @@
+---
+title: 'Exercise 3_2_1: A Simple Plot'
+author: 'Johannes Breuer, Stefan Jünger, & Veronika Batzdorfer'
+date: 'Introduction to R for Data Analysis'
+---
+
+```{r child = "./content/config/exercises_setup.Rmd"}
+```
+
+Plotting data is fun. We also do it for data exploration (see the section on *Exploratory Data Analysis*). In these exercises, however, we just want to familiarize ourselves with some of the graphic facilities in R.
+
+So let's start with a simple task: creating a simple scatter plot. For this purpose, we first load the *German General Social Survey - ALLBUS 2021 SUBSET*.
+
+```{r loadgpcovid, message=FALSE, eval=TRUE}
+library(dplyr)
+library(haven)
+
+allbus_2021_dvI <- 
+  read_sav(
+    "./data/allbus_2021ZA5280_v1-0-0.sav"
+  ) %>% 
+  sjlabelled::set_na(na = c(-1:-99, 97:98))
+```
+
+Now let's plot an actual variable from the dataset.
+
+```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Create a scatter plot for the variables `pa01` (political_orientation) and `fr03b` (children suffer under working mothers).
+```
+
+```{block, opts.label = "clues"}
+You simply need the `plot()` command.
+```
+
+```{r scatter, solution = TRUE}
+plot(allbus_2021_dvI$pa01, allbus_2021_dvI$fr03b)
+```
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Add some jitter to the scatter plot.
+```
+
+```{block, opts.label = "clues"}
+You need the `jitter()` function. Have a look at `?jitter` for more details on using the function.
+```
+
+```{r jitter, solution = TRUE}
+plot(
+  jitter(allbus_2021_dvI$pa01, 2), 
+  jitter(allbus_2021_dvI$fr03b, 2)
+)
+```
+
+```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Add some color of your choice to the plot.
+```
+
+```{block, opts.label = "clues"}
+Did you check out the `ColourPicker` add-in for more modern colors?
+```
+
+```{r colorscatter, solution = TRUE}
+plot(
+  jitter(allbus_2021_dvI$pa01, 2), 
+  jitter(allbus_2021_dvI$fr03b, 2),
+  col = c("#1C86EE", "#FFFFFF", "#FFFFFF")
+)
+```
