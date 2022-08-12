@@ -2,7 +2,7 @@
 title: "Introduction to R for Data Analysis"
 subtitle: "Data Types, Import & Export"
 author: "Johannes Breuer, Stefan Jünger & Veronika Batzdorfer"
-date: "2021-08-02"
+date: "2021-08-15"
 presenter: Stefan
 editor_options: 
   chunk_output_type: console
