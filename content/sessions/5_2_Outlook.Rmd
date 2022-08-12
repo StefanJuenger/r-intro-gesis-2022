@@ -1,0 +1,301 @@
+---
+title: "Introduction to R for Data Analysis"
+subtitle: "Outlook"
+author: "Johannes Breuer, Stefan Jünger, Veronika Batzdorfer"
+date: "2021-08-19"
+presenter: Stefan
+editor_options: 
+  chunk_output_type: console
+---
+
+layout: true 
+
+```{r child = "./content/config/sessions_setup.Rmd"}
+```
+
+---
+
+## Recap: Course schedule - Day 1
+
+```{r schedule-1, echo = F}
+course_content_1
+```
+
+---
+
+## Recap: Course schedule - Day 2
+
+```{r schedule-2, echo = F}
+course_content_2
+```
+
+---
+
+## Recap: Course schedule - Day 3
+
+```{r schedule-3, echo = F}
+course_content_3
+```
+
+---
+
+## Recap: Course schedule - Day 4
+
+```{r schedule-4, echo = F}
+course_content_4
+```
+
+---
+
+## Recap: Course schedule - Day 5
+
+```{r schedule-5, echo = F}
+course_content_5
+```
+
+---
+
+## Our jou`R`ney this week (hopefully)
+
+```{r mindblowing, echo = FALSE, out.width = "85%"}
+woRkshoptools::include_picture("r_pkgs_mindblowing.png")
+```
+.footnote[[Source](https://res.cloudinary.com/syknapptic/image/upload/v1521320144/tidyverse_meme_oceake.png)]
+
+---
+
+## Where to go from here?
+
+Hopefully, after this week, you feel prepared to do your next steps in `R`.
+
+Some recommendations for continuing your jou`R`ney:
+
+- Keep up working with `R`!
+- If time permits, do stuff you usually do in `SPSS` or `Stata` in `R`, even when it's harder
+- Try to do at least one research task solely in `R` (one analysis, a whole paper, a report, etc.)
+- Look for tutorials and guides online
+  - trust us, there's way more (good & free) online material for `R` than there is, e.g., for `SPSS` or `Stata`
+
+---
+
+## Resources: Introductory books
+
+[R for Data Science](https://r4ds.had.co.nz/) by Hadley Wickham
+
+[R Cookbook: Proven recipes for data analysis, statistics, and graphics](https://rc2e.com/) by JD Long & Paul Teetor
+
+[Hands-On Programming with R](https://rstudio-education.github.io/hopr/) by Garrett Grolemund
+
+[R Programming for Data Science](https://bookdown.org/rdpeng/rprogdatascience/) by Roger D. Peng
+
+[Quantitative Social Science Data with R](https://uk.sagepub.com/en-gb/eur/quantitative-social-science-data-with-r/book257236) by Brian J. Fogarty
+
+[Introduction to R for Social Scientists - A Tidy Programming Approach](https://www.routledge.com/Introduction-to-R-for-Social-Scientists-A-Tidy-Programming-Approach/Kennedy-Waggoner/p/book/9780367460723) by Ryan Kennedy & Philip D. Waggoner
+
+[Discovering Statistics Using R](https://uk.sagepub.com/en-gb/eur/discovering-statistics-using-r/book236067) by Andy Field, Jeremy Miles, & Zoe Field
+
+---
+
+## Resources: Online courses & tutorials
+
+[Overview of resources *learnR4free* by Mine Dogucu](https://www.learnr4free.com/)
+
+[Collection of *YouTube* channels by Flavio Azevado](http://flavioazevedo.com/stats-and-r-blog/2016/9/13/learning-r-on-youtube)
+
+[*swirl* - Learn `R` in `R`](https://swirlstats.com/)
+
+Learning `R` (and statistics) with a cute story and beautiful illustrations: [Teacups, Giraffes, & Statistics by Hasse Wallum & Desirée de Leon](https://tinystats.github.io/teacups-giraffes-and-statistics/)
+
+---
+
+## Resources: Cheatsheets
+
+*RStudio* offers a good collection of [cheatsheets for R](https://www.rstudio.com/resources/cheatsheets/).
+
+The following ones are of particular interest for this workshop:
+
+- [RStudio IDE Cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/rstudio-ide.pdf)
+
+- [Data Import Cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf)
+
+- [Data Transformation Cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf)
+
+- [Data Visualization Cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/data-visualization-2.1.pdf)
+
+- [R Markdown Cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/rmarkdown-2.0.pdf)
+
+---
+
+## Working with other data types
+
+Johannes, Stefan, and Veronika use different data types in their daily work:
+- digital trace data (Johannes/Veronika) <sup>*</sup>
+- georeferenced/geospatial data (Stefan)<sup>**</sup>
+
+**Remember that `R` is data-agnostic! It can serve as a fancy data science tool for extracting social media data but also as a full-blown Geographic Information System (GIS)**
+
+
+.footnote[
+<sup>*</sup> see, e.g., https://github.com/jobreu/twitter-linking-workshop-2021 or https://github.com/jobreu/youtube-workshop-gesis-2021
+
+<sup>**</sup> see, e.g., https://github.com/StefanJuenger/gesis-workshop-geospatial-techniques-R or https://github.com/StefanJuenger/esra-workshop-first-steps-R-GIS
+]
+
+---
+
+## Working with text data in `R`
+
+As with almost everything else, there are many great resources for working with text data in `R`. Two good options (and starting points) are:
+- the [`tidytext` package](https://juliasilge.github.io/tidytext/) and the "accompanying" book [*Text Mining with R: A Tidy Approach*](https://www.tidytextmining.com/) by Julia Silge & David Robinson
+- the [`quanteda` package](https://quanteda.io/) and its accompanying [tutorials](https://tutorials.quanteda.io/)
+
+- a nice and free self-paced online course is [*Text mining in R for the social sciences and digital humanities*](https://tm4ss.github.io/docs/index.html) by Andreas Niekler and Gregor Wiedemann
+
+---
+
+## What Are Geospatial Data?
+
+.pull-left[
+Data with a direct spatial reference $\rightarrow$ **geo-coordinates**
+- Information about geometries
+- Optional: Content in relation to the geometries
+
+Can be projected jointly in one single space
+- Allows data linking and extraction of substantial information
+]
+
+.pull-right[
+```{r pic-geometries-1, echo = FALSE, out.width = "85%"}
+woRkshoptools::include_picture("fig_geometries.png")
+```
+
+.tinyisher[Sources: OpenStreetMap / GEOFABRIK (2018), City of Cologne (2014), and the Statistical Offices of the Federation and the Länder (2016) / Jünger, 2019]
+]
+
+---
+
+## Mapping is so easy nowadays
+
+.pull-left[
+```{r mapsf, eval = FALSE}
+library(mapsf)
+
+mtq <- mf_get_mtq()
+
+mf_map(x = mtq)
+mf_map(x = mtq, var = "POP", type = "prop")
+mf_layout(
+  title = "Population in Martinique", 
+  credits = "T. Giraud; Sources: INSEE & IGN, 2018"
+)
+```
+]
+
+.pull-right[
+```{r mapsf-print, echo = FALSE}
+library(mapsf)
+
+mtq <- mf_get_mtq()
+
+mf_map(x = mtq)
+mf_map(x = mtq, var = "POP", type = "prop")
+mf_layout(
+  title = "Population in Martinique", 
+  credits = "T. Giraud; Sources: INSEE & IGN, 2018"
+)
+```
+]
+
+Example from: https://riatelab.github.io/mapsf/
+
+
+---
+
+## 'Web development' using `R`
+
+These days, a lot of `R` packages provide tools originally developed for the web. For example:
+- [bookdown](https://cran.r-project.org/web/packages/bookdown/index.html) enables you to publish books written in `R Markdown` online
+- [pkgdown](https://cran.r-project.org/web/packages/pkgdown/index.html) does the same for your own `R` packages
+- [blogdown](https://cran.r-project.org/web/packages/blogdown/index.html) is more general and helps you with creating websites (examples to follow)
+
+---
+
+## Shiny apps
+
+> Shiny is an R package that makes it easy to build interactive web apps straight from R. You can host standalone apps on a webpage or embed them in R Markdown documents or build dashboards. You can also extend your Shiny apps with CSS themes, htmlwidgets, and JavaScript actions.
+
+https://shiny.rstudio.com/
+
+---
+
+class: middle
+
+## Example 1: Movie Explorer
+
+.center[https://shiny.rstudio.com/gallery/movie-explorer.html]
+
+---
+
+class: middle
+
+## Example 2: CRAN explorer
+
+.center[https://gallery.shinyapps.io/cran-explorer/]
+
+---
+
+## Creating your own homepage with `R`
+
+.pull-left[
+```{r home-johannes, echo = FALSE}
+woRkshoptools::include_picture("homepage_johannes.png")
+```
+.center[.small[https://www.johannesbreuer.com/]]
+]
+
+.pull-right[
+```{r home-stefan, echo = FALSE}
+woRkshoptools::include_picture("homepage_stefan.png")
+```
+.center[.small[https://stefanjuenger.github.io/]]
+]
+
+.center[Powered by  [`blogdown`](https://cran.r-project.org/web/packages/blogdown/index.html) &[ Hugo Academic](https://academic-demo.netlify.app/)]
+
+---
+
+## Writing your own `R` packages
+
+.pull-left[
+At a certain point (not now!), you may want to consider writing your own `R` package
+- useful for creating reproducible code
+- great for distributing your work to others
+- for example, we created an [`R` package](https://stefanjuenger.github.io/woRkshoptools/) to facilitate working on our workshop materials
+]
+
+.pull-right[
+```{r r-packages, echo = FALSE}
+woRkshoptools::include_picture("r_packages.jpg")
+```
+[Read the book here!](https://r-pkgs.org/)
+]
+
+---
+
+class: middle
+
+## It's straightforward in `RStudio`
+
+```{r new-package, echo = FALSE, out.width = "75%"}
+woRkshoptools::include_picture("new_package.png")
+```
+
+---
+
+## Acknowledgements `r ji("heart")`
+
+All slides were created with the `R` package [`xaringan`](https://github.com/yihui/xaringan) which builds on [`remark.js`](https://remarkjs.com), [`knitr`](http://yihui.name/knitr), and [`RMarkdown`](https://rmarkdown.rstudio.com). The exercises were created with the [`unilur` package](https://github.com/koncina/unilur).  
+
+Please make sure to properly cite all data that you use for your research (archives usually provide suggested citations). Also make sure to cite the free and open-source software (FOSS) that you use, such as `R` and the packages for it. To find out how to properly cite an `R` package you can use the function `citation(packagename)` in `R`.
+
+We thank the *GESIS Training* team for taking good care of the organization of this course (and the whole Summer School) and all of you for participating!
