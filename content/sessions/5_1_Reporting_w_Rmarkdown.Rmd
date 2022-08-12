@@ -7,7 +7,7 @@ presenter: Veronika
 ---
 layout: true 
 
-```{r child = "../config/sessions_setup.Rmd"}
+```{r child = "./content/config/sessions_setup.Rmd"}
 ```
 
 ---
@@ -61,7 +61,7 @@ TL;DR of the Wikipedia article: `Markdown` is a lightweight language for text fo
 
 ## What does `R Markdown` do?
 
-```{r, rmarkdown-rocks-cartoon, out.width = "75%", echo = F}
+```{r, rmarkdown-rocks-cartoon, out.width = "40%", echo = F}
 knitr::include_graphics("https://github.com/rstudio/hex-stickers/blob/master/thumbs/rmarkdown.png?raw=true")
 ```
 
