@@ -20,7 +20,7 @@ You need the `haven` package for this. The file should be stored in the `data` f
 ```{r load_gp, solution = TRUE}
 library(haven)
 
-allbus_2021 <- read_dta("./data/allbus_2021/ZA5280_v1-0-0.dta")
+allbus_2021 <- read_spss("./data/allbus_2021/ZA5280_v1-0-0.sav")
 ```
 
 Unlike in flat files, such as CSV, the variables now have labels.
