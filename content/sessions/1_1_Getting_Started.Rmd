@@ -1112,37 +1112,7 @@ class: center, middle
 
 ---
 
-## Resources: Introductory books
-
-[R for Data Science](https://r4ds.had.co.nz/) by Hadley Wickham
-
-[R Cookbook: Proven recipes for data analysis, statistics, and graphics](https://rc2e.com/) by JD Long & Paul Teetor
-
-[Hands-On Programming with R](https://rstudio-education.github.io/hopr/) by Garrett Grolemund
-
-[R Programming for Data Science](https://bookdown.org/rdpeng/rprogdatascience/) by Roger D. Peng
-
-[Quantitative Social Science Data with R](https://uk.sagepub.com/en-gb/eur/quantitative-social-science-data-with-r/book257236) by Brian J. Fogarty
-
-[Introduction to R for Social Scientists - A Tidy Programming Approach](https://www.routledge.com/Introduction-to-R-for-Social-Scientists-A-Tidy-Programming-Approach/Kennedy-Waggoner/p/book/9780367460723) by Ryan Kennedy & Philip D. Waggoner
-
-[Quantitative Social Science: An Introduction in tidyverse](https://press.princeton.edu/books/hardcover/9780691222271/quantitative-social-science) by Kosuke Imai & Nora Webb Williams
-
----
-
-## Resources: Online courses & tutorials
-
-- Overview of resources
-  - [*learnR4free*](https://www.learnr4free.com/) by Mine Dogucu
-  - the [*Big Book of R*](https://www.bigbookofr.com/) by Oscar Baruffa
-
-- [*swirl* - Learn `R` in `R`](https://swirlstats.com/)
-
-- One of my personal favorites: Learning `R` (and statistics) with a cute story and beautiful illustrations: [Teacups, Giraffes, & Statistics by Hasse Wallum & Desirée de Leon](https://tinystats.github.io/teacups-giraffes-and-statistics/)
-
----
-
-## Resources: Cheatsheets
+## Cheatsheets
 
 *RStudio* offers a good collection of [cheatsheets for R](https://www.rstudio.com/resources/cheatsheets/).
 
