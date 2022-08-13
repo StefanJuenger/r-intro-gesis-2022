@@ -1,0 +1,106 @@
+---
+title: "Exploring data from the GESIS Panel Special Survey on the Coronavirus SARS-CoV-2 Outbreak in Germany"
+author: "R User"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    toc_float: true
+    code_folding: hide
+    theme: flatly
+    highlight: tango
+    code_download: true
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE)
+
+options(scipen = 15)
+```
+
+#Wrangling
+
+```{r load-wrangle-data, echo = FALSE}
+
+```
+
+# The data
+
+The data we use comes from the [German General Social Survey - ALLBUS 2021 ](https://search.gesis.org/research_data/ZA5280).We have selected ... variables of interest for our analysis. The dataset includes data for *N* = ... respondents. 
+
+
+## Missing data
+
+As not all of the respondents answered every question in the survey, we have missing data. Before we further explore the data, we want to know whether there are identifiable patterns of missingness in them.
+
+```{r vis-miss}
+
+```
+
+# Exploring the *German General Social Survey - ALLBUS 2021* dataset
+
+## Demographics
+
+We first want to look at gender, age (categories), education, and party vote in our sample.
+
+```{r demo-tables}
+
+```
+
+## Summary statistics
+
+Let's look at the summary statistic for the items on xenophobia.
+
+```{r summarystats}
+
+```
+
+## Distribution of variables
+
+We want to explore how some of the data for the question on life satisfaction and political orientation (left-right) are distributed in our sample.
+
+```{r density-satf}
+
+```
+
+```{r density-lr}
+
+```
+
+## Party affiliation and xenophobic attitudes
+
+How do xenophobic attitudes differ between supporters of different parties? 
+
+```{r party-xenoph}
+
+```
+
+# Analyses
+
+## Correlations
+
+We want to explore the correlations between political leaning, xenophobia, and life satisfaction.
+
+```{r correlations}
+  
+```
+
+## Regression analysis
+
+We use a logistic regression model to explore how trust in people is predicted by life satisfaction, mean xenophobic attitudes and the contact with foreigners.
+
+```{r regression}
+
+```
+
+The unstandardized regression coefficients *b* can be selected from the `tidy_model`.
+
+### Regression plots
+
+```{r regression-plots}
+
+```

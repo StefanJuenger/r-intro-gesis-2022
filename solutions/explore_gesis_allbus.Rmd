@@ -15,14 +15,16 @@ code_download: true
 df_print: paged
 ---
   
-  ```{r setup, include=FALSE}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
                       message = FALSE)
 
 options(scipen = 15)
 ```
 
-```{r load-wrangle-data, echo = FALSE}
+#Wrangling
+
+```{r load-wrangle-data, echo = TRUE}
 library(tidyverse)
 library(naniar)
 library(sjlabelled)
@@ -32,84 +34,72 @@ inverter <- function (var) {
   max(var, na.rm = TRUE) - var + 1
 }
 
-allbus_2021 <- read_sav("./data//ZA5280_v1-0-0.sav") %>% 
-  remove_all_labels()
+allbus_2021_subset <- read_sav("../data/allbus_2021ZA5280_v1-0-0.sav") %>% 
+remove_all_labels()
 
-allbus_survey <- allbus_2021 %>% 
+allbus_2021_subset  <- allbus_2021_subset  %>% 
   select(respid,
-         sex:education_cat,
-         choice_of_party,
-         left_right = political_orientation,
-         risk_self =  hzcy001a,
-         risk_surroundings =  hzcy002a,
-         avoid_places =  hzcy006a,
-         keep_distance =  hzcy007a,
-         wash_hands = hzcy011a,
-         stockup_supplies =  hzcy013a,
-         reduce_contacts =  hzcy014a,
-         wear_mask = hzcy015a,
-         trust_rki = hzcy047a,
-         trust_government = hzcy048a,
-         trust_chancellor = hzcy049a,
-         trust_who = hzcy051a,
-         trust_scientists = hzcy052a,
-         obey_curfew = hzcy026a,
-         info_nat_pub_br = hzcy084a,
-         info_nat_np = hzcy086a,
-         info_loc_np = hzcy089a,
-         info_fb = hzcy090a,
-         info_other_sm = hzcy091a) %>% 
-  replace_with_na_all(condition = ~.x < 0) %>% 
-  replace_with_na(replace = list(choice_of_party = c(97,98),
-                                 risk_self = c(97),
-                                 risk_surroundings = c(97),
-                                 trust_rki = c(98),
-                                 trust_government = c(98),
-                                 trust_chancellor = c(98),
-                                 trust_who = c(98),
-                                 trust_scientists = c(98),
-                                 obey_curfew = c(4))) %>% 
-  mutate(obey_curfew = recode(obey_curfew,
-                              `2` = 0),
+         sex,
+         agec,
+         educ,
+         left_right = pa01,
+         party_vote = pv01,
+         sat_dem = ps03,
+         xeno1 = ma01b,
+         xeno2 = ma02,
+         xeno3 = ma03,
+         xeno4 = ma04,
+         contact1 = mc01,
+         contact2 = mc02,
+         contact3 = mc03,
+         contact4 = mc04,
+         trust = st01,
+         life_satf = ls01
+         ) %>% 
+  replace_with_na_all(condition = ~.x < 0)  %>% 
+  mutate(trust = ifelse(trust == 1, 1, 0), #dichotomization
          sex = recode_factor(sex,
                              `1`= "Male",
-                             `2` = "Female"),
-         education_cat = recode_factor(education_cat,
-                                       `1` = "Low",
-                                       `2` = "Medium",
-                                       `3`= "High",
-                                       .ordered = TRUE),
-         age_cat = recode_factor(age_cat,
-                                 `1`= "<= 25 years",
-                                 `2`= "26 to 30 years",
-                                 `3` = "31 to 35 years",
-                                 `4` = "36 to 40 years",
-                                 `5` = "41 to 45 years",
-                                 `6` = "46 to 50 years",
-                                 `7` = "51 to 60 years",
-                                 `8` = "61 to 65 years",
-                                 `9` = "66 to 70 years",
-                                 `10` = ">= 71 years",
+                             `2` = "Female",
+                             `3` = "Non-binary"),
+         sat_dem = recode(sat_dem,
+                             `1` = 6,
+                             `2` = 5,
+                             `3` = 4,
+                             `4` = 3,
+                             `5` = 3,
+                             `6`= 1),
+         agec = recode_factor(agec,
+                                `1`= "<= 25 years",
+                                `2`= "26 to 30 years",
+                                `3` = "31 to 35 years",
+                                `4` = "36 to 40 years",
+                                `5` = "41 to 45 years",
+                                `6` = "46 to 50 years",
                                  .ordered = TRUE),
-         choice_of_party = recode_factor(choice_of_party,
-                                         `1` = "CDU/CSU",
-                                         `2` = "SPD",
-                                         `3` = "FDP",
-                                         `4` = "Linke",
-                                         `5` = "Gruene",
-                                         `6` = "AfD",
-                                         `7` = "Other"),
-         distrust_gov = inverter(trust_government)) %>% 
+         party_vote = recode_factor(party_vote,
+                                      `1`= "CDU-CSU",
+                                      `2`= "SPD",
+                                      `3` = "FDP",
+                                      `4` = "Gruene",
+                                      `6` = "Linke",
+                                      `42` = "AfD",
+                                      `90` = "Other party",
+                                      `91` = "Would not vote"),
+         distrust_people = inverter(trust)) %>% 
   rowwise() %>% 
-  mutate(sum_measures = sum(c_across(avoid_places:wear_mask)),
-         sum_sources = sum(c_across(info_nat_pub_br:info_other_sm)),
-         mean_trust = mean(c_across(trust_rki:trust_scientists), na.rm = T)) %>% 
+  mutate( across(contact1:contact4,
+                ~recode(
+                  .x,
+                  `2` = 0))) %>% 
+  mutate(contact = rowSums(across(contact1:contact4)), 
+         xenophobia = rowMeans(across(xeno1:xeno4), na.rm = T)) %>% 
   ungroup()
 ```
 
 # The data
 
-The data we use comes from the [Public Use File (PUF) of the GESIS ](https://www.gesis.org/gesis-panel/coronavirus-outbreak/public-use-file-puf). We have selected `r ncol(corona_survey)` variables of interest for our analysis. The dataset includes data for *N* = `r nrow(corona_survey)` respondents.
+The data we use comes from the [German General Social Survey - ALLBUS 2021 ](https://search.gesis.org/research_data/ZA5280).We have selected `r ncol(allbus_2021_subset)` variables of interest for our analysis. The dataset includes data for *N* = `r nrow(allbus_2021_subset)` respondents.   
 
 
 ## Missing data
@@ -119,53 +109,53 @@ As not all of the respondents answered every question in the survey, we have mis
 ```{r vis-miss}
 library(visdat)
 
-vis_miss(corona_survey)
+vis_miss(allbus_2021_subset)
 ```
 
 # Exploring the *GESIS German General Social Survey - ALLBUS 2021* dataset
 
 ## Demographics
 
-We first want to look at gender, age (categories), education, and party affiliation in our sample.
+We first want to look at gender, age (categories), education, and party vote in our sample.
 
 ```{r demo-tables}
 library(janitor)
 
-corona_survey %>% 
+allbus_2021_subset %>% 
   tabyl(sex) %>% 
   adorn_totals("row") %>%
   adorn_pct_formatting() %>% 
   knitr::kable()
 
-corona_survey %>% 
-  tabyl(age_cat) %>% 
+allbus_2021_subset %>% 
+  tabyl(agec) %>% 
   adorn_totals("row") %>%
   adorn_pct_formatting() %>% 
   knitr::kable()
 
-corona_survey %>% 
-  tabyl(education_cat) %>% 
+allbus_2021_subset %>% 
+  tabyl(educ) %>% 
   adorn_totals("row") %>%
   adorn_pct_formatting() %>% 
   knitr::kable()
 
-corona_survey %>% 
-  tabyl(choice_of_party) %>% 
+allbus_2021_subset %>% 
+  tabyl(party_vote) %>% 
   adorn_totals("row") %>%
   adorn_pct_formatting() %>% 
   knitr::kable()
 
-corona_survey %>% 
-  ggplot(aes(x = education_cat, 
-             fill = education_cat)) + 
+allbus_2021_subset %>% 
+  ggplot(aes(x = educ, 
+             fill = educ)) + 
   geom_bar(aes(y = (..count..)/sum(..count..))) +
   scale_y_continuous(labels=scales::percent) +
   ylab("Relative Frequencies")
 
-corona_survey %>% 
-  filter(!is.na(choice_of_party)) %>% 
-  ggplot(aes(x = choice_of_party, 
-             fill = choice_of_party)) + 
+allbus_2021_subset %>% 
+  filter(!is.na(party_vote)) %>% 
+  ggplot(aes(x = party_vote, 
+             fill = party_vote)) + 
   geom_bar(aes(y = (..count..)/sum(..count..))) +
   scale_y_continuous(labels=scales::percent) +
   ylab("Relative Frequencies")
@@ -174,42 +164,42 @@ corona_survey %>%
 
 ## Summary statistics
 
-Let's look at the summary statistic for the items on trust in institutions.
+Let's look at the summary statistic for the items on xenophobia.
 
 ```{r summarystats}
 library(pander)
 
-corona_survey %>% 
-  select(starts_with("trust")) %>% 
+allbus_2021_subset %>% 
+  select(starts_with("xeno")) %>% 
   summary() %>% 
   pander()
 ```
 
 ## Distribution of variables
 
-We want to explore how some of the data for the question on the perceived personal risk of getting infected with the Coronavirus and political orientation (left-right) are distributed in our sample.
+We want to explore how some of the data for the question on life satisfaction and political orientation (left-right) are distributed in our sample.
 
-```{r density-risk}
-corona_survey %>% 
-  ggplot(aes(x = risk_self)) +
+```{r density-satf}
+allbus_2021_subset %>% 
+  ggplot(aes(x = life_satf)) +
   geom_bar() +
   scale_y_continuous(expand=expansion(mult=c(0,0.1)))
 ```
 
 ```{r density-lr}
-corona_survey %>% 
+allbus_2021_subset %>% 
   ggplot(aes(x = left_right)) +
   geom_bar() +
   scale_y_continuous(expand=expansion(mult=c(0,0.1)))
 ```
 
-## Party affiliation and trust in government
+## Party affiliation and xenophobic attitudes
 
-How does trusting the government in dealing with the Coronavirus differ between supporters of different parties? 
+How do xenophobic attitudes differ between supporters of different parties? 
 
-```{r party-trust}
-corona_survey %>% 
-  ggplot(aes(x = choice_of_party, y = trust_government)) +
+```{r party-xenoph}
+allbus_2021_subset %>% 
+  ggplot(aes(x = party_vote, y = xenophobia)) +
   geom_boxplot() +
   geom_jitter(position = position_jitter(width = 0.1, height = 0),
               alpha = 0.25)
@@ -219,25 +209,23 @@ corona_survey %>%
 
 ## Correlations
 
-We want to explore the correlations between political orientation, number of preventive measures taken, trust in different institutions with regard to dealing with the Coronavirus, and the sum of (a subset of) media sources people use to get current information about the Coronavirus.
+We want to explore the correlations between political leaning, xenophobia, and life satisfaction.
 
 ```{r correlations}
 library(correlation)
 library(GGally)
 
-corona_survey %>% 
+allbus_2021_subset %>% 
   select(left_right,
-         sum_measures,
-         starts_with("trust"),
-         sum_sources) %>% 
+         xeno1:xeno4,
+        life_satf) %>% 
   correlation %>% 
   knitr::kable()
 
-corona_survey %>% 
+allbus_2021_subset %>% 
   select(left_right,
-         sum_measures,
-         starts_with("trust"),
-         sum_sources) %>% 
+         xeno1:xeno4,
+         life_satf) %>% 
   ggcorr(label = TRUE,
          label_round = 2)
   
@@ -245,14 +233,14 @@ corona_survey %>%
 
 ## Regression analysis
 
-We use a logistic regression model to explore how the willingness to obey a possible curfew (full lockdown) is predicted by mean trust in (selected) institutions and the perceived personal risk of getting infected with the Coronavirus.
+We use a logistic regression model to explore how trust in people is predicted by life satisfaction, mean xenophobic attitudes and the contact with foreigners.
 
 ```{r regression}
 library(broom)
 
-model <- glm(obey_curfew ~ 1 + mean_trust + risk_self, 
+model <- glm(trust ~ 1 + life_satf + contact + xenophobia,
              family = binomial(link = "logit"),
-             data = corona_survey)
+             data = allbus_2021_subset)
 
 tidy_model <- model %>% 
   tidy()
@@ -263,7 +251,7 @@ tidy_model %>%
 glance(model)
 ```
 
-The unstandardized regression coefficient for the perceived personal risk of getting infected with the Coronavirus is *b* = `r round(tidy_model$estimate[3], 2)` (`r scales::pvalue(tidy_model$p.value[3], accuracy = 0.001, add_p = TRUE)`), while the coefficient for mean trust in institutions is *b* = `r round(tidy_model$estimate[2], 2)` (`r scales::pvalue(tidy_model$p.value[2], accuracy = 0.001, add_p = TRUE)`).
+The unstandardized regression coefficients *b* can be selected from the `tidy_model`.
 
 ### Regression plots
 

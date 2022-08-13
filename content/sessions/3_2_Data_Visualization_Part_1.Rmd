@@ -236,10 +236,7 @@ my_scatterplot <- recordPlot()
 ]
 ]
 
-.pull-right[
-```{r ref.label = "record_plot", echo = FALSE}
-```
-]
+
 
 ---
 
