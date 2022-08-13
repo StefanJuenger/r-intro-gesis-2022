@@ -406,7 +406,7 @@ fancy_data["who"]
 
 ## Difference between `[]` and `[[]]`
 
-```{r hadley-tweet, echo=FALSE, out.width="80%", eval = FALSE}
+```{r hadley-tweet, echo=FALSE, out.width="80%", eval = TRUE}
 tweet_screenshot("https://twitter.com/hadleywickham/status/643381054758363136",
             theme = "dark")
 ```
