@@ -150,6 +150,12 @@ woRkshoptools::include_picture("./stefan.png")
 
 ---
 
+## Support for the course
+
+This year, we also have the privilege of having a fabulous teaching assistant for our course: Our intern Theresa Wagner. Theresa is a bachelor student in political science and has ample experience with using and also teaching `R`. She has helped us in the preparation of the course and will be around during the course for (additional) support and coding questions.
+
+---
+
 ## Our jou`R`neys
 
 **Johannes**
@@ -260,12 +266,6 @@ Please try to keep it short (3 to 4 sentences or ~30 secs).
   - please contact us via the text chat if you have any technical issues/questions that we can try to solve together with you
 
 - We would also kindly ask you to mute your microphones when you are not asking (or answering) a question
-
----
-
-## Support for the course
-
-This year, we also have the privilege of having a fabulous teaching assistant for our course: Our intern Theresa Wagner. Theresa is a bachelor student in political science and has ample experience with using and also teaching `R`. She has helped us in the preparation of the course and will be around during the course for (additional) tech support and coding questions.
 
 ---
 
