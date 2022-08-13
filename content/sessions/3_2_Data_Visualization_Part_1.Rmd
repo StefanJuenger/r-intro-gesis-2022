@@ -39,7 +39,7 @@ In general:
 ## We'll start rather basic
 
 ```{r trump, out.width = "85%", echo = FALSE}
-woRkshoptools::include_picture("trump.jpg")
+knitr::include_graphics("https://github.com/jobreu/r-intro-gesis-2021/blob/main/content/img/trump.jpg?raw=true")
 ```
 
 .footnote[https://twitter.com/katjaberlin/status/1290667772779913218]
@@ -153,7 +153,7 @@ plot(
 plot(
   jitter(allbus_2021_dvI$agec, 2), 
   jitter(allbus_2021_dvI$sum_trust, 2),
-  pch = 16
+  pch = 1
 )
 ```
 ]
@@ -171,7 +171,7 @@ plot(
 plot(
   jitter(allbus_2021_dvI$agec, 2), 
   jitter(allbus_2021_dvI$sum_trust, 2),
-  pch = 16,
+  pch = 1,
   main = 
     "Relationship Age and Trust in Institutions",
   xlab = 
@@ -179,6 +179,7 @@ plot(
   ylab = 
     "Trust in Institutions"
 )
+
 ```
 ]
 
@@ -187,112 +188,6 @@ plot(
 ```
 ]
 
----
-
-## Adding stuff to the plot: axis labels
-.tinyish[
-.pull-left[
-```{r axis_labels, eval = FALSE}
- 
-boxplot(sum_trust ~ agec,
-        data = allbus_2021_dvI,
-        lwd = 2, 
-        main = "Relationship Age and Trust in Institutions",
-        xlab = "Age of Respondents",
-        ylab = 'Trust in Institutions')
-
-  stripchart(sum_trust ~ agec, vertical = TRUE,
-             data = allbus_2021_dvI, 
-             method = "jitter",
-             add = TRUE,
-             pch = 1)
-
-```
-]
-]
-
-.pull-right[
-```{r ref.label = "axis_labels", echo = FALSE}
-```
-]
-
----
-
-## Record your plot
-Adding more and more elements to your plot also means that the code you have to write gets more and more. But what can we do when we want to re-use the same plot and dynamically add some stuff? We can record the plot!
-
-.tinyish[
-.pull-left[
-```{r record_plot, eval = FALSE}
-boxplot(sum_trust ~ agec,
-        data = allbus_2021_dvI,
-        lwd = 2, 
-        main = "Relationship Age and Trust in Institutions",
-        xlab = "Age of Respondents",
-        ylab = 'Trust in Institutions')
-
-my_scatterplot <- recordPlot()
-```
-]
-]
-
-
-
----
-
-## Extending a recorded plot
-
-.tinyish[
-.pull-left[
-```{r apply_recording, eval = FALSE}
-
-  stripchart(sum_trust ~ agec, vertical = TRUE,
-             data = allbus_2021_dvI, 
-             method = "jitter",
-             add = TRUE,
-             pch = 1)
-
-```
-]
-]
-
-.pull-right[
-```{r ref.label = "apply_recording", echo = FALSE}
-```
-]
-
----
-
-## Updating the plot recording
-
-.tinyish[
-.pull-left[
-```{r happy_recording, eval = FALSE}
-my_scatterplot
-axis(
-  side = 2, 
-  at = 1:7,
-  labels = c(
-    "Not at all",
-    "Very\nunlikely", 
-    "Rather\nunlikely",
-    "Moderately",
-    "Rather", 
-    "Very",
-    "Absolutely"
-  ),
-  las = 0
-)
-
-my_scatterplot <- recordPlot()
-```
-]
-]
-
-.pull-right[
-```{r ref.label = "happy_recording", echo = FALSE}
-```
-]
 
 ---
 
@@ -621,7 +516,7 @@ ggplot(
     y = sum_trust
   )
 ) +
-  geom_jitter()
+  geom_jitter() 
 ```
 ]
 ]
