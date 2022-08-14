@@ -236,9 +236,9 @@ boxplot(
 
 class: center, middle
 
-# [Exercise](https://jobreu.github.io/r-intro-gesis-2021/exercises/Exercise_3_2_1_A_Simple_Plot.html) time `r emo::ji("weight_lifting_woman")``r emo::ji("muscle")``r emo::ji("running_man")``r emo::ji("biking_man")`
+# [Exercise](https://github.com/StefanJuenger/r-intro-gesis-2022/blob/main/exercises/Exercise_3_2_1_Simple_Plots.html) time `r emo::ji("weight_lifting_woman")``r emo::ji("muscle")``r emo::ji("running_man")``r emo::ji("biking_man")`
 
-## [Solutions](https://jobreu.github.io/r-intro-gesis-2021/solutions/Exercise_3_2_1_A_Simple_Plot.html)
+## [Solutions](https://github.com/StefanJuenger/r-intro-gesis-2022/blob/main/solutions/Exercise_3_2_1_Simple_Plots.html)
 
 ---
 
@@ -299,9 +299,9 @@ dev.off()
 class: center, middle
 
 
-# [Exercise](https://jobreu.github.io/r-intro-gesis-2021/exercises/Exercise_3_2_2_Handling_Multiple_Plots.html) time `r emo::ji("weight_lifting_woman")``r emo::ji("muscle")``r emo::ji("running_man")``r emo::ji("biking_man")`
+# [Exercise](https://github.com/StefanJuenger/r-intro-gesis-2022/blob/main/exercises/Exercise_3_2_2_Handling_Multiple_Plots.html) time `r emo::ji("weight_lifting_woman")``r emo::ji("muscle")``r emo::ji("running_man")``r emo::ji("biking_man")`
 
-## [Solutions](https://jobreu.github.io/r-intro-gesis-2021/solutions/Exercise_3_2_2_Handling_Multiple_Plots.html)
+## [Solutions](https://github.com/StefanJuenger/r-intro-gesis-2022/blob/main/solutions/Exercise_3_2_2_Handling_Multiple_Plots.html)
 
 ---
 
@@ -642,9 +642,9 @@ ggplot(data = allbus_2021_dvI) +
 class: center, middle
 
 
-# [Exercise](https://jobreu.github.io/r-intro-gesis-2021/exercises/Exercise_3_2_3_Plotting_Repeats.html) time `r emo::ji("weight_lifting_woman")``r emo::ji("muscle")``r emo::ji("running_man")``r emo::ji("biking_man")`
+# [Exercise](https://github.com/StefanJuenger/r-intro-gesis-2022/blob/main/exercises/Exercise_3_2_3_Plotting_Repeats.html) time `r emo::ji("weight_lifting_woman")``r emo::ji("muscle")``r emo::ji("running_man")``r emo::ji("biking_man")`
 
-## [Solutions](https://jobreu.github.io/r-intro-gesis-2021/solutions/Exercise_3_2_3_Plotting_Repeats.html)
+## [Solutions](https://github.com/StefanJuenger/r-intro-gesis-2022/blob/main/solutions/Exercise_3_2_3_Plotting_Repeats.html)
 
 ---
 
@@ -1193,6 +1193,6 @@ allbus_2021_dvI  %>%
 
 class: center, middle
 
-# [Exercise](https://jobreu.github.io/r-intro-gesis-2021/exercises/Exercise_3_2_4_GGood_Plots.html) time `r emo::ji("weight_lifting_woman")``r emo::ji("muscle")``r emo::ji("running_man")``r emo::ji("biking_man")`
+# [Exercise](https://github.com/StefanJuenger/r-intro-gesis-2022/blob/main/exercises/Exercise_3_2_4_GGood_Plots.html) time `r emo::ji("weight_lifting_woman")``r emo::ji("muscle")``r emo::ji("running_man")``r emo::ji("biking_man")`
 
-## [Solutions](https://jobreu.github.io/r-intro-gesis-2021/solutions/Exercise_3_2_4_GGood_Plots.html)
+## [Solutions](https://github.com/StefanJuenger/r-intro-gesis-2022/blob/main/solutions/Exercise_3_2_4_GGood_Plots.html)
