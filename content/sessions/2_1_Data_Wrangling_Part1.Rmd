@@ -471,7 +471,7 @@ dim(allbus_2021_cut)
 
 ```{r select-helper}
 allbus_2021_mj <- allbus_2021 %>% 
-  select(starts_with("mj"))
+  select(starts_with("mi"))
 
 allbus_2021_stat <-allbus_2021 %>% 
   select(ends_with("stat"))
@@ -505,13 +505,22 @@ names(allbus_2021)
 
 ## What's in a name?
 
-As you can see, only a few of the variable names in the *GESIS German General Social Survey (ALLBUS) 2021* data set are self-explanatory. The other variable names are composed of codes representing the study wave, study name, variable number and whether they are original or derived variables. Hence, for analyzing them, especially if you want to create tables and/or plots, it can make sense to **rename** them. This is also a common step if you work with your own data. Depending on what method or tool(s) you used to collect the data, the variable names in your raw data may also not be what you want or need them to be.
+As you can see, only a few of the variable names in the *GESIS German General Social Survey (ALLBUS) 2021* data set are self-explanatory. <br/> The other variable names are composed of codes representing 
+- the study wave 
+- study name 
+- variable number 
+- original or derived variables.
+
+<br/> 
+Hence, for analyzing them it can make sense to **rename** them. 
 
 ---
 
 ## Renaming variables
 
-It is good practice to use consistent naming conventions. Since `R` is case-sensitive, we might, e.g., want to only use lowercase letters. As spaces in variable names can cause problems, we could, e.g., decide to use `r ji("snake")` *snake_case* (`r ji("camel")` *camelCase* is a common alternative; for a good brief discussion of options for avoiding spaces in variable names, see this [Medium post by Patrick Divine](https://medium.com/@pddivine/string-case-styles-camel-pascal-snake-and-kebab-case-981407998841)).
+It is good practice to use consistent naming conventions. Since `R` is .highlight[case-sensitive], we might want to only use lowercase letters.<br/> 
+As spaces in variable names can cause problems, we could, e.g., decide to use `r ji("snake")` *snake_case* (`r ji("camel")`<br/> <br/> 
+*camelCase* is a common alternative; for a good brief discussion of options for avoiding spaces in variable names, see this [Medium post by Patrick Divine](https://medium.com/@pddivine/string-case-styles-camel-pascal-snake-and-kebab-case-981407998841)).
 
 ---
 
@@ -769,7 +778,7 @@ dim(allbus_centrist)
 
 ```{r if-all}
 allbus_trust_high  <- allbus_2021 %>% 
-  filter(if_all(starts_with ("pt"), ~ . >5)) # read: if the values of variables starting with mj in this df are > 5 (indicating high approval)
+  filter(if_all(starts_with ("pt"), ~ . >5)) # read: if the values of variables starting with pt in this df are > 5 (indicating high trust)
 
 dim(allbus_trust_high)
 ```
@@ -855,7 +864,7 @@ The `dplyr` verb for changing the order of rows in a data set is `arrange()` and
 ```{r arrange}
 allbus_2021 %>% 
   arrange(agec) %>% 
-  select(sex:agec) %>% 
+  select(6:13) %>% 
   glimpse()
 ```
 
@@ -868,7 +877,7 @@ allbus_2021 %>%
 ```{r arrange-desc}
 allbus_2021 %>% 
   arrange(desc(agec)) %>% 
-  select(sex:agec) %>% 
+  select(6:13) %>% 
   glimpse()
 ```
 
@@ -881,7 +890,7 @@ allbus_2021 %>%
 ```{r arrange-mult}
 allbus_2021 %>% 
   arrange(agec, educ) %>% 
-  select(sex:agec) %>% 
+  select(6:13) %>% 
   glimpse()
 ```
 
@@ -889,9 +898,9 @@ allbus_2021 %>%
 
 class: center, middle
 
-# [Exercise](https://jobreu.github.io/r-intro-gesis-2021/exercises/Exercise_2_1_2_Filter_Arrange.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+# [Exercise](https://github.com/StefanJuenger/r-intro-gesis-2022/blob/main/exercises/Exercise_2_1_2_Filter_Arrange.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
 
-## [Solutions](https://jobreu.github.io/r-intro-gesis-2021/solutions/Exercise_2_1_2_Filter_Arrange.html)
+## [Solutions](https://github.com/StefanJuenger/r-intro-gesis-2022/blob/main/solutions/Exercise_2_1_2_Filter_Arrange.html)
 
 
 
