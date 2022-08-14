@@ -165,6 +165,7 @@ This year, we also have the privilege of having a fabulous teaching assistant fo
 - attended an introductory *Data analysis with `R`* course at *GESIS* in 2012
 - only used `R` for SEM for some time, while still doing everything else (esp. data wrangling) with *SPSS*
 - finally made the full transition to `R` when joining *GESIS* in 2017
+- soon after ventured into the `tidyverse` `r emo::ji("space")` and never wanted to go back
 
 ---
 
@@ -228,9 +229,6 @@ knitr::include_graphics("https://github.com/allisonhorst/stats-illustrations/blo
 
 - What is your experience with `R` or other programming languages?
 
-- What statistical software package(s) do you typically use?
-
-- What do you want to use `R` for?
 
 Please try to keep it short (3 to 4 sentences or ~30 secs).
 
