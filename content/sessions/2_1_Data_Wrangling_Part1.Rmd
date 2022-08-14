@@ -268,7 +268,7 @@ GESIS - Leibniz-Institut für Sozialwissenschaften (2022). ALLBUS/GGSS 2021 (All
 
 ## Interlude 2: Citing FOSS
 
-You should also make sure to cite the free and open-source software that you use, such as `R` packages and `R` itself. There is a function in `R` that tells you how to cite it or any of the packages you have installed.
+You should also make sure to cite the free and open-source software that you use, such as `R` packages and `R` itself. There is a function in `R` that tells you how to cite it or any of the packages you have used (for this please see `sessionInfo()`).
 
 ```{r citation}
 citation()
@@ -284,7 +284,7 @@ Side note: If you want to (semi-)automatically generate a codebook for your own 
 
 - the [`codebook` package](https://rubenarslan.github.io/codebook/) which includes an *RStudio*-Addin and also offers a [web app](https://rubenarslan.ocpu.io/codebook/www/)
 
-- the `makeCodebook()` function from the [`dataReporter` package](https://github.com/ekstroem/dataReporter) (see this [blog post](http://sandsynligvis.dk/articles/18/codebook.html) for a short tutorial of the initial dataMaid package)
+- the `makeCodebook()` function from the [`dataReporter` package](https://github.com/ekstroem/dataReporter) (see this [blog post](http://sandsynligvis.dk/articles/18/codebook.html) for a short tutorial of the initial `dataMaid package`)
 
 ---
 
@@ -293,9 +293,13 @@ Side note: If you want to (semi-)automatically generate a codebook for your own 
 The first step is loading the data into `R`.
 
 ```{r load-albus2021-data}
-library(haven) #to load foreign data formats such as from SPSS into R
+library(haven)#to load foreign data formats such as from SPSS into R
+library(sjlabelled)
 
-allbus_2021 <- read_sav("./data/allbus_2021ZA5280_v1-0-0.sav")
+allbus_2021 <- read_sav("./data/allbus_2021ZA5280_v1-0-0.sav",
+                       user_na = TRUE) %>% 
+  remove_all_labels() %>% 
+  as_tibble()
 ```
 
 ---
@@ -355,7 +359,7 @@ allbus_immigration <- allbus_2021[, c("mi05", "mi06", "mi07", "mi08", "mi09", "m
 Option 2
 .small[
 ```{r subset}
-allbus_immigration <- subset(allbus_2021, TRUE, select = c(mi05,mi06,mi07,mi08,mi09,mi10,mi11))
+allbus_immigration <- subset(allbus_2021, TRUE, select = c(mi05, mi06, mi07, mi08, mi09, mi10, mi11))
 # Again, here the 2nd argument refers to the rows.
 # Setting it to TRUE means that we want to include all rows in the subset.
 ```
