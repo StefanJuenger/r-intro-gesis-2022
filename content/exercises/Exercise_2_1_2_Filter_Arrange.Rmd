@@ -4,7 +4,7 @@ author: 'Johannes Breuer, Stefan Jünger, & Veronika Batzdorfer'
 date: 'Introduction to R for Data Analysis'
 ---
 
-```{r child = "../config/exercises_setup.Rmd"}
+```{r child = "content/config/exercises_setup.Rmd"}
 ```
 
 In this set of exercises, we will practice filtering and rearranging the order of rows.
@@ -14,9 +14,13 @@ As for the previous set of data wrangling exercises, before we can begin, we nee
 ```{r read-data, message = F}
 library(tidyverse)
 library(haven)
+library(sjlabelled)
 
 
-allbus_2021 <- read_sav("./data/allbus_2021ZA5280_v1-0-0.sav")
+allbus_2021 <- read_sav("./data/allbus_2021ZA5280_v1-0-0.sav",
+                       user_na = TRUE) %>% 
+  remove_all_labels() %>% 
+  as_tibble()
 ```
 
 ```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}

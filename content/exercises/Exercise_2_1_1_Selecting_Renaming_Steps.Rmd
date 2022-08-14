@@ -16,6 +16,7 @@ That being sad, let's get wrangling...
 ```{r read-data, message = F}
 library (tidyverse)
 library (haven)
+library(sjlabelled)
 
 allbus_2021 <- read_sav("./data/allbus_2021ZA5280_v1-0-0.sav",
                        user_na = TRUE) %>% 

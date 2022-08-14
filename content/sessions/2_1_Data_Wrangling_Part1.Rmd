@@ -630,9 +630,9 @@ glimpse(allbus_immigration)
 
 class: center, middle
 
-# [Exercise](https://github.com/StefanJuenger/r-intro-gesis-2022/blob/main/exercises/Exercise_2_1_1_Selecting_Renaming_Steps.Rmd) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+# [Exercise](https://github.com/StefanJuenger/r-intro-gesis-2022/blob/main/exercises/Exercise_2_1_1_Selecting_Renaming_Steps.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
 
-## [Solutions](https://github.com/StefanJuenger/r-intro-gesis-2022/blob/main/exercises/Exercise_2_1_1_Selecting_Renaming_Steps.Rmd)
+## [Solutions](https://github.com/StefanJuenger/r-intro-gesis-2022/blob/main/solutions/Exercise_2_1_1_Selecting_Renaming_Steps.html)
 
 ---
 
