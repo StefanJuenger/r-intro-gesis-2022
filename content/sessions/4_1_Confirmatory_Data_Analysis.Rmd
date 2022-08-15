@@ -99,7 +99,7 @@ allbus_2021_cda <-
       pv01,
       `1`= "CDU-CSU", `2`= "SPD", `3` = "FDP", `4` = "Gruene", `6` = "Linke",
       `42` = "AfD", `90` = "Other party", `91` = "Would not vote"),
-    person_weight = as.numeric(allbus_2021_cda$wghtpew)
+    person_weight = as.numeric(wghtpew)
   )
 ```
 
