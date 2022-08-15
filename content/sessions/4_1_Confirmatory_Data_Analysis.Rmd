@@ -81,17 +81,25 @@ allbus_2021_cda <- read_spss("./data/allbus_2021/ZA5280_v1-0-0.sav")
 
 ```{r central-variables}
 library(dplyr)
+library(forcats)
+library(sjlabelled)
 
 allbus_2021_cda <-
   allbus_2021_cda %>% 
+  remove_all_labels() %>% 
   mutate(
-    # sum score + numeric conversion
-    xenophobia = rowSums(across(ma01b:ma04, ~as.numeric(.x))) - 4, 
-    # dichotomization
+    sex = recode_factor(sex, `1` = "Male", `2` = "Female", `3` = "Non-binary"),
+    region = recode_factor(
+      eastwest, `1` = "Western Germany", `2` = "Eastern Germany"
+      ),
+    xenophobia = rowMeans(across(ma01b:ma04, ~as.numeric(.x))), 
     trust = ifelse(st01 == 1, 1, 0), 
-    # sum score + numeric conversion + inversion
-    contact = rowSums(across(mc01:mc04, ~as.numeric(.x))) * -1 + 8, 
-    party = pv01
+    contact = rowSums(across(mc01:mc04, ~as.numeric(.x))), 
+    party = recode_factor(
+      pv01,
+      `1`= "CDU-CSU", `2`= "SPD", `3` = "FDP", `4` = "Gruene", `6` = "Linke",
+      `42` = "AfD", `90` = "Other party", `91` = "Would not vote"),
+    person_weight = as.numeric(allbus_2021_cda$wghtpew)
   )
 ```
 
@@ -237,7 +245,7 @@ The previous descriptions mainly refer to formulas used in regression models in 
 A very common methods for analyzing group differences are t-tests. You can use the `t.test()` function from `base R` function to easily perform such a test. 
 
 ```{r t-test}
-t.test(xenophobia ~ eastwest, data = allbus_2021_cda)
+t.test(xenophobia ~ region, data = allbus_2021_cda)
 ```
 
 .small[
@@ -261,7 +269,7 @@ shapiro.test(allbus_2021_cda$xenophobia)
 If the data are not normally distributed, the [Wilcoxon/Mann-Whitney](https://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U_test) test can be a suitable alternative.
 
 ```{r wilcox}
-wilcox.test(xenophobia ~ eastwest, data = allbus_2021_cda)
+wilcox.test(xenophobia ~ region, data = allbus_2021_cda)
 ```
 
 ---
@@ -313,7 +321,7 @@ This may not come as a surprise at this point, but regression models are also ea
 ```{r linmodel, eval = FALSE}
 simple_linear_model <- 
   lm(
-    xenophobia ~ age + sex + eastwest + trust + contact + party, 
+    xenophobia ~ age + sex + region + trust + contact + party, 
     data = allbus_2021_cda
   )
 
@@ -384,7 +392,7 @@ If you want to change the reference category for a categorical predictor, you ca
 ```{r ref-cat, eval=FALSE}
 lm_relevel <-  
   lm(
-    xenophobia ~ age + sex + eastwest + trust + contact + relevel(party, ref = 6),
+    xenophobia ~ age + sex + region + trust + contact + relevel(party, ref = 6),
     data = allbus_2021_cda
   )
 
@@ -429,7 +437,7 @@ contrasts(allbus_2021_cda$party)
 ```{r effect-coded-reg, eval = FALSE}
 simple_linear_model_effect_coded <- 
   lm(
-    xenophobia ~ age + sex + eastwest + trust + contact + party, 
+    xenophobia ~ age + sex + region + trust + contact + party, 
     data = allbus_2021_cda
   )
 
@@ -488,7 +496,7 @@ Of course, you also can use, e.g., survey design weights to adjust to estimates 
 weighted_regression <-
   lm(
     xenophobia ~ age + sex + trust + contact + party,
-    weights = wghtpew,
+    weights = person_weight,
     data = allbus_2021_cda
   )
 
@@ -514,7 +522,7 @@ table(allbus_2021_cda$trust)
 ```{r log-reg, eval = FALSE}
 simple_linear_model_logistic <- 
   glm(
-    trust ~ age + sex + eastwest + contact + party, 
+    trust ~ age + sex + region + contact + party, 
     family = binomial(link = "logit"),
     data = allbus_2021_cda
   )
@@ -555,7 +563,7 @@ For the fun of it, let's change the link function in our regression model from l
 ```{r probit-reg, eval = FALSE}
 simple_linear_model_probit <- 
   glm(
-    trust ~ age + sex + eastwest + contact + party, 
+    trust ~ age + sex + region + contact + party, 
     family = binomial(link = "probit"),
     data = allbus_2021_cda
   )
@@ -692,13 +700,13 @@ It is also quite straightforward to produce simple predictions from an estimated
 .small[
 ```{r predict}
 simple_linear_model_new <-  
-  lm(xenophobia ~ age + eastwest + party, data = allbus_2021_cda)
+  lm(xenophobia ~ age + region + party, data = allbus_2021_cda)
 
 predictions_data <-  
   data.frame(
     age = rep(mean(allbus_2021_cda$age, na.rm = TRUE), times = 4),
-    eastwest = as.factor(rep(1:2, each = 2)),
-    party = as.factor(rep(c(1, 42), times = 2))
+    region = as.factor(rep(c("Western Germany", "Eastern Germany"), each = 2)),
+    party = as.factor(rep(c("CDU-CSU", "AfD"), times = 2))
   )
 
 predictions_data
@@ -727,7 +735,7 @@ In an OLS context, predictions of this kind are straightforward to interpret. Fo
 ```{r pred-log}
 simple_linear_model_logistic_new <- 
   glm(
-    trust ~ age + eastwest + party,
+    trust ~ age + region + party,
     family = binomial(link = "logit"),
     data = allbus_2021_cda
   )
@@ -754,7 +762,7 @@ library(marginaleffects)
 
 plot_cme(
   simple_linear_model_logistic_new, 
-  effect = "eastwest", 
+  effect = "region", 
   condition = "party"
 )
 ```
@@ -766,7 +774,7 @@ library(marginaleffects)
 
 plot_cme(
   simple_linear_model_logistic_new, 
-  effect = "eastwest", 
+  effect = "region", 
   condition = "party"
 )
 ```
@@ -786,10 +794,10 @@ As we have seen in the session on *Exploratory Data Analysis*, there are differe
 library(stargazer)
 
 stargazer(
-  lm(xenophobia ~ age + sex + eastwest, data = allbus_2021_cda),
-  lm(xenophobia ~ age + sex + eastwest + trust, data = allbus_2021_cda),
-  glm(trust ~ age + sex + eastwest, data = allbus_2021_cda, family = binomial(link = "logit")),
-  glm(trust ~ age + sex + eastwest, data = allbus_2021_cda, family = binomial(link = "probit")),
+  lm(xenophobia ~ age + sex + region, data = allbus_2021_cda),
+  lm(xenophobia ~ age + sex + region + trust, data = allbus_2021_cda),
+  glm(trust ~ age + sex + region, data = allbus_2021_cda, family = binomial(link = "logit")),
+  glm(trust ~ age + sex + region, data = allbus_2021_cda, family = binomial(link = "probit")),
   type = "text",
   dep.var.labels = c("Xenophobia", "Trust"),
   covariate.labels =
@@ -819,10 +827,10 @@ As for the summary table, the `stargazer()` output can also be saved in various 
 # dir.create("./output")
 
 stargazer(
-  lm(xenophobia ~ age + sex + eastwest, data = allbus_2021_cda),
-  lm(xenophobia ~ age + sex + eastwest + trust, data = allbus_2021_cda),
-  glm(trust ~ age + sex + eastwest, data = allbus_2021_cda, family = binomial(link = "logit")),
-  glm(trust ~ age + sex + eastwest, data = allbus_2021_cda, family = binomial(link = "probit")),
+  lm(xenophobia ~ age + sex + region, data = allbus_2021_cda),
+  lm(xenophobia ~ age + sex + region + trust, data = allbus_2021_cda),
+  glm(trust ~ age + sex + region, data = allbus_2021_cda, family = binomial(link = "logit")),
+  glm(trust ~ age + sex + region, data = allbus_2021_cda, family = binomial(link = "probit")),
   type = "latex",
   dep.var.labels = c("Xenophobia", "Trust"),
   covariate.labels =
@@ -841,7 +849,7 @@ Instead of or in addition to tables, we often want to report the results of our 
 ```{r report-t-test}
 library(report)
 
-t.test(xenophobia ~ eastwest, data = allbus_2021_cda) %>% 
+t.test(xenophobia ~ region, data = allbus_2021_cda) %>% 
   report()
 ```
 
