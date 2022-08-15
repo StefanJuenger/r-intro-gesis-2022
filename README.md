@@ -311,7 +311,7 @@ By the end of the course participants should be:
 [2_2_4 Factors & Conditional Recoding](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_2_4_Factors_Conditional_Recode.html)
 
 ### Solutions
-[2_1_1 Select Rename](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_1_1_Select_Rename.html)
+[2_1_1 Select Rename](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_1_1_Selecting_Renaming_Steps.html)
 
 [2_1_2 Filter Arrange](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_1_2_Filter_Arrange.html)
 
