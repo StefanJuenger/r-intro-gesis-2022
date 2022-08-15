@@ -267,6 +267,8 @@ By the end of the course participants should be:
 
 [Appendix - Setup and Workflow Help](https://stefanjuenger.github.io/r-intro-gesis-2022/slides/1_3_Appendix_Setup_Workflow_Help.html)
 
+[Appendix - Labelled Data](https://stefanjuenger.github.io/r-intro-gesis-2022/slides/1_4_Appendix_Labelled_Data.html)
+
 ### Exercises
 [1_1_1 First Steps](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_1_1_1_First_Steps.html)
 
