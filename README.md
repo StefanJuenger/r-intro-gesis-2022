@@ -267,6 +267,8 @@ By the end of the course participants should be:
 
 [Appendix - Setup and Workflow Help](https://stefanjuenger.github.io/r-intro-gesis-2022/slides/1_3_Appendix_Setup_Workflow_Help.html)
 
+[Appendix - Labelled Data](https://stefanjuenger.github.io/r-intro-gesis-2022/slides/1_4_Appendix_Labelled_Data.html)
+
 ### Exercises
 [1_1_1 First Steps](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_1_1_1_First_Steps.html)
 
@@ -298,7 +300,7 @@ By the end of the course participants should be:
 [Appendix - Relational Data](https://stefanjuenger.github.io/r-intro-gesis-2022/slides/2_3_Appendix_Relational_Data.html)     
 
 ### Exercises
-[2_1_1 Select Rename](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_1_1_Select_Rename.html)
+[2_1_1 Select Rename](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_1_1_Selecting_Renaming_Steps.html)
 
 [2_1_2 Filter Arrange](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_1_2_Filter_Arrange.html)
 
@@ -311,7 +313,7 @@ By the end of the course participants should be:
 [2_2_4 Factors & Conditional Recoding](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_2_4_Factors_Conditional_Recode.html)
 
 ### Solutions
-[2_1_1 Select Rename](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_1_1_Select_Rename.html)
+[2_1_1 Select Rename](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_1_1_Selecting_Renaming_Steps.html)
 
 [2_1_2 Filter Arrange](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_1_2_Filter_Arrange.html)
 
