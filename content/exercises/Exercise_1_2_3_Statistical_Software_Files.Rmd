@@ -23,9 +23,9 @@ library(haven)
 allbus_2021 <- read_spss("./data/allbus_2021/ZA5280_v1-0-0.sav")
 ```
 
-Unlike in flat files, such as CSV, the variables now have labels.
+Unlike in flat files, such as CSV, the variables now have labels. **If you aim to learn about them, you may want to have a look into the [appendix for labelled data]() and then work on the following exercises. For this course, however, this is not necessary.**
 
-```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+```{block, box.title = "2 (optional)", box.body = list(fill = "white"), box.icon = "fa-star"}
 Print the labels of the first ten variables in the data set.
 ```
 
@@ -41,7 +41,7 @@ get_label(allbus_2021[1:10])
 
 Unfortunately, it's all in German. Imagine you are a political scientist working on a publication in English, and you are interested in the variable `pa01` (left-right self-placement). So you may want to consider translating the variable into English.
 
-```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+```{block, box.title = "3 (optional)", box.body = list(fill = "white"), box.icon = "fa-star"}
 Change the variable label of `pa01` from "LINKS-RECHTS-SELBSTEINSTUFUNG, BEFR." to "left-right self-placement".
 ```
 
@@ -60,7 +60,7 @@ get_label(allbus_2021$pa01)
 
 Your collaborators ask you to share the data after changing labels and stuff. Unfortunately, they do not use `R`, `SPSS` or even `Stata` and, hence, asks you to export your data as a *SAS* file.
 
-```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
+```{block, box.title = "4 (optional)", box.body = list(fill = "white"), box.icon = "fa-star"}
 Export your data as a *SAS* file (its file extension is `sas7bdat`).
 ```
 
