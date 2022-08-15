@@ -23,7 +23,7 @@ library(haven)
 allbus_2021 <- read_spss("./data/allbus_2021/ZA5280_v1-0-0.sav")
 ```
 
-Unlike in flat files, such as CSV, the variables now have labels. **If you aim to learn about them, you may want to have a look into the [appendix for labelled data]() and then work on the following exercises. For this course, however, this is not necessary.**
+Unlike in flat files, such as CSV, the variables now have labels. **If you aim to learn about them, you may want to have a look into the [appendix for labelled data](https://stefanjuenger.github.io/r-intro-gesis-2022/slides/1_4_Appendix_Labelled_Data.html) and then work on the following exercises. For this course, however, this is not necessary.**
 
 ```{block, box.title = "2 (optional)", box.body = list(fill = "white"), box.icon = "fa-star"}
 Print the labels of the first ten variables in the data set.
