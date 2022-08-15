@@ -875,8 +875,6 @@ titanic <-
   )
 ```
 
-
-
 ---
 
 class: center, middle
@@ -918,7 +916,7 @@ write_dta(titanic, "titanic_own.dta")
 ## `R`'s native file formats
 
 If you plan to continue to work with `R` (something we would always recommend `r emo::ji("stuck_out_tongue_winking_eye")`), there are at least two native 'file formats' to choose from. The advantage of using them is that they are compressed files, so that they don't occupy unnecessarily large disk space. These two formats are `.Rdata`/`.rda` and `.rds`.
-The key difference between them is that `.rds` can only hold one object, whereas `.Rdata`/`.rda` can also be used for storing several objects in one file.
+**The key difference between them is that `.rds` can only hold one object, whereas `.Rdata`/`.rda` can also be used for storing several objects in one file.**
 
 ---
 
@@ -1036,7 +1034,7 @@ load("../../data/fancy_data.Rdata")
 
 class: center, middle
 
-Please first download the [GGSS 2021](https://search.gesis.org/research_data/ZA5280) as .sav, .dta, and .csv file.
+Please first download the [GGSS 2021](https://search.gesis.org/research_data/ZA5280) as .sav and .dta file.
 
 # [Exercise](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_1_2_3_Statistical_Software_Files.html) time `r emo::ji("weight_lifting_woman")``r emo::ji("muscle")``r emo::ji("running_man")``r emo::ji("biking_man")`
 
