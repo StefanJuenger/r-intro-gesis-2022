@@ -395,7 +395,7 @@ By the end of the course participants should be:
 
 ## Day 5
 ### Slides
-[5_1 Reporting with R Markdown](https://stefanjuenger.github.io/r-intro-gesis-2022/slides/5_1_R_Markdown.html)
+[5_1 Reporting with R Markdown](https://stefanjuenger.github.io/r-intro-gesis-2022/slides/5_1_Reporting_w_Rmarkdown.html)
 
 [5_2 Outlook](https://stefanjuenger.github.io/r-intro-gesis-2022/slides/5_2_Outlook.html)
 
