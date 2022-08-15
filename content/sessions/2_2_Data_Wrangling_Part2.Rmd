@@ -4,6 +4,8 @@ subtitle: "Data Wrangling - Part 2"
 author: "Johannes Breuer, Stefan Jünger, & Veronika Batzdorfer"
 date: "2022-08-16"
 presenter: Johannes
+editor_options: 
+  chunk_output_type: console
 ---
 layout: true 
 
@@ -740,7 +742,24 @@ If you want (or have) to work with [regular expressions](https://en.wikipedia.or
 
 ## Outlook: Times and dates
 
-If you are want/need to work with times and dates in `R`, you may want to look into the [`lubridate` package](https://lubridate.tidyverse.org/) which is part of the `tidyverse`, and for which *RStudio* also provides a [cheatsheet](https://raw.githubusercontent.com/rstudio/cheatsheets/master/lubridate.pdf).
+[Working with times and dates can be quite a pain in programming](https://www.youtube.com/watch?v=-5wpm-gesOY) (as well as data analysis). Luckily, there are a couple of neat options for working with times and dates in `R` that can reduce the headache.
+
+---
+
+## Outlook: Times and dates
+
+```{r excel-time, echo=FALSE, out.width="50%"}
+include_picture("./excel-time.jpg")
+```
+.small[
+Source: https://twitter.com/ExcelHumor/status/1558608440230117384
+]
+
+---
+
+## Outlook: Times and dates
+
+If you want/need to work with times and dates in `R`, you may want to look into the [`lubridate` package](https://lubridate.tidyverse.org/) which is part of the `tidyverse`, and for which *RStudio* also provides a [cheatsheet](https://raw.githubusercontent.com/rstudio/cheatsheets/master/lubridate.pdf).
 
 ```{r lubridate-hex, out.width = "25%", echo = F}
 knitr::include_graphics("https://github.com/rstudio/hex-stickers/blob/master/PNG/lubridate.png?raw=true")
