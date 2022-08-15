@@ -298,7 +298,7 @@ By the end of the course participants should be:
 [Appendix - Relational Data](https://stefanjuenger.github.io/r-intro-gesis-2022/slides/2_3_Appendix_Relational_Data.html)     
 
 ### Exercises
-[2_1_1 Select Rename](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_1_1_Select_Rename.html)
+[2_1_1 Select Rename]https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_1_1_Selecting_Renaming_Steps.html)
 
 [2_1_2 Filter Arrange](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_1_2_Filter_Arrange.html)
 
