@@ -81,14 +81,22 @@ We are still interested in xenophobic attitudes, like to investigate how social 
 
 ```{r central-variables}
 library(dplyr)
+library(forcats)
+library(sjlabelled)
 
 allbus_2021_dvII <-
   allbus_2021_dvII %>% 
+  remove_all_labels() %>% 
   mutate(
-    xenophobia = rowSums(across(ma01b:ma04, ~as.numeric(.x))) - 4, # sum score
-    trust = ifelse(st01 == 1, 1, 0), # dichotomization
-    contact = rowSums(across(mc01:mc04, ~as.numeric(.x))) * -1 + 8, # sum score + inversion
-    afd = ifelse(pv01 == 42, 1, 0)
+    sex = recode_factor(sex, `1` = "Male", `2` = "Female", `3` = "Non-binary"),
+    region = recode_factor(
+      eastwest, `1` = "Western Germany", `2` = "Eastern Germany"
+      ),
+    xenophobia = rowMeans(across(ma01b:ma04, ~as.numeric(.x))), 
+    trust = ifelse(st01 == 1, 1, 0), 
+    contact = rowSums(across(mc01:mc04, ~as.numeric(.x))), 
+    afd = ifelse(pv01 == 42, 1, 0),
+    person_weight = as.numeric(wghtpew)
   )
 ```
 
@@ -101,7 +109,7 @@ We start with estimating a linear regression model including our variables of in
 ```{r linear-model}
 linear_model <- 
   lm(
-    xenophobia ~ age + sex + eastwest + trust + contact + afd, 
+    xenophobia ~ age + sex + region + trust + contact + afd, 
     data = allbus_2021_dvII
   )
 
@@ -366,7 +374,7 @@ Let's now turn to a possible interaction between age and contact. Does contact t
 ```{r interaction-model}
 linear_model_interaction <-
   lm(
-    xenophobia ~ age + sex + eastwest + trust + contact + afd + age:contact,
+    xenophobia ~ age + sex + region + trust + contact + afd + age:contact,
     data = allbus_2021_dvII
   )
 
@@ -458,7 +466,7 @@ linear_model_plain <-
   lm(xenophobia ~ trust + contact + afd, data = allbus_2021_dvII)
 
 linear_model_controls <-
-  lm(xenophobia ~ age + sex + eastwest + trust + contact + afd, data = allbus_2021_dvII)
+  lm(xenophobia ~ age + sex + region + trust + contact + afd, data = allbus_2021_dvII)
 
 model_parameters(linear_model_plain)
 
