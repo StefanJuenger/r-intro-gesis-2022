@@ -127,7 +127,7 @@ Then, rename the variables `lm30` `lm31` `lm32` `lm33` , and `lm34` to `internet
 
 When using the `dplyr` function for renaming the variables, assign the result to the same object name as before (i.e., overwrite the `internet_use_pc` object).
 ```
-```
+
 
 ```{block, opts.label = "clues"}
 The `base R` function we need here is `colnames()`, and the `dplyr` function is `rename()`. Remember that the correct syntax the `rename()` function is `new_name = old_name`.
