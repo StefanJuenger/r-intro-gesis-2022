@@ -38,7 +38,9 @@ By the end of this course you should...
 knitr::include_graphics("https://d33wubrfki0l68.cloudfront.net/795c039ba2520455d833b4034befc8cf360a70ba/558a5/diagrams/data-science-explore.png")
 ```
 ]
-<small><small>Source: [*R for Data Science*](http://r4ds.had.co.nz/)</small></small>
+.small[
+Source: [*R for Data Science*](http://r4ds.had.co.nz/)
+]
 
 .small[
 - **Import**: read in data in different formats (e.g., .csv, .xls, .sav, .dta)
@@ -48,16 +50,6 @@ knitr::include_graphics("https://d33wubrfki0l68.cloudfront.net/795c039ba2520455d
 - **Model**: analyze the data by creating models (e.g, linear regression model) 
 - **Communicate**: present the results (to others)
 ]
-
----
-
-## Learning by coding
-
-```{r hadley-tweet, echo=FALSE}
-tweet_screenshot("https://twitter.com/hadleywickham/status/589068687669243905",
-            theme = "dark")
-```
-https://twitter.com/hadleywickham/status/589068687669243905
 
 ---
 
@@ -200,6 +192,16 @@ tweet_embed("https://twitter.com/tanya_shapiro/status/1558141982974902272")
 
 ---
 
+## Learning by coding
+
+```{r hadley-tweet, echo=FALSE}
+tweet_screenshot("https://twitter.com/hadleywickham/status/589068687669243905",
+            theme = "dark")
+```
+https://twitter.com/hadleywickham/status/589068687669243905
+
+---
+
 ## Step-by-step
 
 ```{r workflow-tweet, echo=FALSE, out.width="50%"}
@@ -226,11 +228,6 @@ knitr::include_graphics("https://github.com/allisonhorst/stats-illustrations/blo
 - What's your name?  
 
 - Where do you work/study? What are you working on/studying?
-
-- What is your experience with `R` or other programming languages?
-
-
-Please try to keep it short (3 to 4 sentences or ~30 secs).
 
 ---
 
@@ -327,10 +324,9 @@ course_content_5
 If you want to know a bit more about the origins and history of `R` as well as the philosophy behind it, the book [*R Programming for Data Science*](https://bookdown.org/rdpeng/rprogdatascience/) by Roger D. Peng provides a [good summary](https://bookdown.org/rdpeng/rprogdatascience/history-and-overview-of-r.html). You can also watch this [*YouTube* video in which David Smith talks about *Twenty Years of R*](https://youtu.be/iq_biXEIx-U).
 
 .small[
-.footnote[
 [1] Fun fact: The different versions of `R` also have (nick)names. The current version `4.2.1`, e.g., is called 'Funny-Looking Kid'.
 ]
-]
+
 ---
 class: middle
 
@@ -466,10 +462,9 @@ Using an IDE provides several advantages, such as:
 - new versions also include (live) spellchecking features and a visual editor for [`R Markdown`](https://rmarkdown.rstudio.com/)/[`Quarto`](https://quarto.org/)
 
 .small[
-.footnote[
 [1] There are, of course, other IDEs that can be used with/for `R`. Another popular option is [*Visual Studio*](https://visualstudio.microsoft.com/) from *Microsoft* (for which an [`R` extension](https://marketplace.visualstudio.com/items?itemName=Ikuyadeu.r) is available).
+
 [2] Despite its name, however, the *RStudio* IDE is multilingual and can, e.g., also be used for/with `Python`.
-]
 ]
 
 ---
