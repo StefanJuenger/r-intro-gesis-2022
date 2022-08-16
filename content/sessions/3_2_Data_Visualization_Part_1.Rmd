@@ -1,7 +1,7 @@
 ---
 title: "Introduction to R for Data Analysis"
 subtitle: "Data Visualization - Part 1"
-author: "Johannes Breuer, Stefan Jünger,& Veronika Batzdorfer"
+author: "Johannes Breuer, Stefan Jünger, & Veronika Batzdorfer"
 date: "2022-08-17"
 presenter: Veronika
 editor_options: 
@@ -67,7 +67,7 @@ There's more that we won't cover:
 
 ## Data for this session
 
-As before, we will use the data from the from the *GESIS German General Social Survey (ALLBUS) 2021*.
+As before, we will use the data from the *GESIS German General Social Survey (ALLBUS) 2021*.
 
 ```{r load_allbus_2021_dvI }
 library(sjlabelled)
