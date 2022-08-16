@@ -9,7 +9,7 @@ date: 'Introduction to R for Data Analysis'
 
 In this set of exercises, we will practice filtering and rearranging the order of rows.
 
-As for the previous set of data wrangling exercises, before we can begin, we need to load the `tidyverse` package(s) and import the data. Also for these exercises, it is advisable to open the *AKTUELLER LINK* [codebook for the data set](https://dbk.gesis.org/dbksearch/download.asp?id=67378).
+As for the previous set of data wrangling exercises, before we can begin, we need to load the `tidyverse` package(s) and import the data. Also for these exercises, it is advisable to open the *codebook* [codebook for the data set](https://github.com/StefanJuenger/r-intro-gesis-2022/blob/main/data/codebook_gesis_allbus_2021.pdf).
 
 ```{r read-data, message = F}
 library(tidyverse)
@@ -17,8 +17,7 @@ library(haven)
 library(sjlabelled)
 
 
-allbus_2021 <- read_sav("./data/allbus_2021ZA5280_v1-0-0.sav",
-                       user_na = TRUE) %>% 
+allbus_2021 <- read_sav("./data/allbus_2021ZA5280_v1-0-0.sav") %>% 
   remove_all_labels() %>% 
   as_tibble()
 ```
@@ -28,7 +27,7 @@ As a first exercise, using `base R`, let's create a new data set named `allbus_s
 ```
 
 ```{block, opts.label = "clues"}
-The variable representing marital status is named `mstat` and the value indicating that the respondent is married is 5. Remember that there are 2 options in `base R` for filtering rows (the same ones as for selecting columns).
+The variable representing marital status is named `mstat` and the value indicating that the respondent is single is 5. Remember that there are 2 options in `base R` for filtering rows (the same ones as for selecting columns).
 ```
 
 ```{r first-exercise, solution = TRUE}

@@ -143,7 +143,7 @@ Of course, it is possible to combine `base R` and `tidyverse` code. However, in 
 install.packages("tidyverse")
 ```
 **Load core `tidyverse` packages** (NB: To save time and reduce namespace conflicts you can also load `tidyverse` packages individually)
-```{r load-tidyverse, message = T}
+```{r load-tidyverse, message = F}
 library("tidyverse") ##load the tidyverse package
 ```
 
@@ -278,7 +278,7 @@ citation()
 
 ## Interlude 3: Codebook
 
-It is always advisable to consult the codebook (if there is one) before starting to work with a data set. The *GESIS German General Social Survey (ALLBUS) 2021* comes with a very [detailed codebook](https://dbk.gesis.org/DBKSearch/download.asp?file=ZA5280_fb_CAWI.pdf).
+It is always advisable to consult the codebook (if there is one) before starting to work with a data set. We created for the *GESIS German General Social Survey (ALLBUS) 2021* an [English codebook](https://github.com/StefanJuenger/r-intro-gesis-2022/blob/main/data/codebook_gesis_allbus_2021.pdf).
 
 Side note: If you want to (semi-)automatically generate a codebook for your own dataset, there are several options in `R`:
 
@@ -293,7 +293,7 @@ Side note: If you want to (semi-)automatically generate a codebook for your own 
 The first step is loading the data into `R`.
 
 ```{r load-albus2021-data}
-library(haven)#to load foreign data formats such as from SPSS into R
+library(haven) #to load foreign data formats such as from SPSS into R
 library(sjlabelled)
 
 allbus_2021 <- read_sav("./data/allbus_2021ZA5280_v1-0-0.sav",
@@ -639,9 +639,9 @@ glimpse(allbus_immigration)
 
 class: center, middle
 
-# [Exercise](https://github.com/StefanJuenger/r-intro-gesis-2022/blob/main/exercises/Exercise_2_1_1_Selecting_Renaming_Steps.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+# [Exercise](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_1_1_Selecting_Renaming_Steps.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
 
-## [Solutions](https://github.com/StefanJuenger/r-intro-gesis-2022/blob/main/solutions/Exercise_2_1_1_Selecting_Renaming_Steps.html)
+## [Solutions](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_1_1_Selecting_Renaming_Steps.html)
 
 ---
 
@@ -898,9 +898,9 @@ allbus_2021 %>%
 
 class: center, middle
 
-# [Exercise](https://github.com/StefanJuenger/r-intro-gesis-2022/blob/main/exercises/Exercise_2_1_2_Filter_Arrange.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+# [Exercise](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_2_1_2_Filter_Arrange.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
 
-## [Solutions](https://github.com/StefanJuenger/r-intro-gesis-2022/blob/main/solutions/Exercise_2_1_2_Filter_Arrange.html)
+## [Solutions](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_2_1_2_Filter_Arrange.html)
 
 
 

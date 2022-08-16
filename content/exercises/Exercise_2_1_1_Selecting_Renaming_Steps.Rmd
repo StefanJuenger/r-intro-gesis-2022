@@ -8,7 +8,7 @@ date: 'Introduction to R for Data Analysis'
 ```
 
 
-As in the presentation, we will use data from the [German General Social Survey - Allbus 2021](https://search.gesis.org/research_data/ZA5280) for this exercise. You should (have) download(ed) the dataset in `.sav` format and saved it in a folder caller `data` within the folder containing the materials for this workshop. Also remember that it is helpful to consult the [codebook for the data set](https://search.gesis.org/research_data/ZA5280).
+As in the presentation, we will use data from the [German General Social Survey - Allbus 2021](https://search.gesis.org/research_data/ZA5280) for this exercise. You should (have) download(ed) the dataset in `.sav` format and saved it in a folder caller `data` within the folder containing the materials for this workshop. Also remember that it is helpful to consult the [codebook for the data set](https://github.com/StefanJuenger/r-intro-gesis-2022/blob/main/data/codebook_gesis_allbus_2021.pdf).
 That being sad, let's get wrangling...
 
 ...but before we can do that, we need to load the `tidyverse` and `haven` package(s) and import the data.
@@ -18,8 +18,7 @@ library (tidyverse)
 library (haven)
 library(sjlabelled)
 
-allbus_2021 <- read_sav("./data/allbus_2021ZA5280_v1-0-0.sav",
-                       user_na = TRUE) %>% 
+allbus_2021 <- read_sav("./data/allbus_2021ZA5280_v1-0-0.sav") %>% 
   remove_all_labels() %>% 
   as_tibble()
 ```

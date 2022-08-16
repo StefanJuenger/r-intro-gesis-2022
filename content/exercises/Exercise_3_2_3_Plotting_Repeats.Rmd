@@ -9,7 +9,7 @@ date: 'Introduction to R for Data Analysis'
 
 ~~History~~ Plotting repeats. Let's dive into `ggplot2` and repeat what we've done in `base R` using the "grammar of graphics".
 
-Here's the GESIS Panel data again.
+Here's the Allbus 2021 data again.
 
 ```{r loadallbus2021, message=FALSE, eval=TRUE}
 library(dplyr)
