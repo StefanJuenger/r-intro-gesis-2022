@@ -30,7 +30,7 @@ To override the default behavior of converting user-defined missing values into 
 
 ```{r first-exercise, solution = TRUE}
 allbus_2021_missings <- read_sav("./data/allbus_2021/ZA5280_v1-0-0.sav",
-                        user_na = FALSE) %>% 
+                        user_na = TRUE) %>% 
   remove_all_labels()
 ```
 

@@ -43,7 +43,7 @@ The name of the original variable is `pa01`. For this transformation, we we simp
 ```
 
 ```{r second-exercise, solution = TRUE}
-gp_covid <- allbus_2021 %>% 
+allbus_2021 <- allbus_2021 %>% 
   mutate(pol_view_new = pa01 - 1)
 ```
 
@@ -56,7 +56,7 @@ The name of the variable we want to transform is `pt12` and it ranges from 1 to 
 ```
 
 ```{r third-exercise, solution = TRUE}
-gp_covid <-allbus_2021 %>% 
+allbus_2021 <- allbus_2021 %>% 
   mutate(distrust_gov = recode(pt12,
                                `7` = 1, # `old_value` = new_value
                                `6` = 2,
