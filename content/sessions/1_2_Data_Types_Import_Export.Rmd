@@ -962,7 +962,7 @@ woRkshoptools::include_picture("save_image.png")
 You can also do that whenever you want using the `save.image()` function:
 
 ```{r, eval = FALSE}
-save.image(file = "my_fancy_workspace.RData")
+save.image()
 ```
 
 .small[
