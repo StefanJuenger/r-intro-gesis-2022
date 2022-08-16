@@ -2,6 +2,8 @@
 title: 'Exercise 1_2_3: Statistical Software Files'
 author: 'Johannes Breuer, Stefan Jünger, Veronika Batzdorfer'
 date: 'Introduction to R for Data Analysis'
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r child = "./content/config/exercises_setup.Rmd"}
@@ -34,7 +36,7 @@ The `haven` package provides a function for writing such files that is called an
 ```
 
 ```{r exportstata, solution = TRUE, eval = FALSE}
-write_sas(allbus_2021, "Allbus_SAS_format.sas7bdat)
+write_sas(allbus_2021, "Allbus_SAS_format.sas7bdat")
 ```
 
 Unlike in flat files, such as CSV, the variables now have labels. **If you aim to learn about them, you may want to have a look into the [appendix for labelled data](https://stefanjuenger.github.io/r-intro-gesis-2022/slides/1_4_Appendix_Labelled_Data.html) and then work on the following exercises. For this course, however, this is not necessary.**
