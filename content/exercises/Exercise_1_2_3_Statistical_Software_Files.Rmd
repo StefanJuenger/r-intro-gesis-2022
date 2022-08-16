@@ -23,9 +23,23 @@ library(haven)
 allbus_2021 <- read_spss("./data/allbus_2021/ZA5280_v1-0-0.sav")
 ```
 
+Your collaborators ask you to share the data. Unfortunately, they do not use `R`, `SPSS` or even `Stata` and, hence, asks you to export your data as a *SAS* file.
+
+```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Export your data as a *SAS* file (its file extension is `sas7bdat`).
+```
+
+```{block, opts.label = "clues"}
+The `haven` package provides a function for writing such files that is called and works in a similar way as the corresponding function for importing data in this particular format.
+```
+
+```{r exportstata, solution = TRUE, eval = FALSE}
+write_sas(allbus_2021, "Allbus_SAS_format.sas7bdat)
+```
+
 Unlike in flat files, such as CSV, the variables now have labels. **If you aim to learn about them, you may want to have a look into the [appendix for labelled data](https://stefanjuenger.github.io/r-intro-gesis-2022/slides/1_4_Appendix_Labelled_Data.html) and then work on the following exercises. For this course, however, this is not necessary.**
 
-```{block, box.title = "2 (optional)", box.body = list(fill = "white"), box.icon = "fa-star"}
+```{block, box.title = "3 (optional)", box.body = list(fill = "white"), box.icon = "fa-star"}
 Print the labels of the first ten variables in the data set.
 ```
 
@@ -41,7 +55,7 @@ get_label(allbus_2021[1:10])
 
 Unfortunately, it's all in German. Imagine you are a political scientist working on a publication in English, and you are interested in the variable `pa01` (left-right self-placement). So you may want to consider translating the variable into English.
 
-```{block, box.title = "3 (optional)", box.body = list(fill = "white"), box.icon = "fa-star"}
+```{block, box.title = "4 (optional)", box.body = list(fill = "white"), box.icon = "fa-star"}
 Change the variable label of `pa01` from "LINKS-RECHTS-SELBSTEINSTUFUNG, BEFR." to "left-right self-placement".
 ```
 
@@ -58,16 +72,4 @@ allbus_2021$pa01 <-
 get_label(allbus_2021$pa01)
 ```
 
-Your collaborators ask you to share the data after changing labels and stuff. Unfortunately, they do not use `R`, `SPSS` or even `Stata` and, hence, asks you to export your data as a *SAS* file.
 
-```{block, box.title = "4 (optional)", box.body = list(fill = "white"), box.icon = "fa-star"}
-Export your data as a *SAS* file (its file extension is `sas7bdat`).
-```
-
-```{block, opts.label = "clues"}
-The `haven` package provides a function for writing such files that is called and works in a similar way as the corresponding function for importing data in this particular format.
-```
-
-```{r exportstata, solution = TRUE, eval = FALSE}
-write_sas(gp_covid, "Allbus_SAS_format.sas7bdat)
-```
