@@ -340,7 +340,7 @@ By the end of the course participants should be:
 
 [3_1_3 Crosstabs Correlations](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_3_1_3_Crosstabs_Correlations.html)
 
-[3_2_1 A Simple Plot](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_3_2_1_A_Simple_Plot.html)
+[3_2_1 A Simple Plot](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_3_2_1_Simple_Plots.html)
 
 [3_2_2 Handling Multiple Plots](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_3_2_2_Handling_Multiple_Plots.html)
 
@@ -355,7 +355,7 @@ By the end of the course participants should be:
 
 [3_1_3 Crosstabs Correlations](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_3_1_3_Crosstabs_Correlations.html)
 
-[3_2_1 A Simple Plot](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_3_2_1_A_Simple_Plot.html)
+[3_2_1 A Simple Plot](https://stefanJuenger.github.io/r-intro-gesis-2022/solutions/Exercise_3_2_1_Simple_Plots.html)
 
 [3_2_2 Handling Multiple Plots](https://stefanjuenger.github.io/r-intro-gesis-2022/solutions/Exercise_3_2_2_Handling_Multiple_Plots.html)
 
