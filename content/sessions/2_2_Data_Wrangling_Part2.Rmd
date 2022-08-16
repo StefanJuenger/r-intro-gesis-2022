@@ -54,6 +54,14 @@ allbus_2021 <- read_sav("./data/allbus_2021/ZA5280_v1-0-0.sav",
 
 ---
 
+## Join the World Wrangling Federation
+
+```{r ready-wrangle, echo=FALSE, out.width="50%"}
+include_picture("./ready-wrangle.png")
+```
+
+---
+
 ## Creating & transforming variables
 
 The simplest case of adding a new variable is creating a constant. You might, e.g., want to do that to add information about the year in which data were collected. This is how you can do this in `base R`:
