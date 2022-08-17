@@ -23,9 +23,8 @@ Yesterday, we covered exploratory data analysis (EDA). In contrast to that, the 
 ## Content of this session
 .pull-left[
 **What we will cover**
-- Bivariate hypothesis testing
-
 - Using (more or less) simple regression models
+
 - OLS, GLM, and the like
 
 - How to re-use the results of these models
@@ -793,15 +792,17 @@ As we have seen in the session on *Exploratory Data Analysis*, there are differe
 ```{r stargazer, eval = FALSE}
 library(stargazer)
 
+reg_1 <- lm(xenophobia ~ age + sex + region, data = allbus_2021_cda)
+reg_2 <- lm(xenophobia ~ age + sex + region + trust, data = allbus_2021_cda)
+reg_3 <- glm(trust ~ age + sex + region, data = allbus_2021_cda, family = binomial(link = "logit"))
+reg_4 <- glm(trust ~ age + sex + region, data = allbus_2021_cda, family = binomial(link = "probit"))
+
 stargazer(
-  lm(xenophobia ~ age + sex + region, data = allbus_2021_cda),
-  lm(xenophobia ~ age + sex + region + trust, data = allbus_2021_cda),
-  glm(trust ~ age + sex + region, data = allbus_2021_cda, family = binomial(link = "logit")),
-  glm(trust ~ age + sex + region, data = allbus_2021_cda, family = binomial(link = "probit")),
+  reg_1, reg_2, reg_3, reg_4,
   type = "text",
   dep.var.labels = c("Xenophobia", "Trust"),
   covariate.labels =
-    c("Age", "Sex", "Region (Reference = Western Germany", "Social Trust")
+    c("Age", "Female", "Non-binary", "Region (Reference = Western Germany", "Social Trust")
 )
 ```
 
@@ -827,18 +828,55 @@ As for the summary table, the `stargazer()` output can also be saved in various 
 # dir.create("./output")
 
 stargazer(
-  lm(xenophobia ~ age + sex + region, data = allbus_2021_cda),
-  lm(xenophobia ~ age + sex + region + trust, data = allbus_2021_cda),
-  glm(trust ~ age + sex + region, data = allbus_2021_cda, family = binomial(link = "logit")),
-  glm(trust ~ age + sex + region, data = allbus_2021_cda, family = binomial(link = "probit")),
+  reg_1, reg_2, reg_3, reg_4,
   type = "latex",
   dep.var.labels = c("Xenophobia", "Trust"),
   covariate.labels =
-    c("Age", "Sex", "Region (Reference = Western Germany", "Social Trust")
+    c("Age", "Female", "Non-binary", "Region (Reference = Western Germany", "Social Trust"),
   out = "./output/stargazer_regression.tex"
 )
 ```
 ]
+
+---
+
+## Example: Regression tables with the `huxtable` package
+
+```{r huxtable, eval = FALSE}
+library(huxtable)
+
+huxreg_table <-
+  huxreg(
+    reg_1, reg_2, reg_3, reg_4,
+    coefs = c(
+      "(Intercept)", "Age" = "age", "Female (Reference: Male)" = "sexFemale",
+      "Non-binary (Reference: Male)" = "sexNon-binary",
+      "Eastern Germany (Reference: Western Germany)" = "regionEastern Germany",
+      "Trust" = "trust"
+    ),
+    statistics = c("N" = "nobs", "R squared" = "r.squared", "BIC")
+  )
+
+huxreg_table
+```
+
+---
+
+class: center, middle
+.ssmall[
+```{r ref.label = "huxtable", echo = FALSE}
+```
+]
+
+For more details, have a look at the [huxreg vignette](https://hughjonesd.github.io/huxtable/huxreg.html).
+
+---
+
+## Export `huxtable` object to \LaTeX
+
+```{r export-huxtable-latex, eval = FALSE}
+quick_latex(huxreg_table, file = "regression_table.tex")
+```
 
 ---
 
