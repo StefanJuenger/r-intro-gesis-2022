@@ -69,7 +69,7 @@ There's more that we won't cover:
 
 As before, we will use the data from the *GESIS German General Social Survey (ALLBUS) 2021*.
 
-```{r load_allbus_2021_dvI, echo=FALSE}
+```{r load_allbus_2021_dvI, echo=TRUE}
 library(sjlabelled)
 library(tidyverse)
 library(haven)
