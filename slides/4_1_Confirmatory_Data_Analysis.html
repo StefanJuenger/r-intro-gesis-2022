@@ -645,9 +645,8 @@ Yesterday, we covered exploratory data analysis (EDA). In contrast to that, the 
 ## Content of this session
 .pull-left[
 **What we will cover**
-- Bivariate hypothesis testing
-
 - Using (more or less) simple regression models
+
 - OLS, GLM, and the like
 
 - How to re-use the results of these models
@@ -683,7 +682,7 @@ Say we&#39;re interested in xenophobic attitudes. We&#39;d like to investigate h
 
 ---
 
-## Data in this session #XYZ
+## Data in this session
 
 In this session, we will, again, use the data from the *GGSS 2021*. As before, we need to load the data.
 
@@ -1080,10 +1079,16 @@ class: middle
 ##     party, data = allbus_2021_cda)
 ## 
 ## Coefficients:
-##           (Intercept)                    age              sexFemale          sexNon-binary  regionEastern Germany                  trust                contact  
-##               1.06782                0.01724               -0.09238               -0.67122                0.04532               -0.35851                0.20248  
-##              partySPD               partyFDP            partyGruene             partyLinke               partyAfD       partyOther party    partyWould not vote  
-##              -0.31008                0.16462               -0.72487               -0.57422                1.62736                0.20451                0.43211
+##           (Intercept)                    age              sexFemale  
+##               1.06782                0.01724               -0.09238  
+##         sexNon-binary  regionEastern Germany                  trust  
+##              -0.67122                0.04532               -0.35851  
+##               contact               partySPD               partyFDP  
+##               0.20248               -0.31008                0.16462  
+##           partyGruene             partyLinke               partyAfD  
+##              -0.72487               -0.57422                1.62736  
+##      partyOther party    partyWould not vote  
+##               0.20451                0.43211
 ```
 ]
 
@@ -1679,8 +1684,10 @@ names(simple_linear_model)
 ```
 
 ```
-##  [1] &quot;coefficients&quot;  &quot;residuals&quot;     &quot;effects&quot;       &quot;rank&quot;          &quot;fitted.values&quot; &quot;assign&quot;        &quot;qr&quot;            &quot;df.residual&quot;   &quot;na.action&quot;     &quot;contrasts&quot;    
-## [11] &quot;xlevels&quot;       &quot;call&quot;          &quot;terms&quot;         &quot;model&quot;
+##  [1] &quot;coefficients&quot;  &quot;residuals&quot;     &quot;effects&quot;       &quot;rank&quot;         
+##  [5] &quot;fitted.values&quot; &quot;assign&quot;        &quot;qr&quot;            &quot;df.residual&quot;  
+##  [9] &quot;na.action&quot;     &quot;contrasts&quot;     &quot;xlevels&quot;       &quot;call&quot;         
+## [13] &quot;terms&quot;         &quot;model&quot;
 ```
 
 ---
@@ -1695,10 +1702,16 @@ simple_linear_model$coefficients
 ```
 
 ```
-##           (Intercept)                   age             sexFemale         sexNon-binary regionEastern Germany                 trust               contact 
-##            1.06782116            0.01724286           -0.09238226           -0.67122309            0.04531679           -0.35850547            0.20248050 
-##              partySPD              partyFDP           partyGruene            partyLinke              partyAfD      partyOther party   partyWould not vote 
-##           -0.31008195            0.16462466           -0.72487317           -0.57422122            1.62735852            0.20450803            0.43210733
+##           (Intercept)                   age             sexFemale 
+##            1.06782116            0.01724286           -0.09238226 
+##         sexNon-binary regionEastern Germany                 trust 
+##           -0.67122309            0.04531679           -0.35850547 
+##               contact              partySPD              partyFDP 
+##            0.20248050           -0.31008195            0.16462466 
+##           partyGruene            partyLinke              partyAfD 
+##           -0.72487317           -0.57422122            1.62735852 
+##      partyOther party   partyWould not vote 
+##            0.20450803            0.43210733
 ```
 
 ---
@@ -1713,10 +1726,16 @@ summary(simple_linear_model)$coefficients[,2]
 ```
 
 ```
-##           (Intercept)                   age             sexFemale         sexNon-binary regionEastern Germany                 trust               contact 
-##            0.14056837            0.00152080            0.04929583            1.12809160            0.05650183            0.05542306            0.02125645 
-##              partySPD              partyFDP           partyGruene            partyLinke              partyAfD      partyOther party   partyWould not vote 
-##            0.07871806            0.08490929            0.07236338            0.10379503            0.10649711            0.12933848            0.11838786
+##           (Intercept)                   age             sexFemale 
+##            0.14056837            0.00152080            0.04929583 
+##         sexNon-binary regionEastern Germany                 trust 
+##            1.12809160            0.05650183            0.05542306 
+##               contact              partySPD              partyFDP 
+##            0.02125645            0.07871806            0.08490929 
+##           partyGruene            partyLinke              partyAfD 
+##            0.07236338            0.10379503            0.10649711 
+##      partyOther party   partyWould not vote 
+##            0.12933848            0.11838786
 ```
 
 ---
@@ -1911,15 +1930,17 @@ As we have seen in the session on *Exploratory Data Analysis*, there are differe
 ```r
 library(stargazer)
 
+reg_1 &lt;- lm(xenophobia ~ age + sex + region, data = allbus_2021_cda)
+reg_2 &lt;- lm(xenophobia ~ age + sex + region + trust, data = allbus_2021_cda)
+reg_3 &lt;- glm(trust ~ age + sex + region, data = allbus_2021_cda, family = binomial(link = &quot;logit&quot;))
+reg_4 &lt;- glm(trust ~ age + sex + region, data = allbus_2021_cda, family = binomial(link = &quot;probit&quot;))
+
 stargazer(
-  lm(xenophobia ~ age + sex + region, data = allbus_2021_cda),
-  lm(xenophobia ~ age + sex + region + trust, data = allbus_2021_cda),
-  glm(trust ~ age + sex + region, data = allbus_2021_cda, family = binomial(link = &quot;logit&quot;)),
-  glm(trust ~ age + sex + region, data = allbus_2021_cda, family = binomial(link = &quot;probit&quot;)),
+  reg_1, reg_2, reg_3, reg_4,
   type = &quot;text&quot;,
   dep.var.labels = c(&quot;Xenophobia&quot;, &quot;Trust&quot;),
   covariate.labels =
-    c(&quot;Age&quot;, &quot;Sex&quot;, &quot;Region (Reference = Western Germany&quot;, &quot;Social Trust&quot;)
+    c(&quot;Age&quot;, &quot;Female&quot;, &quot;Non-binary&quot;, &quot;Region (Reference = Western Germany&quot;, &quot;Social Trust&quot;)
 )
 ```
 
@@ -1942,16 +1963,16 @@ class: center, middle
 ## Age                                         0.023***                  0.023***            0.003      0.002   
 ##                                              (0.001)                   (0.001)           (0.002)    (0.001)  
 ##                                                                                                              
-## Sex                                         -0.134***                 -0.163***         -0.327***  -0.193*** 
+## Female                                      -0.134***                 -0.163***         -0.327***  -0.193*** 
 ##                                              (0.047)                   (0.047)           (0.064)    (0.038)  
 ##                                                                                                              
-## Region (Reference = Western Germany          -1.735                    -1.269             0.260      0.161   
+## Non-binary                                   -1.735                    -1.269             0.260      0.161   
 ##                                              (1.337)                   (1.305)           (1.226)    (0.749)  
 ##                                                                                                              
-## Social Trust                                0.418***                  0.400***           -0.115*     -0.067  
+## Region (Reference = Western Germany         0.418***                  0.400***           -0.115*     -0.067  
 ##                                              (0.050)                   (0.049)           (0.069)    (0.041)  
 ##                                                                                                              
-## trust                                                                 -0.610***                              
+## Social Trust                                                          -0.610***                              
 ##                                                                        (0.054)                               
 ##                                                                                                              
 ## Constant                                    1.770***                  1.932***          -1.029***  -0.634*** 
@@ -1983,18 +2004,92 @@ As for the summary table, the `stargazer()` output can also be saved in various 
 # dir.create(&quot;./output&quot;)
 
 stargazer(
-  lm(xenophobia ~ age + sex + region, data = allbus_2021_cda),
-  lm(xenophobia ~ age + sex + region + trust, data = allbus_2021_cda),
-  glm(trust ~ age + sex + region, data = allbus_2021_cda, family = binomial(link = &quot;logit&quot;)),
-  glm(trust ~ age + sex + region, data = allbus_2021_cda, family = binomial(link = &quot;probit&quot;)),
+  reg_1, reg_2, reg_3, reg_4,
   type = &quot;latex&quot;,
   dep.var.labels = c(&quot;Xenophobia&quot;, &quot;Trust&quot;),
   covariate.labels =
-    c(&quot;Age&quot;, &quot;Sex&quot;, &quot;Region (Reference = Western Germany&quot;, &quot;Social Trust&quot;)
+    c(&quot;Age&quot;, &quot;Female&quot;, &quot;Non-binary&quot;, &quot;Region (Reference = Western Germany&quot;, &quot;Social Trust&quot;),
   out = &quot;./output/stargazer_regression.tex&quot;
 )
 ```
 ]
+
+---
+
+## Example: Regression tables with the `huxtable` package
+
+
+```r
+library(huxtable)
+
+huxreg_table &lt;-
+  huxreg(
+    reg_1, reg_2, reg_3, reg_4,
+    coefs = c(
+      &quot;(Intercept)&quot;, &quot;Age&quot; = &quot;age&quot;, &quot;Female (Reference: Male)&quot; = &quot;sexFemale&quot;,
+      &quot;Non-binary (Reference: Male)&quot; = &quot;sexNon-binary&quot;,
+      &quot;Eastern Germany (Reference: Western Germany)&quot; = &quot;regionEastern Germany&quot;,
+      &quot;Trust&quot; = &quot;trust&quot;
+    ),
+    statistics = c(&quot;N&quot; = &quot;nobs&quot;, &quot;R squared&quot; = &quot;r.squared&quot;, &quot;BIC&quot;)
+  )
+
+huxreg_table
+```
+
+---
+
+class: center, middle
+.ssmall[
+<table class="huxtable" style="border-collapse: collapse; border: 0px; margin-bottom: 2em; margin-top: 2em; ; margin-left: auto; margin-right: auto;  " id="tab:unnamed-chunk-24">
+<col><col><col><col><col><tr>
+<th style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.8pt 0pt 0pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></th><th style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.8pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(1)</th><th style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.8pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(2)</th><th style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.8pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(3)</th><th style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 0.8pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(4)</th></tr>
+<tr>
+<th style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(Intercept)</th><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">1.770 ***</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">1.932 ***</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">-1.029 ***</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">-0.634 ***</td></tr>
+<tr>
+<th style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></th><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(0.080)&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(0.079)&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(0.108)&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(0.064)&nbsp;&nbsp;&nbsp;</td></tr>
+<tr>
+<th style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">Age</th><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">0.023 ***</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">0.023 ***</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">0.003&nbsp;&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">0.002&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr>
+<th style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></th><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(0.001)&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(0.001)&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(0.002)&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(0.001)&nbsp;&nbsp;&nbsp;</td></tr>
+<tr>
+<th style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">Female (Reference: Male)</th><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">-0.134 **&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">-0.163 ***</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">-0.327 ***</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">-0.193 ***</td></tr>
+<tr>
+<th style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></th><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(0.047)&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(0.047)&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(0.064)&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(0.038)&nbsp;&nbsp;&nbsp;</td></tr>
+<tr>
+<th style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">Non-binary (Reference: Male)</th><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">-1.735&nbsp;&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">-1.269&nbsp;&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">0.260&nbsp;&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">0.161&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr>
+<th style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></th><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(1.337)&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(1.305)&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(1.226)&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(0.749)&nbsp;&nbsp;&nbsp;</td></tr>
+<tr>
+<th style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">Eastern Germany (Reference: Western Germany)</th><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">0.418 ***</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">0.400 ***</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">-0.115&nbsp;&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">-0.067&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr>
+<th style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></th><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(0.050)&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(0.049)&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(0.069)&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(0.041)&nbsp;&nbsp;&nbsp;</td></tr>
+<tr>
+<th style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">Trust</th><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">-0.610 ***</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr>
+<th style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></th><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">(0.054)&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr>
+<th style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">N</th><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">3216&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">3159&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">5178&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">5178&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr>
+<th style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">R squared</th><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">0.113&nbsp;&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">0.146&nbsp;&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr>
+<th style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.8pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">BIC</th><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.8pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">11035.941&nbsp;&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.8pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">10689.421&nbsp;&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.8pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">5869.103&nbsp;&nbsp;&nbsp;&nbsp;</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.8pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">5869.125&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr>
+<th colspan="5" style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.8pt 0pt 0pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;"> *** p &lt; 0.001;  ** p &lt; 0.01;  * p &lt; 0.05.</th></tr>
+</table>
+
+]
+
+For more details, have a look at the [huxreg vignette](https://hughjonesd.github.io/huxtable/huxreg.html).
+
+---
+
+## Export `huxtable` object to LaTeX
+
+
+```r
+quick_latex(huxreg_table, file = &quot;regression_table.tex&quot;)
+```
 
 ---
 
@@ -2013,9 +2108,11 @@ t.test(xenophobia ~ region, data = allbus_2021_cda) %&gt;%
 ```
 ## Effect sizes were labelled following Cohen&#39;s (1988) recommendations.
 ## 
-## The Welch Two Sample t-test testing the difference of xenophobia by region (mean in group Western Germany = 2.93, mean in group Eastern Germany = 3.42) suggests that
-## the effect is negative, statistically significant, and small (difference = -0.49, 95% CI [-0.60, -0.38], t(1947.89) = -8.97, p &lt; .001; Cohen&#39;s d = -0.41, 95% CI [-0.50,
-## -0.32])
+## The Welch Two Sample t-test testing the difference of xenophobia by region
+## (mean in group Western Germany = 2.93, mean in group Eastern Germany = 3.42)
+## suggests that the effect is negative, statistically significant, and small
+## (difference = -0.49, 95% CI [-0.60, -0.38], t(1947.89) = -8.97, p &lt; .001;
+## Cohen&#39;s d = -0.41, 95% CI [-0.50, -0.32])
 ```
 
 .small[
@@ -2037,7 +2134,8 @@ anova %&gt;%
 ```
 ## The ANOVA (formula: xenophobia ~ party) suggests that:
 ## 
-##   - The main effect of party is statistically significant and large (F(7, 2459) = 103.75, p &lt; .001; Eta2 = 0.23, 95% CI [0.20, 1.00])
+##   - The main effect of party is statistically significant and large (F(7, 2459) =
+## 103.75, p &lt; .001; Eta2 = 0.23, 95% CI [0.20, 1.00])
 ## 
 ## Effect sizes were labelled following Field&#39;s (2013) recommendations.
 ```
@@ -2062,27 +2160,50 @@ class: center, middle
 .tinyish[
 
 ```
-## We fitted a logistic model (estimated using ML) to predict trust with age, sex, region, contact and party
-##  (formula: trust ~ age + sex + region + contact + party). The model&#39;s explanatory power is weak (Tjur&#39;s R2 = 0.04). The model&#39;s intercept, corresponding to age = 0, sex
-## = Male, region = Western Germany, contact = 0 and party = CDU-CSU
+## We fitted a logistic model (estimated using ML) to predict trust with age, sex,
+## region, contact and party
+##  (formula: trust ~ age + sex + region + contact + party). The model&#39;s
+## explanatory power is weak (Tjur&#39;s R2 = 0.04). The model&#39;s intercept,
+## corresponding to age = 0, sex = Male, region = Western Germany, contact = 0 and
+## party = CDU-CSU
 ## , is at -0.73 (95% CI [-1.28, -0.18], p = 0.010). Within this model:
 ## 
-##   - The effect of age is statistically significant and positive (beta = 6.06e-03, 95% CI [5.08e-05, 0.01], p = 0.049; Std. beta = 0.11, 95% CI [8.86e-04, 0.21])
-##   - The effect of sex [Female] is statistically significant and negative (beta = -0.39, 95% CI [-0.58, -0.20], p &lt; .001; Std. beta = -0.39, 95% CI [-0.58, -0.20])
-##   - The effect of sex [Non-binary] is statistically non-significant and positive (beta = 13.12, 95% CI [-53.06, ], p = 0.968; Std. beta = 13.12, 95% CI [-53.06, ])
-##   - The effect of region [Eastern Germany] is statistically non-significant and positive (beta = 0.06, 95% CI [-0.17, 0.28], p = 0.604; Std. beta = 0.06, 95% CI [-0.17,
-## 0.28])
-##   - The effect of contact is statistically non-significant and negative (beta = -0.08, 95% CI [-0.16, 3.18e-03], p = 0.060; Std. beta = -0.10, 95% CI [-0.21, 4.14e-03])
-##   - The effect of party [2] is statistically non-significant and positive (beta = 5.66e-03, 95% CI [-0.31, 0.31], p = 0.971; Std. beta = 5.66e-03, 95% CI [-0.31, 0.31])
-##   - The effect of party [3] is statistically non-significant and positive (beta = 0.12, 95% CI [-0.22, 0.44], p = 0.494; Std. beta = 0.12, 95% CI [-0.22, 0.44])
-##   - The effect of party [4] is statistically significant and positive (beta = 0.57, 95% CI [0.30, 0.85], p &lt; .001; Std. beta = 0.57, 95% CI [0.30, 0.85])
-##   - The effect of party [5] is statistically non-significant and positive (beta = 0.33, 95% CI [-0.07, 0.71], p = 0.103; Std. beta = 0.33, 95% CI [-0.07, 0.71])
-##   - The effect of party [6] is statistically significant and negative (beta = -0.95, 95% CI [-1.50, -0.45], p &lt; .001; Std. beta = -0.95, 95% CI [-1.50, -0.45])
-##   - The effect of party [7] is statistically non-significant and negative (beta = -0.10, 95% CI [-0.64, 0.41], p = 0.710; Std. beta = -0.10, 95% CI [-0.64, 0.41])
-##   - The effect of party [8] is statistically significant and negative (beta = -1.54, 95% CI [-2.36, -0.85], p &lt; .001; Std. beta = -1.54, 95% CI [-2.36, -0.85])
+##   - The effect of age is statistically significant and positive (beta = 6.06e-03,
+## 95% CI [5.08e-05, 0.01], p = 0.049; Std. beta = 0.11, 95% CI [8.86e-04, 0.21])
+##   - The effect of sex [Female] is statistically significant and negative (beta =
+## -0.39, 95% CI [-0.58, -0.20], p &lt; .001; Std. beta = -0.39, 95% CI [-0.58,
+## -0.20])
+##   - The effect of sex [Non-binary] is statistically non-significant and positive
+## (beta = 13.12, 95% CI [-53.06, ], p = 0.968; Std. beta = 13.12, 95% CI [-53.06,
+## ])
+##   - The effect of region [Eastern Germany] is statistically non-significant and
+## positive (beta = 0.06, 95% CI [-0.17, 0.28], p = 0.604; Std. beta = 0.06, 95%
+## CI [-0.17, 0.28])
+##   - The effect of contact is statistically non-significant and negative (beta =
+## -0.08, 95% CI [-0.16, 3.18e-03], p = 0.060; Std. beta = -0.10, 95% CI [-0.21,
+## 4.14e-03])
+##   - The effect of party [2] is statistically non-significant and positive (beta =
+## 5.66e-03, 95% CI [-0.31, 0.31], p = 0.971; Std. beta = 5.66e-03, 95% CI [-0.31,
+## 0.31])
+##   - The effect of party [3] is statistically non-significant and positive (beta =
+## 0.12, 95% CI [-0.22, 0.44], p = 0.494; Std. beta = 0.12, 95% CI [-0.22, 0.44])
+##   - The effect of party [4] is statistically significant and positive (beta =
+## 0.57, 95% CI [0.30, 0.85], p &lt; .001; Std. beta = 0.57, 95% CI [0.30, 0.85])
+##   - The effect of party [5] is statistically non-significant and positive (beta =
+## 0.33, 95% CI [-0.07, 0.71], p = 0.103; Std. beta = 0.33, 95% CI [-0.07, 0.71])
+##   - The effect of party [6] is statistically significant and negative (beta =
+## -0.95, 95% CI [-1.50, -0.45], p &lt; .001; Std. beta = -0.95, 95% CI [-1.50,
+## -0.45])
+##   - The effect of party [7] is statistically non-significant and negative (beta =
+## -0.10, 95% CI [-0.64, 0.41], p = 0.710; Std. beta = -0.10, 95% CI [-0.64,
+## 0.41])
+##   - The effect of party [8] is statistically significant and negative (beta =
+## -1.54, 95% CI [-2.36, -0.85], p &lt; .001; Std. beta = -1.54, 95% CI [-2.36,
+## -0.85])
 ## 
-## Standardized parameters were obtained by fitting the model on a standardized version of the dataset. 95% Confidence Intervals (CIs) and p-values were computed using a
-## Wald z-distribution approximation.
+## Standardized parameters were obtained by fitting the model on a standardized
+## version of the dataset. 95% Confidence Intervals (CIs) and p-values were
+## computed using a Wald z-distribution approximation.
 ```
 ]
 
@@ -2151,9 +2272,12 @@ glance(simple_linear_model)
 
 ```
 ## # A tibble: 1 × 12
-##   r.squared adj.r.squared sigma statistic   p.value    df logLik   AIC   BIC deviance df.residual  nobs
-##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;       &lt;int&gt; &lt;int&gt;
-## 1     0.356         0.352  1.12      90.5 2.60e-192    13 -3280. 6590. 6675.    2685.        2127  2141
+##   r.squared adj.r.squ…¹ sigma stati…²   p.value    df logLik   AIC   BIC devia…³
+##       &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+## 1     0.356       0.352  1.12    90.5 2.60e-192    13 -3280. 6590. 6675.   2685.
+## # … with 2 more variables: df.residual &lt;int&gt;, nobs &lt;int&gt;, and abbreviated
+## #   variable names ¹​adj.r.squared, ²​statistic, ³​deviance
+## # ℹ Use `colnames()` to see all variable names
 ```
 
 ---
@@ -2167,20 +2291,21 @@ augment(simple_linear_model)
 
 ```
 ## # A tibble: 2,141 × 14
-##    .rownames xenophobia   age sex    region          trust contact party   .fitted   .resid    .hat .sigma       .cooksd .std.resid
-##    &lt;chr&gt;          &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;  &lt;fct&gt;           &lt;dbl&gt;   &lt;dbl&gt; &lt;fct&gt;     &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;         &lt;dbl&gt;      &lt;dbl&gt;
-##  1 2               2       53 Male   Western Germany     1       6 CDU-CSU    2.84 -0.838   0.00389   1.12 0.000156        -0.747  
-##  2 7               1.5     31 Female Western Germany     0       4 Gruene     1.60 -0.0950  0.00375   1.12 0.00000193      -0.0847 
-##  3 9               3.75    68 Male   Eastern Germany     0       8 Linke      3.33  0.419   0.00838   1.12 0.0000845        0.374  
-##  4 17              2.5     54 Male   Western Germany     0       5 SPD        2.70 -0.201   0.00407   1.12 0.00000940      -0.180  
-##  5 18              2       45 Male   Western Germany     0       5 Gruene     2.13 -0.131   0.00313   1.12 0.00000307      -0.117  
-##  6 19              2       49 Male   Western Germany     0       4 Gruene     2.00  0.00223 0.00388   1.12 0.00000000110    0.00199
-##  7 20              2       26 Male   Western Germany     1       5 Gruene     1.45  0.555   0.00417   1.12 0.0000733        0.495  
-##  8 21              3.25    83 Female Western Germany     0       6 CDU-CSU    3.62 -0.371   0.00399   1.12 0.0000314       -0.331  
-##  9 24              2.25    73 Female Eastern Germany     0       7 SPD        3.39 -1.14    0.00500   1.12 0.000369        -1.01   
-## 10 25              5       62 Male   Eastern Germany     0       7 AfD        5.23 -0.227   0.00761   1.12 0.0000225       -0.203  
-## # … with 2,131 more rows
-## # ℹ Use `print(n = ...)` to see more rows
+##    .rownames xenophobia   age sex    region trust contact party .fitted   .resid
+##    &lt;chr&gt;          &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;  &lt;fct&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;fct&gt;   &lt;dbl&gt;    &lt;dbl&gt;
+##  1 2               2       53 Male   Weste…     1       6 CDU-…    2.84 -0.838  
+##  2 7               1.5     31 Female Weste…     0       4 Grue…    1.60 -0.0950 
+##  3 9               3.75    68 Male   Easte…     0       8 Linke    3.33  0.419  
+##  4 17              2.5     54 Male   Weste…     0       5 SPD      2.70 -0.201  
+##  5 18              2       45 Male   Weste…     0       5 Grue…    2.13 -0.131  
+##  6 19              2       49 Male   Weste…     0       4 Grue…    2.00  0.00223
+##  7 20              2       26 Male   Weste…     1       5 Grue…    1.45  0.555  
+##  8 21              3.25    83 Female Weste…     0       6 CDU-…    3.62 -0.371  
+##  9 24              2.25    73 Female Easte…     0       7 SPD      3.39 -1.14   
+## 10 25              5       62 Male   Easte…     0       7 AfD      5.23 -0.227  
+## # … with 2,131 more rows, and 4 more variables: .hat &lt;dbl&gt;, .sigma &lt;dbl&gt;,
+## #   .cooksd &lt;dbl&gt;, .std.resid &lt;dbl&gt;
+## # ℹ Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names
 ```
 
 ---

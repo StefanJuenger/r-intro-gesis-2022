@@ -62,7 +62,7 @@ woRkshoptools::include_picture("4iq3kg.jpg")
 
 ---
 
-## Data in this session #XYZ
+## Data in this session
 
 In this session, we will, again, use the data from the *GGSS 2021*. As before, we need to load the data.
 
@@ -864,7 +864,7 @@ huxreg_table
 
 class: center, middle
 .ssmall[
-```{r ref.label = "huxtable", echo = FALSE}
+```{r ref.label = "huxtable", echo = FALSE, results = "asis"}
 ```
 ]
 
@@ -872,7 +872,7 @@ For more details, have a look at the [huxreg vignette](https://hughjonesd.github
 
 ---
 
-## Export `huxtable` object to \LaTeX
+## Export `huxtable` object to LaTeX
 
 ```{r export-huxtable-latex, eval = FALSE}
 quick_latex(huxreg_table, file = "regression_table.tex")
