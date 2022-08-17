@@ -76,9 +76,11 @@ As using the full data set can become somewhat unwieldy for the examples in this
 
 As a repetition and reminder, we will quickly go some of the wrangling steps we discussed before for variables listed on the previous slide in the following.
 
-*Note*: Of course, it is possible to do the whole wrangling in one pipe. However, to check if everything worked it is advisable to break up the pipe into smaller chunks (a nice tool for checking and debugging pipes that also provides an *RStudio* Addin is the package [`ViewPipeSteps`](https://github.com/daranzolin/ViewPipeSteps)). Also, splitting up the wrangling pipe steps allows us to show them on the slides.
+Of course, it is possible to do the whole wrangling in one pipe. However, to check if everything worked it is advisable to break up the pipe into smaller chunks (a nice tool for checking and debugging pipes that also provides an *RStudio* addin is the package [`ViewPipeSteps`](https://github.com/daranzolin/ViewPipeSteps)). Also, splitting up the wrangling pipe steps allows us to show them on the slides.
 
-**NB**: To reduce the number of objects in our working environment, we will overwrite the `allbus_2021_eda` object multiple times in the import and wrangling process. In your actual work, however, you may want to keep some of the intermediate objects (e.g., the version of the dataframe before it is wrangled). Remember that this is easily done by assigning different object names.
+.small[
+*Note*: To reduce the number of objects in our working environment, we will overwrite the `allbus_2021_eda` object multiple times in the import and wrangling process. In your actual work, however, you may want to keep some of the intermediate objects (e.g., the version of the dataframe before it is wrangled). Remember that this is easily done by assigning different object names.
+]
 
 ---
 
@@ -442,7 +444,7 @@ round((prop.table(table(allbus_2021_eda$party_vote, useNA = "always")) * 100), 2
 
 ## Frequencies and proportions with `janitor::tabyl()`
 
-The [`janitor` package](https://github.com/sfirke/janitor) that we briefly mentioned in the first session on data wrangling also provides the `tabyl()` function for creating frequency and proportion tables:
+The [`janitor` package](https://github.com/sfirke/janitor) that we briefly mentioned in the first session on data wrangling also provides the [`tabyl()` function](https://sfirke.github.io/janitor/articles/tabyls.html) for creating frequency and proportion tables:
 
 .small[
 ```{r tabyl, message = F}
@@ -455,9 +457,6 @@ party_stats <- allbus_2021_eda %>%
 
 party_stats
 ```
-
-*Note*: For the full range of customization options, check the [online documentation for `tabyl()`](https://sfirke.github.io/janitor/articles/tabyls.html)
-]
 
 ---
 

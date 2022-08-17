@@ -8,3 +8,6 @@
 data/allbus_2021/*
 data/allbus_2021ZA5280_v1-0-0.sav
 allbus_2021_eda.rds
+
+# Output folder
+output/*

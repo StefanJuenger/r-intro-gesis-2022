@@ -49,7 +49,7 @@ The function we need to combine with `across()` for this is `rowMeans()`. Rememb
 
 ```{r second-exercise, solution = TRUE}
 allbus_2021 <- allbus_2021 %>%
-  mutate(xenohpobia = rowMeans(across(
+  mutate(xenophobia = rowMeans(across(
     ma01b:ma04),
     na.rm = TRUE))
 ```

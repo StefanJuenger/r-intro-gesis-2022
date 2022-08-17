@@ -67,6 +67,8 @@ You can format the `tabyl()` output using the `adorn_pct_formatting` function.
 ```
 
 ```{r fourth-exercise, solution = TRUE}
+library(janitor)
+
 allbus_2021_eda %>% 
   tabyl(agec) %>% 
   adorn_pct_formatting(digits = 3, 

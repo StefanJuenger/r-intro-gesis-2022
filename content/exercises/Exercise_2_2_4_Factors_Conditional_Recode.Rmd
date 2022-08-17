@@ -27,17 +27,15 @@ allbus_2021 <- read_sav("./data/allbus_2021/ZA5280_v1-0-0.sav") %>%
 
 ```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
 First, let's create an unordered factor based on the variable representing marital status (`mstat`). The factor levels should be the English translations of the first five value labels listed in the codebook: "Married and living with spouse", "Married and living separately", "Widowed", "Divorced", "Unmarried".
-**NB**: As we only want to focus on five categories (for simplicity), we should set all values > 5 to `NA` for this purpose. The easiest way to achieve this is to use a function from the `naniar` package that replaces specific values (or those that meet a certain condition) for a selection of variables.
+*Note*: For simplicity, we only want to focus on five categories here.
 ```
 
 ```{block, opts.label = "clues"}
-The `dplyr` function we need to use here (in combination with `mutate()`) is `recode_factor()`. The function for replacing values with `NA` from the `naniar` package that we want to use here is `replace_with_na_at()`
+The `dplyr` function we need to use here (in combination with `mutate()`) is `recode_factor()`.
 ```
 
 ```{r first-exercise, solution = TRUE}
 allbus_2021 <- allbus_2021 %>% 
-  replace_with_na_at(.vars = "mstat",
-                     condition = ~.x > 5) %>% 
   mutate(mstat_fac = recode_factor(mstat,
                                    `1` = "Married and living with spouse",
                                    `2` = "Married and living separately",
