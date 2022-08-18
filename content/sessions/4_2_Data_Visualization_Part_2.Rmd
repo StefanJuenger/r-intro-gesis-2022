@@ -264,7 +264,7 @@ model_parameters(linear_model) %>%
     labels = # in reversed order!
       c(
         "AfD Vote", "Contact", "Social Trust", "Region (Ref. Western Germany)",
-        "Sex", "Age"
+        "Non-binary (Ref. Male)", "Female (Ref. Male)", "Age"
       )
   )
 ```
@@ -291,7 +291,7 @@ model_parameters(linear_model) %>%
     labels = # in reversed order!
       c(
         "AfD Vote", "Contact", "Social Trust", "Region (Ref. Western Germany)",
-        "Sex", "Age"
+        "Non-binary (Ref. Male)", "Female (Ref. Male)", "Age"
       )
   ) +
   scale_colour_grey(start = 0, end = 0) + 
@@ -537,7 +537,8 @@ plot_models(
     ),
   axis.labels = 
     c(
-      "Region (Ref. Western Germany)", "Sex", "Age", "AfD Vote", "Contact",
+      "Region (Ref. Western Germany)", "Non-binary (Ref. Male)", 
+      "Female (Ref. Male)", "Age", "AfD Vote", "Contact",
       "Social Trust"
     )
 ) 
@@ -571,7 +572,8 @@ plot_models(
     ),
   axis.labels = 
     c(
-      "Region (Ref. Western Germany)", "Sex", "Age", "AfD Vote", "Contact",
+      "Region (Ref. Western Germany)", "Non-binary (Ref. Male)", 
+      "Female (Ref. Male)", "Age", "AfD Vote", "Contact",
       "Social Trust"
     )
 ) +
