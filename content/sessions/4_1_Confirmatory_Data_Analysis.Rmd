@@ -519,14 +519,14 @@ table(allbus_2021_cda$trust)
 ## Logistic regression
 
 ```{r log-reg, eval = FALSE}
-simple_linear_model_logistic <- 
+simple_model_logistic <- 
   glm(
     trust ~ age + sex + region + contact + party, 
     family = binomial(link = "logit"),
     data = allbus_2021_cda
   )
 
-summary(simple_linear_model_logistic)
+summary(simple_model_logistic)
 ```
 
 .right[`r emo::ji("left_arrow_curving_right")`]
@@ -548,7 +548,7 @@ The [`performance` package](https://easystats.github.io/performance/) that is th
 ```{r nagelkerke}
 library(performance)
 
-r2_nagelkerke(simple_linear_model_logistic)
+r2_nagelkerke(simple_model_logistic)
 ```
 
 *Note*: The `performance` package also includes several helpful functions for model diagnostics.
@@ -560,14 +560,14 @@ r2_nagelkerke(simple_linear_model_logistic)
 For the fun of it, let's change the link function in our regression model from logit to probit.
 
 ```{r probit-reg, eval = FALSE}
-simple_linear_model_probit <- 
+simple_model_probit <- 
   glm(
     trust ~ age + sex + region + contact + party, 
     family = binomial(link = "probit"),
     data = allbus_2021_cda
   )
 
-summary(simple_linear_model_probit)
+summary(simple_model_probit)
 ```
 
 .right[`r emo::ji("left_arrow_curving_right")`]
@@ -587,7 +587,7 @@ class:middle
 We can also compare models with some standard tools. For example, to examine competing models, such as our logistic and probit regression, we can apply an ANOVA.
 
 ```{r anova-glm-compare}
-anova(simple_linear_model_logistic, simple_linear_model_probit)
+anova(simple_model_logistic, simple_model_probit)
 ```
 
 ---
@@ -598,7 +598,7 @@ The `performance` package we have previously used for calculating Nagelkerke's R
 
 ```{r compare-perf}
 compare_performance(
-  simple_linear_model_logistic, simple_linear_model_probit,
+  simple_model_logistic, simple_model_probit,
   metrics = c("AIC", "BIC", "R2")
 )
 ```
@@ -662,7 +662,7 @@ summary(simple_linear_model)$coefficients[,2]
 The standard `summary()` doesn't supply confidence intervals. We can use the `confint()` command to produce them. For example, for the logistic regression:
 
 ```{r confint-lm}
-confint(simple_linear_model_logistic)
+confint(simple_model_logistic)
 ```
 
 ---
@@ -732,7 +732,7 @@ predict(object = simple_linear_model_new,
 In an OLS context, predictions of this kind are straightforward to interpret. For non-linear models, such as in logistic regression, this is more difficult:
 
 ```{r pred-log}
-simple_linear_model_logistic_new <- 
+simple_model_logistic_new <- 
   glm(
     trust ~ age + region + party,
     family = binomial(link = "logit"),
@@ -740,7 +740,7 @@ simple_linear_model_logistic_new <-
   )
 
 predictions <- 
-  predict(object = simple_linear_model_logistic_new, newdata = predictions_data)
+  predict(object = simple_model_logistic_new, newdata = predictions_data)
 ```
 
 Predictions have to be converted into probabilities:
@@ -760,7 +760,7 @@ AME provide a similar interpretation for a one-unit change as in OLS models: the
 library(marginaleffects)
 
 plot_cme(
-  simple_linear_model_logistic_new, 
+  simple_model_logistic_new, 
   effect = "region", 
   condition = "party"
 )
@@ -772,7 +772,7 @@ plot_cme(
 library(marginaleffects)
 
 plot_cme(
-  simple_linear_model_logistic_new, 
+  simple_model_logistic_new, 
   effect = "region", 
   condition = "party"
 )
@@ -913,7 +913,7 @@ anova %>%
 ... or our regression models.
 
 ```{r report-regression, eval=FALSE}
-simple_linear_model_logistic %>% 
+simple_model_logistic %>% 
   report()
 ```
 
