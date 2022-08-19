@@ -586,11 +586,12 @@ As this session should have illustrated, you can do a lot of things and produce 
 
 There are two packages that facilitate collaboration on `R Markdown` documents; even with collaborators who do not use `R Markdown` themselves:
 
-- The [`trackdown`](https://ekothe.github.io/trackdown/) uses *Google Drive* for this
+- The [`trackdown`](https://claudiozandonella.github.io/trackdown/) uses *Google Drive* for this
 
-- [`redoc`](https://github.com/noamross/redoc) "is a package to enable a two-way R Markdown-Microsoft Word workflow" 
+- [`redoc`](https://github.com/noamross/redoc) "is a package to enable a two-way R Markdown-Microsoft Word workflow" (**NB**: The package is currently "in suspended animation" and not available via CRAN) 
 
 ---
+
 ## `R Markdown` & lessons learned `r ji("page_with_curl")`
 
 - do not hard code values
@@ -618,7 +619,7 @@ The [`RMarkdown` chapter](https://r4ds.had.co.nz/r-markdown.html) in *R for Data
 
 class: center, middle
 
-# [Exercise](https://github.com/StefanJuenger/r-intro-gesis-2022/blob/main/exercises/Exercise_5_1_1_R_Markdown.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+# [Exercise](https://stefanjuenger.github.io/r-intro-gesis-2022/exercises/Exercise_5_1_1_R_Markdown.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
 
 ---
 

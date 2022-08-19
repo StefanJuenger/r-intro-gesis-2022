@@ -4,25 +4,26 @@ author: "R User"
 date: "`r Sys.Date()`"
 output:
   html_document:
-  toc: true
-toc_depth: 3
-number_sections: true
-toc_float: true
-code_folding: hide
-theme: flatly
-highlight: tango
-code_download: true
-df_print: paged
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    toc_float: true
+    code_folding: hide
+    theme: flatly
+    highlight: tango
+    code_download: true
+    df_print: paged
 ---
   
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
+                      warning = FALSE,
                       message = FALSE)
 
 options(scipen = 15)
 ```
 
-#Wrangling
+#Data Wrangling
 
 ```{r load-wrangle-data, echo = TRUE}
 library(tidyverse)
@@ -34,10 +35,10 @@ inverter <- function (var) {
   max(var, na.rm = TRUE) - var + 1
 }
 
-allbus_2021_subset <- read_sav("../data/allbus_2021ZA5280_v1-0-0.sav") %>% 
-remove_all_labels()
+allbus_2021 <- read_sav("../data/allbus_2021/ZA5280_v1-0-0.sav") %>% 
+  remove_all_labels()
 
-allbus_2021_subset  <- allbus_2021_subset  %>% 
+allbus_2021_subset  <- allbus_2021  %>% 
   select(respid,
          sex,
          agec,
@@ -53,48 +54,49 @@ allbus_2021_subset  <- allbus_2021_subset  %>%
          contact2 = mc02,
          contact3 = mc03,
          contact4 = mc04,
-         trust = st01,
+         trust_gov = pt12,
          life_satf = ls01
-         ) %>% 
+  ) %>% 
   replace_with_na_all(condition = ~.x < 0)  %>% 
-  mutate(trust = ifelse(trust == 1, 1, 0), #dichotomization
-         sex = recode_factor(sex,
+  mutate(sex = recode_factor(sex,
                              `1`= "Male",
                              `2` = "Female",
                              `3` = "Non-binary"),
          sat_dem = recode(sat_dem,
-                             `1` = 6,
-                             `2` = 5,
-                             `3` = 4,
-                             `4` = 3,
-                             `5` = 3,
-                             `6`= 1),
+                          `1` = 6,
+                          `2` = 5,
+                          `3` = 4,
+                          `4` = 3,
+                          `5` = 3,
+                          `6`= 1),
          agec = recode_factor(agec,
-                                `1`= "<= 25 years",
-                                `2`= "26 to 30 years",
-                                `3` = "31 to 35 years",
-                                `4` = "36 to 40 years",
-                                `5` = "41 to 45 years",
-                                `6` = "46 to 50 years",
-                                 .ordered = TRUE),
+                              `1`= "<= 25 years",
+                              `2`= "26 to 30 years",
+                              `3` = "31 to 35 years",
+                              `4` = "36 to 40 years",
+                              `5` = "41 to 45 years",
+                              `6` = "46 to 50 years",
+                              .ordered = TRUE),
          party_vote = recode_factor(party_vote,
-                                      `1`= "CDU-CSU",
-                                      `2`= "SPD",
-                                      `3` = "FDP",
-                                      `4` = "Gruene",
-                                      `6` = "Linke",
-                                      `42` = "AfD",
-                                      `90` = "Other party",
-                                      `91` = "Would not vote"),
-         distrust_people = inverter(trust)) %>% 
-  rowwise() %>% 
-  mutate( across(contact1:contact4,
+                                    `1`= "CDU-CSU",
+                                    `2`= "SPD",
+                                    `3` = "FDP",
+                                    `4` = "Gruene",
+                                    `6` = "Linke",
+                                    `42` = "AfD",
+                                    `90` = "Other party",
+                                    `91` = "Would not vote"),
+         distrust_gov = inverter(trust_gov)) %>% 
+  mutate(
+    xenophobia = rowMeans(across(
+      xeno1:xeno4))) %>% 
+  mutate(across(contact1:contact4,
                 ~recode(
                   .x,
                   `2` = 0))) %>% 
-  mutate(contact = rowSums(across(contact1:contact4)), 
-         xenophobia = rowMeans(across(xeno1:xeno4), na.rm = T)) %>% 
-  ungroup()
+  mutate(contact = rowSums(across(
+    contact1:contact4)))
+
 ```
 
 # The data
@@ -236,9 +238,12 @@ allbus_2021_subset %>%
 We use a logistic regression model to explore how trust in people is predicted by life satisfaction, mean xenophobic attitudes and the contact with foreigners.
 
 ```{r regression}
+allbus_2021_subset <- allbus_2021_subset %>% 
+  mutate(distrust_gov_dic = ifelse(distrust_gov > 4, 0, 1))
+
 library(broom)
 
-model <- glm(trust ~ 1 + life_satf + contact + xenophobia,
+model <- glm(distrust_gov_dic ~ 1 + life_satf + contact + xenophobia,
              family = binomial(link = "logit"),
              data = allbus_2021_subset)
 

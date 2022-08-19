@@ -1,5 +1,5 @@
 ---
-title: "Exploring data from the GESIS Panel Special Survey on the Coronavirus SARS-CoV-2 Outbreak in Germany"
+title: "Exploring data from the GESIS German General Social Survey - ALLBUS 2021"
 author: "R User"
 date: "`r Sys.Date()`"
 output:
@@ -17,12 +17,13 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
+                      warning = FALSE,
                       message = FALSE)
 
 options(scipen = 15)
 ```
 
-#Wrangling
+## Data Wrangling
 
 ```{r load-wrangle-data, echo = FALSE}
 
